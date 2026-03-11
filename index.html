@@ -26,13 +26,11 @@
   const db = getDatabase(app);
   const dataRef = ref(db, 'schedulerData');
 
-  // ── Real-time listener: READ from cloud, never auto-write ──
   onValue(dataRef, (snapshot) => {
     const data = snapshot.val();
     if (data) {
       roster = data.roster || roster;
       schedule = data.schedule || schedule;
-      // Also keep local storage in sync with cloud data
       localStorage.setItem('ts_roster', JSON.stringify(roster));
       localStorage.setItem('ts_schedule', JSON.stringify(schedule));
       renderPool();
@@ -44,16 +42,10 @@
     toast('⚠ Could not connect to cloud – working offline');
   });
 
-  // ── Save only when explicitly called ──
   function saveToFirebase() {
     set(dataRef, { roster, schedule })
-      .then(() => {
-        toast('✓ Saved to cloud');
-      })
-      .catch(err => {
-        console.error('Firebase save error:', err);
-        toast('⚠ Save failed – check connection');
-      });
+      .then(() => { toast('✓ Saved to cloud'); })
+      .catch(err => { console.error('Firebase save error:', err); toast('⚠ Save failed – check connection'); });
   }
 
   window.saveToFirebase = saveToFirebase;
@@ -83,10 +75,13 @@ header{background:var(--bg2);border-bottom:1px solid var(--border);padding:16px 
 aside{background:var(--bg2);border-right:1px solid var(--border);padding:24px 18px;position:sticky;top:68px;height:calc(100vh - 68px);overflow-y:auto}
 aside h2{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--text2);margin-bottom:14px;padding:0 6px}
 .pool{display:flex;flex-direction:column;gap:6px}
-.chip{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:8px;cursor:grab;font-size:1rem;font-weight:500;border:1px solid var(--border);user-select:none;transition:all .15s;background:var(--surface)}
+.chip{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:8px;cursor:grab;font-size:1rem;font-weight:500;border:1px solid var(--border);user-select:none;transition:all .15s;background:var(--surface);position:relative}
 .chip:hover{border-color:var(--cyan);transform:translateX(2px)}
 .chip:active{cursor:grabbing;transform:scale(.98)}
 .chip.dragging{opacity:.25}
+.chip-del{background:none;border:none;cursor:pointer;color:var(--text3);font-size:18px;width:26px;height:26px;border-radius:4px;display:flex;align-items:center;justify-content:center;opacity:0;transition:all .15s;margin-left:auto;flex-shrink:0;line-height:1}
+.chip:hover .chip-del{opacity:1}
+.chip-del:hover{background:var(--magenta)!important;color:#000!important;opacity:1!important}
 .avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:#000;flex-shrink:0}
 .add-section{margin-top:20px;padding-top:20px;border-top:1px solid var(--border)}
 .add-section label{font-size:.85rem;font-weight:600;color:var(--text2);display:block;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px}
@@ -250,13 +245,11 @@ function markUnsaved() {
   document.getElementById('unsavedDot').classList.add('show');
 }
 
-// Save to local storage only (no cloud push)
 function saveLocal() {
   localStorage.setItem('ts_roster', JSON.stringify(roster));
   localStorage.setItem('ts_schedule', JSON.stringify(schedule));
 }
 
-// Called when user clicks Save button — pushes to cloud
 function saveAll() {
   saveLocal();
   if (window.saveToFirebase) {
@@ -272,13 +265,36 @@ function toast(msg){
   setTimeout(()=>el.classList.remove('show'),4000);
 }
 
+function deleteFromRoster(name) {
+  if (!confirm(`Remove ${name} from the roster?\n\nThey will also be removed from all scheduled sessions.`)) return;
+  roster = roster.filter(r => r.name !== name);
+  // Remove from all schedule slots across all weeks
+  Object.keys(schedule).forEach(wk => {
+    Object.keys(schedule[wk]).forEach(key => {
+      if (Array.isArray(schedule[wk][key].names)) {
+        schedule[wk][key].names = schedule[wk][key].names.filter(n => n !== name);
+      }
+    });
+  });
+  saveLocal();
+  markUnsaved();
+  renderPool();
+  render();
+  toast(`✓ ${name} removed from roster`);
+}
+
 function renderPool(){
   const p=document.getElementById('pool');p.innerHTML='';
   roster.forEach(({name,color})=>{
     const el=document.createElement('div');el.className='chip';el.draggable=true;
-    el.innerHTML=`<div class="avatar" style="background:${color}">${ini(name)}</div><span>${name}</span>`;
+    el.innerHTML=`<div class="avatar" style="background:${color}">${ini(name)}</div><span>${name}</span><button class="chip-del" title="Remove from roster">×</button>`;
     el.addEventListener('dragstart',e=>{drag={name,from:null};el.classList.add('dragging');e.dataTransfer.effectAllowed='move'});
     el.addEventListener('dragend',()=>el.classList.remove('dragging'));
+    el.querySelector('.chip-del').addEventListener('click', e => {
+      e.stopPropagation();
+      e.preventDefault();
+      deleteFromRoster(name);
+    });
     p.appendChild(el);
   });
 }
@@ -366,7 +382,6 @@ function openSummary(){
   body.innerHTML=html;
 }
 
-// Event listeners
 document.getElementById('saveBtn').addEventListener('click', saveAll);
 document.getElementById('summaryBtn').addEventListener('click',openSummary);
 document.getElementById('modalClose').addEventListener('click',()=>document.getElementById('modalOverlay').classList.remove('open'));
@@ -382,12 +397,8 @@ document.getElementById('nameIn').addEventListener('keydown',e=>{if(e.key==='Ent
 document.getElementById('prevW').addEventListener('click',()=>{offset--;render()});
 document.getElementById('nextW').addEventListener('click',()=>{offset++;render()});
 
-// Warn if leaving with unsaved changes
 window.addEventListener('beforeunload', e => {
-  if (hasUnsavedChanges) {
-    e.preventDefault();
-    e.returnValue = '';
-  }
+  if (hasUnsavedChanges) { e.preventDefault(); e.returnValue = ''; }
 });
 
 function boot(){
@@ -397,8 +408,6 @@ function boot(){
   }catch{}
   if(!roster.length)['Tyler','Julie','Adam','Carnell','Kris','Cameron','Cynthia'].forEach((n,i)=>roster.push({name:n,color:COLORS[i]}));
   renderPool();render();
-  // NOTE: We do NOT push to Firebase on load anymore.
-  // Cloud data will load automatically via the onValue listener above.
   toast('Connected – click 💾 Save to push your changes to the cloud');
 }
 boot();
