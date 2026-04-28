@@ -118,6 +118,22 @@ main{padding:32px;overflow-x:auto !important}
 .rec input:focus{border-color:var(--green)}
 .rec a{width:34px;height:34px;background:var(--green);color:#000;border-radius:6px;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:14px;flex-shrink:0;transition:all .15s}
 .rec a:hover{filter:brightness(1.15)}
+
+/* ── Notes collapsible ── */
+.notes-toggle{margin-top:8px;display:flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;padding:5px 0;font-family:inherit;font-size:.8rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.9px;transition:color .15s;width:100%}
+.notes-toggle:hover{color:var(--yellow)}
+.notes-toggle .nt-icon{font-size:13px;transition:transform .2s;display:inline-block}
+.notes-toggle.has-notes{color:var(--yellow)}
+.notes-toggle.has-notes .nt-dot{width:6px;height:6px;background:var(--yellow);border-radius:50%;display:inline-block;margin-left:auto;flex-shrink:0}
+.notes-body{overflow:hidden;max-height:0;transition:max-height .25s ease, opacity .2s ease;opacity:0}
+.notes-body.open{max-height:200px;opacity:1}
+.notes-body textarea{width:100%;margin-top:6px;background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:10px 12px;border-radius:6px;font-size:.875rem;outline:none;font-family:inherit;line-height:1.5;resize:vertical;min-height:72px;transition:border-color .15s}
+.notes-body textarea::placeholder{color:var(--text3)}
+.notes-body textarea:focus{border-color:var(--yellow)}
+/* preview line shown when collapsed but has content */
+.notes-preview{font-size:.78rem;color:var(--text3);font-style:italic;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;display:none}
+.notes-toggle.has-notes ~ .notes-preview{display:block}
+
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:200;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
 .modal-overlay.open{opacity:1;pointer-events:all}
 .modal{background:var(--bg2);border:1px solid var(--border);border-radius:14px;width:min(840px,95vw);max-height:88vh;overflow:hidden;display:flex;flex-direction:column;transform:translateY(20px) scale(.97);transition:transform .25s cubic-bezier(.175,.885,.32,1.1)}
@@ -146,6 +162,7 @@ main{padding:32px;overflow-x:auto !important}
 .td-rec a{display:inline-flex;align-items:center;gap:5px;color:var(--green);font-size:.9rem;font-weight:600;text-decoration:none;padding:5px 12px;background:rgba(16,185,129,0.15);border-radius:6px}
 .td-rec a:hover{background:var(--green);color:#000}
 .td-empty{color:var(--text3);font-size:.9rem;font-style:italic}
+.td-notes{font-size:.85rem;color:var(--text2);max-width:220px;line-height:1.4;white-space:pre-wrap}
 .sum-person-section{margin-top:30px}
 .sum-section-title{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--text2);margin-bottom:14px}
 .sum-person-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
@@ -233,10 +250,11 @@ function slotData(day, si) {
   const k = wkKey(offset);
   if (!schedule[k]) schedule[k] = {};
   const key = day + '-' + si;
-  if (!schedule[k][key]) schedule[k][key] = { names: [], rec: '' };
+  if (!schedule[k][key]) schedule[k][key] = { names: [], rec: '', notes: '' };
   const slot = schedule[k][key];
   if (!Array.isArray(slot.names)) slot.names = [];
   if (typeof slot.rec !== 'string') slot.rec = '';
+  if (typeof slot.notes !== 'string') slot.notes = '';
   return slot;
 }
 
@@ -268,7 +286,6 @@ function toast(msg){
 function deleteFromRoster(name) {
   if (!confirm(`Remove ${name} from the roster?\n\nThey will also be removed from all scheduled sessions.`)) return;
   roster = roster.filter(r => r.name !== name);
-  // Remove from all schedule slots across all weeks
   Object.keys(schedule).forEach(wk => {
     Object.keys(schedule[wk]).forEach(key => {
       if (Array.isArray(schedule[wk][key].names)) {
@@ -326,9 +343,11 @@ function mkSlot(day,si){
     t.names.push(drag.name);drag=null;
     saveLocal();markUnsaved();render();renderPool();
   });
+
   const lbl=document.createElement('div');lbl.className='slot-lbl';lbl.textContent='Session '+(si+1);
   const cnt=document.createElement('div');cnt.className='slot-cnt';cnt.textContent=(d.names||[]).length+'/1';
   el.appendChild(lbl);el.appendChild(cnt);
+
   if(!(d.names||[]).length){
     const h=document.createElement('div');h.className='hint';h.textContent='Drop trainee here';el.appendChild(h);
   }else{
@@ -341,20 +360,70 @@ function mkSlot(day,si){
       el.appendChild(row);
     });
   }
+
+  // Recording URL row
   const rec=document.createElement('div');rec.className='rec';
   const inp=document.createElement('input');inp.type='url';inp.placeholder='Recording URL...';inp.value=d.rec||'';
   const lnk=document.createElement('a');lnk.target='_blank';lnk.textContent='▶';
   const updL=()=>{const v=inp.value.trim();lnk.href=v||'#';lnk.style.display=v?'flex':'none'};updL();
   inp.addEventListener('input',()=>{d.rec=inp.value;saveLocal();markUnsaved();updL()});
-  rec.appendChild(inp);rec.appendChild(lnk);el.appendChild(rec);return el;
+  rec.appendChild(inp);rec.appendChild(lnk);el.appendChild(rec);
+
+  // ── Notes collapsible ──
+  const hasNotes = !!(d.notes && d.notes.trim());
+
+  const notesToggle = document.createElement('button');
+  notesToggle.className = 'notes-toggle' + (hasNotes ? ' has-notes' : '');
+  notesToggle.innerHTML = `<span class="nt-icon">▸</span>&nbsp;Notes${hasNotes ? '<span class="nt-dot"></span>' : ''}`;
+
+  const notesPreview = document.createElement('div');
+  notesPreview.className = 'notes-preview';
+  if (hasNotes) notesPreview.textContent = d.notes.trim();
+
+  const notesBody = document.createElement('div');
+  notesBody.className = 'notes-body';
+
+  const textarea = document.createElement('textarea');
+  textarea.placeholder = 'Session summary, observations, follow-ups…';
+  textarea.value = d.notes || '';
+  textarea.addEventListener('input', () => {
+    d.notes = textarea.value;
+    saveLocal();
+    markUnsaved();
+    const filled = !!(d.notes && d.notes.trim());
+    notesToggle.classList.toggle('has-notes', filled);
+    // update dot
+    const existingDot = notesToggle.querySelector('.nt-dot');
+    if (filled && !existingDot) {
+      notesToggle.innerHTML = `<span class="nt-icon" style="${notesToggle.querySelector('.nt-icon') ? notesToggle.querySelector('.nt-icon').getAttribute('style') : ''}">▾</span>&nbsp;Notes<span class="nt-dot"></span>`;
+    } else if (!filled && existingDot) {
+      notesToggle.innerHTML = `<span class="nt-icon">▾</span>&nbsp;Notes`;
+    }
+    notesPreview.textContent = filled ? d.notes.trim() : '';
+  });
+  notesBody.appendChild(textarea);
+
+  notesToggle.addEventListener('click', () => {
+    const isOpen = notesBody.classList.toggle('open');
+    const icon = notesToggle.querySelector('.nt-icon');
+    if (icon) icon.textContent = isOpen ? '▾' : '▸';
+    notesPreview.style.display = isOpen ? 'none' : (hasNotes ? 'block' : 'none');
+    if (isOpen) textarea.focus();
+  });
+
+  el.appendChild(notesToggle);
+  el.appendChild(notesPreview);
+  el.appendChild(notesBody);
+
+  return el;
 }
 
 function renderStats(){
   const bar=document.getElementById('stats');bar.innerHTML='';
-  const wk=schedule[wkKey(offset)]||{};let total=0,withRec=0,filled=0;const pc={};
-  DAYS.forEach(day=>{for(let si=0;si<SLOTS;si++){const d=wk[day+'-'+si]||{names:[]};if((d.names||[]).length){filled++;(d.names||[]).forEach(n=>{pc[n]=(pc[n]||0)+1;total});if(d.rec)withRec++}}});
+  const wk=schedule[wkKey(offset)]||{};let total=0,withRec=0,filled=0,withNotes=0;const pc={};
+  DAYS.forEach(day=>{for(let si=0;si<SLOTS;si++){const d=wk[day+'-'+si]||{names:[]};if((d.names||[]).length){filled++;(d.names||[]).forEach(n=>{pc[n]=(pc[n]||0)+1;total});if(d.rec)withRec++;if(d.notes&&d.notes.trim())withNotes++}}});
   const all=DAYS.length*SLOTS,top=Object.entries(pc).sort((a,b)=>b[1]-a[1])[0];
-  [{l:'Sessions',v:total,c:'#22d3ee'},{l:'Slots Filled',v:filled+'/'+all,c:'#10b981'},{l:'Recordings',v:withRec,c:'#fbbf24'},...(top?[{l:'Top Trainee',v:top[0],c:'#ec4899'}]:[])].forEach(({l,v,c})=>{
+  [{l:'Sessions',v:total,c:'#22d3ee'},{l:'Slots Filled',v:filled+'/'+all,c:'#10b981'},{l:'Recordings',v:withRec,c:'#fbbf24'},{l:'Notes',v:withNotes,c:'#f97316'},...(top?[{l:'Top Trainee',v:top[0],c:'#ec4899'}]:[])].forEach(({l,v,c})=>{
     const s=document.createElement('div');s.className='stat';
     s.innerHTML=`<div class="sl">${l}</div><div class="sv" style="color:${c}">${v}</div>`;bar.appendChild(s);
   });
@@ -365,17 +434,20 @@ function openSummary(){
   document.getElementById('modalWeekLabel').textContent=fmtWeek(offset);
   overlay.classList.add('open');
   const wk=schedule[wkKey(offset)]||{};let totalSessions=0,withRec=0,filled=0;const pc={},rows=[];
-  DAYS.forEach((day,di)=>{const date=dayDate(di,offset);for(let si=0;si<SLOTS;si++){const d=wk[day+'-'+si]||{names:[]};const hasName=(d.names||[]).length>0;rows.push({day,date,si,name:hasName?d.names[0]:null,rec:hasName&&d.rec?d.rec:null});if(hasName){filled++;totalSessions++;pc[d.names[0]]=(pc[d.names[0]]||0)+1;if(d.rec)withRec++}}});
+  DAYS.forEach((day,di)=>{const date=dayDate(di,offset);for(let si=0;si<SLOTS;si++){const d=wk[day+'-'+si]||{names:[]};const hasName=(d.names||[]).length>0;rows.push({day,date,si,name:hasName?d.names[0]:null,rec:hasName&&d.rec?d.rec:null,notes:d.notes||''});if(hasName){filled++;totalSessions++;pc[d.names[0]]=(pc[d.names[0]]||0)+1;if(d.rec)withRec++}}});
   if(totalSessions===0){body.innerHTML='<div class="no-data"><span>📭</span>No sessions logged yet.<br>Drag trainees into sessions to get started.</div>';return}
   const pct=Math.round(filled/(DAYS.length*SLOTS)*100);
-  let html=`<div class="sum-week-badge">Week of ${fmtWeek(offset)}</div><div class="sum-kpis"><div class="sum-kpi"><div class="kv" style="color:#22d3ee">${totalSessions}</div><div class="kl">Total Sessions</div></div><div class="sum-kpi"><div class="kv" style="color:#10b981">${pct}%</div><div class="kl">Completion</div></div><div class="sum-kpi"><div class="kv" style="color:#fbbf24">${withRec}</div><div class="kl">Recordings</div></div><div class="sum-kpi"><div class="kv" style="color:#ec4899">${Object.keys(pc).length}</div><div class="kl">Trainees</div></div></div><table class="sum-table"><thead><tr><th>Day</th><th>Date</th><th>Session</th><th>Trainee</th><th>Recording</th></tr></thead><tbody>`;
+  let html=`<div class="sum-week-badge">Week of ${fmtWeek(offset)}</div><div class="sum-kpis"><div class="sum-kpi"><div class="kv" style="color:#22d3ee">${totalSessions}</div><div class="kl">Total Sessions</div></div><div class="sum-kpi"><div class="kv" style="color:#10b981">${pct}%</div><div class="kl">Completion</div></div><div class="sum-kpi"><div class="kv" style="color:#fbbf24">${withRec}</div><div class="kl">Recordings</div></div><div class="sum-kpi"><div class="kv" style="color:#ec4899">${Object.keys(pc).length}</div><div class="kl">Trainees</div></div></div><table class="sum-table"><thead><tr><th>Day</th><th>Date</th><th>Session</th><th>Trainee</th><th>Recording</th><th>Notes</th></tr></thead><tbody>`;
   let lastDay='';
-  rows.forEach(({day,date,si,name,rec})=>{
+  rows.forEach(({day,date,si,name,rec,notes})=>{
     const dc=day!==lastDay?`<td class="td-day" rowspan="${SLOTS}">${day}</td>`:'';if(day!==lastDay)lastDay=day;
     const color=name?rColor(name):'#94a3b8';
     const nc=name?`<div class="td-name"><div class="avatar" style="background:${color};width:26px;height:26px;font-size:.65rem">${ini(name)}</div>${name}</div>`:'<span class="td-empty">— unscheduled —</span>';
     const rc=rec?`<a href="${rec}" target="_blank">▶ Watch</a>`:'<span class="td-empty">No link</span>';
-    html+=`<tr>${dc}<td style="color:#cbd5e1">${date}</td><td style="font-weight:600">Session ${si+1}</td><td>${nc}</td><td class="td-rec">${rc}</td></tr>`;
+    const notesHtml = notes && notes.trim()
+      ? `<div class="td-notes">${notes.trim().replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`
+      : '<span class="td-empty">—</span>';
+    html+=`<tr>${dc}<td style="color:#cbd5e1">${date}</td><td style="font-weight:600">Session ${si+1}</td><td>${nc}</td><td class="td-rec">${rc}</td><td>${notesHtml}</td></tr>`;
   });
   html+='</tbody></table>';
   if(Object.keys(pc).length){html+='<div class="sum-person-section"><div class="sum-section-title">Trainee Breakdown</div><div class="sum-person-grid">';Object.entries(pc).sort((a,b)=>b[1]-a[1]).forEach(([name,count])=>{const color=rColor(name);html+=`<div class="sum-person-card"><div class="avatar" style="background:${color}">${ini(name)}</div><div><div class="pname">${name}</div><div class="psub">${count} session${count>1?'s':''}</div></div><div class="pcount">${count}</div></div>`});html+='</div></div>'}
