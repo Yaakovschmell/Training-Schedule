@@ -3,108 +3,293 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Day — Sales Manager</title>
+<title>MyDay</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#f4f2ed;
-  --bg2:#eceae3;
+  --bg:#f7f6f3;
+  --bg2:#f0efe9;
   --surface:#ffffff;
-  --surface2:#f9f8f5;
-  --border:#e2dfd7;
-  --border2:#d0ccbf;
-  --text:#1a1814;
-  --text2:#6b6558;
-  --text3:#a89f90;
+  --surface2:#faf9f7;
+  --border:#e8e5de;
+  --border2:#d8d4ca;
+  --text:#18160f;
+  --text2:#6e6a5e;
+  --text3:#aaa69a;
   --green:#1a6b42;
-  --green-bg:#e6f4ed;
-  --green-bd:#a8d8bc;
-  --green-text:#0e4028;
-  --amber:#8a5a00;
-  --amber-bg:#fff3d6;
-  --amber-bd:#e8c060;
-  --amber-text:#5c3a00;
-  --red:#a82020;
-  --red-bg:#fdeaea;
-  --red-bd:#e8a0a0;
-  --blue:#1a40a0;
-  --blue-bg:#eaf0ff;
-  --blue-bd:#a0b8f0;
-  --purple:#5820a8;
-  --purple-bg:#f2eeff;
+  --green-bg:#e8f5ee;
+  --green-bd:#b0d8bf;
+  --green-lt:#f0faf4;
+  --amber:#8a5800;
+  --amber-bg:#fff8e6;
+  --amber-bd:#e8c870;
+  --red:#c02828;
+  --red-bg:#fff0f0;
+  --red-bd:#f0b8b8;
+  --blue:#1840a8;
+  --blue-bg:#eef3ff;
+  --blue-bd:#a8bef8;
+  --purple:#6020b8;
+  --purple-bg:#f5eeff;
+  --mono:'JetBrains Mono',monospace;
+  --sans:'Inter',sans-serif;
+  --sh:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --sh-md:0 4px 16px rgba(0,0,0,.08),0 2px 6px rgba(0,0,0,.05);
   --r:8px;--r-lg:12px;--r-xl:16px;
-  --mono:'DM Mono',monospace;
-  --sans:'DM Sans',sans-serif;
-  --shadow:0 1px 3px rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.05);
-  --shadow-md:0 4px 12px rgba(0,0,0,.08),0 2px 4px rgba(0,0,0,.05);
 }
-body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
 
-/* ── TOPBAR ── */
-.topbar{height:52px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:0;position:sticky;top:0;z-index:500;box-shadow:var(--shadow)}
-.tb-brand{font-size:16px;font-weight:700;color:var(--text);letter-spacing:-.3px;margin-right:32px}
-.tb-brand span{color:var(--green)}
-.tb-date{font-family:var(--mono);font-size:11px;color:var(--text3);margin-right:auto}
-.tb-tabs{display:flex;height:52px;gap:0;margin-right:20px}
-.tb-tab{height:52px;padding:0 18px;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;border:none;background:none;font-family:var(--sans);border-bottom:2.5px solid transparent;transition:all .15s;white-space:nowrap}
-.tb-tab:hover{color:var(--text)}
-.tb-tab.on{color:var(--green);border-bottom-color:var(--green);font-weight:600}
-.tb-tab .n{font-size:10px;font-weight:700;background:var(--amber);color:#fff;padding:1px 6px;border-radius:20px;font-family:var(--mono)}
-.save-btn{display:flex;align-items:center;gap:6px;padding:8px 18px;background:var(--green);color:#fff;border:none;border-radius:var(--r);font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;transition:background .15s;box-shadow:var(--shadow)}
+/* ═══ TOPBAR ═══ */
+.topbar{height:54px;background:var(--text);flex-shrink:0;display:flex;align-items:center;padding:0 20px;gap:0;z-index:500}
+.tb-logo{font-size:16px;font-weight:700;color:#fff;letter-spacing:-.4px;margin-right:24px}
+.tb-logo em{color:#4ecb7a;font-style:normal}
+.tb-date{font-family:var(--mono);font-size:11px;color:#666258;margin-right:auto}
+.tb-nav{display:flex;height:54px}
+.tb-btn{height:54px;padding:0 20px;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:#888078;cursor:pointer;border:none;background:none;font-family:var(--sans);border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap}
+.tb-btn:hover{color:#ccc}
+.tb-btn.on{color:#fff;border-bottom-color:#4ecb7a}
+.tb-btn .badge{font-size:10px;font-weight:700;background:#e8a020;color:#fff;padding:1px 6px;border-radius:20px;font-family:var(--mono)}
+.topbar-actions{display:flex;align-items:center;gap:10px;margin-left:16px}
+.save-btn{display:flex;align-items:center;gap:6px;padding:7px 16px;background:#1a6b42;color:#fff;border:none;border-radius:var(--r);font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;transition:background .15s}
 .save-btn:hover{background:#145535}
-.save-st{font-family:var(--mono);font-size:11px;color:var(--text3);margin-left:10px;min-width:90px}
+.save-st{font-family:var(--mono);font-size:11px;color:#555048}
 
-/* ── PAGE ── */
-.page{display:none}
-.page.on{display:block}
+/* ═══ LAYOUT ═══ */
+.app-body{flex:1;display:flex;overflow:hidden}
+.page{display:none;flex:1;overflow:hidden}
+.page.on{display:flex}
 
-/* ── CHECKLIST PAGE ── */
-.cl-page{display:grid;grid-template-columns:1fr 360px;min-height:calc(100vh - 52px)}
-.cl-col{padding:24px;overflow-y:auto;border-right:1px solid var(--border)}
-.cl-col:last-child{border-right:none;background:var(--bg2)}
+/* ═══ SIDEBAR (shared by checklist + trainees) ═══ */
+.sidebar{width:230px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.sidebar-section{padding:14px 12px 6px;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3)}
+.sidebar-link{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:var(--r);cursor:pointer;font-size:13px;font-weight:500;color:var(--text2);border:none;background:none;font-family:var(--sans);width:100%;text-align:left;transition:all .12s}
+.sidebar-link:hover{background:var(--bg);color:var(--text)}
+.sidebar-link.on{background:var(--green-bg);color:var(--green);font-weight:600}
+.sidebar-link .dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0}
+.sidebar-link .pend{margin-left:auto;font-size:10px;font-weight:700;color:var(--amber);font-family:var(--mono)}
+.sidebar-av{width:26px;height:26px;border-radius:50%;background:var(--blue-bg);color:var(--blue);font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--blue-bd)}
+.sidebar-av.ob{background:var(--purple-bg);color:var(--purple);border-color:#c8a8f0}
+.sidebar-footer{padding:12px;margin-top:auto;border-top:1px solid var(--border)}
 
-.col-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.col-title{font-size:18px;font-weight:700;letter-spacing:-.3px}
+/* ═══ MAIN CONTENT ═══ */
+.main{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+.main-header{padding:22px 28px 0;display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0}
+.main-title{font-size:20px;font-weight:700;letter-spacing:-.4px}
+.main-sub{font-size:13px;color:var(--text3);margin-top:2px}
+.main-body{padding:20px 28px 40px;flex:1}
 
-.prog-wrap{margin-bottom:20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px 16px;box-shadow:var(--shadow)}
-.prog-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
-.prog-label{font-size:13px;color:var(--text2)}
-.prog-pct{font-family:var(--mono);font-size:14px;font-weight:600;color:var(--green)}
-.prog-track{height:6px;background:var(--border);border-radius:6px;overflow:hidden}
-.prog-fill{height:100%;background:var(--green);border-radius:6px;transition:width .4s cubic-bezier(.4,0,.2,1)}
+/* ═══ CHECKLIST PAGE ═══ */
+.cl-grid{display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start}
 
-/* remind strip */
-.remind{background:var(--amber-bg);border:1px solid var(--amber-bd);border-radius:var(--r-lg);padding:14px 16px;margin-bottom:18px;box-shadow:var(--shadow)}
-.remind-hd{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--amber-text);margin-bottom:10px}
-.remind-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-top:1px solid var(--amber-bd)}
-.ri-cb{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--amber-bd);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;background:var(--surface);transition:all .15s;margin-top:1px}
-.ri-cb.on{background:var(--green);border-color:var(--green)}
-.ri-cb.on::after{content:'';width:9px;height:6px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translate(1px,-1px);display:block}
-.ri-text{font-size:13px;color:var(--amber-text);flex:1}
-.ri-sub{font-size:11px;color:var(--amber);font-family:var(--mono);margin-top:2px}
+/* progress card */
+.prog-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:16px 18px;margin-bottom:18px;box-shadow:var(--sh);display:flex;align-items:center;gap:20px}
+.prog-ring-wrap{position:relative;flex-shrink:0}
+.prog-ring{transform:rotate(-90deg)}
+.prog-ring-bg{fill:none;stroke:var(--border);stroke-width:4}
+.prog-ring-fill{fill:none;stroke:var(--green);stroke-width:4;stroke-linecap:round;transition:stroke-dashoffset .5s cubic-bezier(.4,0,.2,1)}
+.prog-pct-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:600;color:var(--green)}
+.prog-stats{display:flex;gap:24px;flex:1}
+.prog-stat{text-align:center}
+.prog-stat-val{font-size:22px;font-weight:700;font-family:var(--mono);color:var(--text);letter-spacing:-1px}
+.prog-stat-lbl{font-size:11px;color:var(--text3);margin-top:1px}
 
-/* section label */
-.sec{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin:18px 0 8px;display:flex;align-items:center;justify-content:space-between}
-.sec:first-child{margin-top:0}
-.sec button{font-size:11px;text-transform:none;letter-spacing:0;font-weight:500;color:var(--text3);background:none;border:none;cursor:pointer;font-family:var(--sans)}
-.sec button:hover{color:var(--red)}
+/* section */
+.sec-hd{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin:16px 0 8px;display:flex;align-items:center;justify-content:space-between}
+.sec-hd:first-child{margin-top:0}
+.sec-hd button{font-size:11px;text-transform:none;letter-spacing:0;font-weight:500;color:var(--text3);background:none;border:none;cursor:pointer;font-family:var(--sans)}
+.sec-hd button:hover{color:var(--red)}
 
 /* check item */
-.ci{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin-bottom:5px;cursor:pointer;transition:background .1s;user-select:none;box-shadow:var(--shadow)}
-.ci:hover{background:var(--surface2)}
-.ci:hover .ci-del{opacity:1}
-.ci.done{opacity:.5;box-shadow:none}
+.ci{display:flex;align-items:flex-start;gap:10px;padding:11px 13px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin-bottom:5px;cursor:pointer;transition:all .1s;user-select:none;box-shadow:var(--sh)}
+.ci:hover{background:var(--surface2);border-color:var(--border2)}
+.ci:hover .x-btn{opacity:1}
+.ci.done{opacity:.45;box-shadow:none}
 .cb{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--border2);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .15s}
 .cb.on{background:var(--green);border-color:var(--green)}
 .cb.on::after{content:'';width:9px;height:6px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translate(1px,-1px);display:block}
 .ci-text{font-size:14px;flex:1;line-height:1.4;word-break:break-word}
 .ci-text.done{text-decoration:line-through;color:var(--text3)}
-.ci-del{opacity:0;background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:2px 4px;border-radius:4px;flex-shrink:0;transition:all .1s;line-height:1}
-.ci-del:hover{color:var(--red);background:var(--red-bg)}
+.x-btn{opacity:0;background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:2px 4px;border-radius:4px;flex-shrink:0;line-height:1;transition:all .1s}
+.x-btn:hover{color:var(--red);background:var(--red-bg)}
 
-/* inputs */
+/* notes area */
+.notes-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--sh);overflow:hidden}
+.notes-header{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface2)}
+.notes-title{font-size:13px;font-weight:700}
+.notes-area{width:100%;min-height:120px;padding:12px 14px;border:none;outline:none;font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--text);background:var(--surface);resize:none}
+.notes-area::placeholder{color:var(--text3)}
+
+/* one-offs */
+.oo-item{display:flex;align-items:flex-start;gap:10px;padding:10px 13px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin-bottom:5px;cursor:pointer;box-shadow:var(--sh);transition:all .1s}
+.oo-item:hover{background:var(--surface2)}
+.oo-item:hover .x-btn{opacity:1}
+.oo-item.done{opacity:.45}
+
+/* remind strip */
+.remind-strip{background:var(--amber-bg);border:1px solid var(--amber-bd);border-radius:var(--r-lg);padding:13px 15px;margin-bottom:18px}
+.rs-hd{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--amber);margin-bottom:8px}
+.rs-item{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-top:1px solid var(--amber-bd)}
+.rs-cb{width:17px;height:17px;border-radius:4px;border:1.5px solid var(--amber-bd);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;background:var(--surface);transition:all .15s;margin-top:1px}
+.rs-cb.on{background:var(--green);border-color:var(--green)}
+.rs-cb.on::after{content:'';width:8px;height:5px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translate(1px,-1px);display:block}
+.rs-text{font-size:13px;color:var(--amber);flex:1}
+.rs-sub{font-size:11px;color:#b07800;font-family:var(--mono);margin-top:1px}
+
+/* ═══ TRAINEES PAGE ═══ */
+/* uses .sidebar and .main from above */
+.tr-detail{padding:24px 28px 40px;flex:1;overflow-y:auto}
+.no-sel{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--text3);gap:10px;font-size:15px}
+
+.td-hdr{display:flex;align-items:flex-start;gap:16px;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.td-av{width:50px;height:50px;border-radius:50%;background:var(--blue-bg);color:var(--blue);font-size:17px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:2px solid var(--blue-bd)}
+.td-av.ob{background:var(--purple-bg);color:var(--purple);border-color:#c8a8f0}
+.td-name{font-size:21px;font-weight:700;letter-spacing:-.4px}
+.td-tags{display:flex;gap:6px;margin-top:5px;flex-wrap:wrap}
+.tag{font-size:11px;padding:2px 9px;border-radius:20px;font-weight:600;font-family:var(--mono)}
+.tag-ob{background:var(--purple-bg);color:var(--purple)}
+.tag-today{background:var(--green-bg);color:var(--green);border:1px solid var(--green-bd)}
+.tag-pend{background:var(--amber-bg);color:var(--amber)}
+.tag-ok{background:var(--green-bg);color:var(--green)}
+
+/* toggle */
+.sw{display:flex;align-items:center;gap:11px;padding:11px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);cursor:pointer;margin-bottom:20px;transition:all .15s;box-shadow:var(--sh)}
+.sw:hover{border-color:var(--border2)}
+.sw.on{background:var(--green-lt);border-color:var(--green-bd)}
+.sw-pill{width:34px;height:18px;border-radius:20px;background:var(--border2);transition:background .2s;position:relative;flex-shrink:0}
+.sw-pill.on{background:var(--green)}
+.sw-pill::after{content:'';width:12px;height:12px;border-radius:50%;background:#fff;position:absolute;top:3px;left:3px;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.sw-pill.on::after{transform:translateX(16px)}
+.sw-lbl{font-size:14px;font-weight:600}
+.sw-hint{font-size:12px;color:var(--text3);margin-left:auto}
+
+/* prep */
+.prep-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:22px}
+.prep-item{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 8px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);cursor:pointer;transition:all .15s;box-shadow:var(--sh);text-align:center}
+.prep-item:hover{border-color:var(--border2)}
+.prep-item.on{background:var(--green-lt);border-color:var(--green-bd)}
+.prep-icon{width:28px;height:28px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s}
+.prep-item.on .prep-icon{background:var(--green-bg)}
+.prep-lbl{font-size:11px;font-weight:600;color:var(--text2);line-height:1.3}
+.prep-item.on .prep-lbl{color:var(--green)}
+
+/* detail panels */
+.td-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.td-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--sh)}
+.panel-hd{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface2)}
+.panel-title{font-size:13px;font-weight:700;display:flex;align-items:center;gap:7px}
+.panel-body{padding:14px}
+
+/* todo */
+.todo-item{display:flex;align-items:flex-start;gap:9px;padding:9px 10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);margin-bottom:5px;transition:background .1s}
+.todo-item:hover{background:var(--surface2)}
+.todo-cb{width:17px;height:17px;border-radius:4px;border:1.5px solid var(--border2);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;background:var(--surface);margin-top:1px}
+.todo-cb.on{background:var(--green);border-color:var(--green)}
+.todo-cb.on::after{content:'';width:8px;height:5px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translate(1px,-1px);display:block}
+.todo-body{flex:1;min-width:0}
+.todo-text{font-size:13px;line-height:1.4;word-break:break-word}
+.todo-text.done{text-decoration:line-through;color:var(--text3)}
+.todo-meta{display:flex;gap:5px;margin-top:3px;flex-wrap:wrap;align-items:center}
+.rf{font-size:10px;padding:1px 7px;border-radius:20px;font-weight:600;background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-bd)}
+.df{font-size:10px;color:var(--green);font-family:var(--mono)}
+.i-btn{background:none;border:none;color:var(--text3);cursor:pointer;padding:2px 4px;border-radius:4px;font-size:12px;flex-shrink:0;line-height:1;transition:all .1s}
+.i-btn:hover{color:var(--red);background:var(--red-bg)}
+.remind-i-btn{font-size:13px}
+
+/* call review */
+.call-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px;margin-bottom:6px}
+.call-hdr{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:5px}
+.call-name{font-size:13px;font-weight:600}
+.call-metas{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:2px}
+.ctag{font-size:10px;padding:1px 7px;border-radius:20px;font-weight:600;font-family:var(--mono)}
+.ct-goal{background:var(--blue-bg);color:var(--blue)}
+.ct-neglect{background:var(--red-bg);color:var(--red)}
+.ct-transfer{background:var(--purple-bg);color:var(--purple)}
+.ct-other{background:var(--bg2);color:var(--text2)}
+.call-dur{font-size:10px;color:var(--text3);font-family:var(--mono)}
+.call-notes{font-size:12px;color:var(--text2);line-height:1.55;white-space:pre-wrap;margin-top:4px}
+
+/* tip */
+.tip-card{display:flex;align-items:flex-start;gap:8px;padding:9px 11px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);margin-bottom:5px;transition:background .1s}
+.tip-card:hover{background:var(--surface2)}
+.tip-card:hover .i-btn{opacity:1}
+.tip-dot{width:6px;height:6px;border-radius:50%;background:var(--blue);flex-shrink:0;margin-top:6px}
+.tip-text{font-size:13px;color:var(--text2);flex:1;line-height:1.5}
+.tip-card .i-btn{opacity:0}
+
+/* meeting */
+.meeting-entry{border:1px solid var(--border);border-radius:var(--r-lg);padding:12px 14px;margin-bottom:8px;background:var(--bg)}
+.me-date{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
+.me-date-lbl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);font-family:var(--mono)}
+.me-notes{font-size:13px;line-height:1.65;white-space:pre-wrap;color:var(--text);margin-bottom:7px}
+.me-acts{border-top:1px solid var(--border);padding-top:8px}
+.me-acts-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:6px}
+.ma-row{display:flex;align-items:flex-start;gap:8px;padding:4px 0}
+.ma-cb{width:16px;height:16px;border-radius:3px;border:1.5px solid var(--border2);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;background:var(--surface);margin-top:2px}
+.ma-cb.on{background:var(--green);border-color:var(--green)}
+.ma-cb.on::after{content:'';width:8px;height:5px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translate(1px,-1px);display:block}
+.ma-text{font-size:13px;flex:1;line-height:1.4}
+.ma-text.done{text-decoration:line-through;color:var(--text3)}
+.pend-hint{font-size:10px;color:var(--amber);font-family:var(--mono);margin-top:1px}
+
+/* log form */
+.log-toggle{width:100%;padding:9px;background:var(--bg);border:1.5px dashed var(--border2);border-radius:var(--r);font-family:var(--sans);font-size:13px;color:var(--text3);cursor:pointer;margin-bottom:10px;text-align:center;transition:all .15s}
+.log-toggle:hover{border-color:var(--green);color:var(--green)}
+.log-form{background:var(--bg2);border-radius:var(--r-lg);padding:14px;margin-bottom:12px;display:none;border:1px solid var(--border)}
+.log-form.open{display:block}
+.lf-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);display:block;margin-bottom:5px}
+.lf-row{display:flex;gap:7px;margin-top:10px}
+
+/* ═══ ALL TODOS PAGE ═══ */
+.all-todos-page{flex:1;overflow-y:auto;padding:24px 28px 40px}
+.at-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.at-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--sh)}
+.at-card-hd{padding:11px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;background:var(--surface2)}
+.at-av{width:28px;height:28px;border-radius:50%;background:var(--blue-bg);color:var(--blue);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--blue-bd)}
+.at-av.ob{background:var(--purple-bg);color:var(--purple);border-color:#c8a8f0}
+.at-name{font-size:13px;font-weight:700;flex:1}
+.at-pend{font-size:10px;font-weight:700;color:var(--amber);font-family:var(--mono)}
+.at-card-body{padding:10px 12px}
+.at-item{display:flex;align-items:flex-start;gap:8px;padding:7px 8px;border-radius:var(--r);cursor:pointer;transition:background .1s}
+.at-item:hover{background:var(--bg)}
+.at-cb{width:16px;height:16px;border-radius:3px;border:1.5px solid var(--border2);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;background:var(--surface);margin-top:1px}
+.at-cb.on{background:var(--green);border-color:var(--green)}
+.at-cb.on::after{content:'';width:7px;height:5px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translate(1px,-1px);display:block}
+.at-text{font-size:13px;flex:1;line-height:1.35;word-break:break-word}
+.at-text.done{text-decoration:line-through;color:var(--text3)}
+
+/* ═══ HISTORY PAGE ═══ */
+.hist-page{flex:1;overflow-y:auto;padding:24px 28px 40px}
+.hist-day{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);margin-bottom:14px;overflow:hidden;box-shadow:var(--sh)}
+.hist-day-hd{padding:13px 18px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background .1s}
+.hist-day-hd:hover{background:var(--surface2)}
+.hist-day-date{font-size:14px;font-weight:700}
+.hist-day-stats{display:flex;gap:12px;align-items:center}
+.hist-stat{font-size:12px;color:var(--text3)}
+.hist-stat strong{color:var(--text);font-weight:600}
+.hist-chevron{color:var(--text3);font-size:12px;transition:transform .2s}
+.hist-chevron.open{transform:rotate(180deg)}
+.hist-body{display:none;border-top:1px solid var(--border);padding:14px 18px}
+.hist-body.open{display:block}
+.hist-task{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)}
+.hist-task:last-child{border-bottom:none}
+.hist-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.hist-dot.done{background:var(--green)}
+.hist-dot.undone{background:var(--border2)}
+.hist-task-text{font-size:13px;color:var(--text2);flex:1}
+.hist-task-text.done{color:var(--text)}
+.hist-cat{font-size:10px;padding:1px 7px;border-radius:20px;background:var(--bg2);color:var(--text3);font-family:var(--mono)}
+.hist-notes-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);margin:12px 0 6px}
+.hist-notes-text{font-size:13px;color:var(--text2);line-height:1.65;white-space:pre-wrap;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px}
+
+/* ═══ COACHING LIBRARY PAGE ═══ */
+.lib-page{flex:1;overflow-y:auto;padding:24px 28px 40px;max-width:960px}
+.lib-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+/* ═══ SHARED INPUT STYLES ═══ */
 input,select,textarea{font-family:var(--sans);font-size:14px;padding:9px 12px;border:1px solid var(--border2);border-radius:var(--r);background:var(--surface);color:var(--text);outline:none;transition:border-color .15s}
 input:focus,select:focus,textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(26,107,66,.1)}
 input.flex1,textarea.flex1{flex:1}
@@ -112,266 +297,183 @@ select{color:var(--text2);cursor:pointer;font-size:13px}
 textarea{width:100%;resize:vertical;line-height:1.6}
 .add-row{display:flex;gap:7px}
 
-.btn{padding:8px 14px;border:1px solid var(--border);border-radius:var(--r);background:var(--surface);color:var(--text);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--sans);white-space:nowrap;transition:all .12s;display:inline-flex;align-items:center;gap:6px;box-shadow:var(--shadow)}
+.btn{padding:8px 14px;border:1px solid var(--border);border-radius:var(--r);background:var(--surface);color:var(--text);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--sans);white-space:nowrap;transition:all .12s;display:inline-flex;align-items:center;gap:6px;box-shadow:var(--sh)}
 .btn:hover{background:var(--surface2)}
-.btn-green{background:var(--green);color:#fff;border-color:var(--green);box-shadow:var(--shadow)}
-.btn-green:hover{background:#145535;border-color:#145535}
-.btn-sm{padding:6px 11px;font-size:12px}
+.btn-green{background:var(--green);color:#fff;border-color:var(--green);box-shadow:var(--sh)}
+.btn-green:hover{background:#145535}
+.btn-sm{padding:5px 11px;font-size:12px}
 .btn-ghost{background:transparent;border-color:transparent;color:var(--text2);box-shadow:none}
-.btn-ghost:hover{background:var(--bg);border-color:var(--border);color:var(--text)}
+.btn-ghost:hover{background:var(--bg);border-color:var(--border)}
 .btn-red{background:transparent;border-color:transparent;color:var(--red);box-shadow:none}
 .btn-red:hover{background:var(--red-bg);border-color:var(--red-bd)}
 
-/* oo items */
-.oo-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin-bottom:5px;cursor:pointer;box-shadow:var(--shadow);transition:background .1s}
-.oo-item:hover{background:var(--surface2)}
-.oo-item:hover .ci-del{opacity:1}
-.oo-item.done{opacity:.5}
+.empty{font-size:13px;color:var(--text3);padding:14px 0;text-align:center}
+.divider{height:1px;background:var(--border);margin:16px 0}
 
-/* ── TRAINEES PAGE ── */
-.tr-page{display:grid;grid-template-columns:230px 1fr;min-height:calc(100vh - 52px)}
-.tr-sidebar{background:var(--surface);border-right:1px solid var(--border);padding:14px 10px;overflow-y:auto;box-shadow:2px 0 8px rgba(0,0,0,.04)}
-.tr-main{background:var(--bg);overflow-y:auto}
-
-.tr-sec-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);padding:10px 10px 5px}
-.tr-btn{display:flex;align-items:center;gap:9px;width:100%;padding:9px 10px;border:none;background:none;font-family:var(--sans);font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;border-radius:var(--r);transition:all .12s;text-align:left}
-.tr-btn:hover{background:var(--bg);color:var(--text)}
-.tr-btn.on{background:var(--green-bg);color:var(--green-text);font-weight:600}
-.tr-av{width:30px;height:30px;border-radius:50%;background:var(--blue-bg);color:var(--blue);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--blue-bd)}
-.tr-av.ob{background:var(--purple-bg);color:var(--purple);border-color:#c0a0e8}
-.tr-pend{margin-left:auto;font-size:10px;font-weight:700;color:var(--amber);font-family:var(--mono)}
-.today-dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0}
-
-/* trainee detail */
-.td-wrap{padding:28px 32px;max-width:none}
-.td-header{display:flex;align-items:flex-start;gap:16px;margin-bottom:22px;padding-bottom:20px;border-bottom:1px solid var(--border)}
-.td-av-lg{width:48px;height:48px;border-radius:50%;background:var(--blue-bg);color:var(--blue);font-size:17px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:2px solid var(--blue-bd)}
-.td-av-lg.ob{background:var(--purple-bg);color:var(--purple);border-color:#c0a0e8}
-.td-name{font-size:22px;font-weight:700;letter-spacing:-.4px}
-.td-tags{display:flex;gap:6px;margin-top:5px;flex-wrap:wrap}
-.tag{font-size:11px;padding:2px 9px;border-radius:20px;font-weight:600;font-family:var(--mono)}
-.tag-ob{background:var(--purple-bg);color:var(--purple)}
-.tag-today{background:var(--green-bg);color:var(--green-text);border:1px solid var(--green-bd)}
-.tag-pend{background:var(--amber-bg);color:var(--amber-text)}
-.tag-ok{background:var(--green-bg);color:var(--green-text)}
-
-/* toggle */
-.sw-row{display:flex;align-items:center;gap:11px;padding:11px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);cursor:pointer;margin-bottom:20px;transition:all .15s;box-shadow:var(--shadow)}
-.sw-row:hover{background:var(--surface2)}
-.sw-row.on{border-color:var(--green-bd);background:var(--green-bg)}
-.sw-pill{width:34px;height:18px;border-radius:20px;background:var(--border2);transition:background .2s;position:relative;flex-shrink:0}
-.sw-pill.on{background:var(--green)}
-.sw-pill::after{content:'';width:12px;height:12px;border-radius:50%;background:#fff;position:absolute;top:3px;left:3px;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
-.sw-pill.on::after{transform:translateX(16px)}
-.sw-label{font-size:14px;font-weight:600}
-.sw-hint{font-size:12px;color:var(--text3);margin-left:auto}
-
-/* prep grid */
-.prep-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:20px}
-.prep-item{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);cursor:pointer;transition:all .15s;box-shadow:var(--shadow)}
-.prep-item:hover{background:var(--surface2)}
-.prep-item.on{background:var(--green-bg);border-color:var(--green-bd)}
-.pcb{width:16px;height:16px;border-radius:3px;border:1.5px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
-.pcb.on{background:var(--green);border-color:var(--green)}
-.pcb.on::after{content:'';width:8px;height:5px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translate(1px,-1px);display:block}
-.prep-lbl{font-size:13px;font-weight:500}
-.prep-lbl.on{color:var(--green-text)}
-
-/* 4-column grid for trainee detail panels */
-.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
-.detail-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px}
-
-/* panel */
-.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--shadow)}
-.panel-hd{padding:13px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface2)}
-.panel-title{font-size:14px;font-weight:700}
-.panel-body{padding:14px}
-.panel-body.slim{padding:10px 12px}
-
-/* call review */
-.call-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:11px 13px;margin-bottom:7px}
-.call-card-hd{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:5px}
-.call-name{font-size:14px;font-weight:600}
-.call-metas{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:2px}
-.call-tag{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:600;font-family:var(--mono)}
-.ct-goal{background:var(--blue-bg);color:var(--blue)}
-.ct-neglect{background:var(--red-bg);color:var(--red)}
-.ct-transfer{background:var(--purple-bg);color:var(--purple)}
-.ct-other{background:var(--bg2);color:var(--text2)}
-.call-dur{font-size:11px;color:var(--text3);font-family:var(--mono)}
-.call-notes{font-size:13px;color:var(--text2);line-height:1.55;white-space:pre-wrap}
-.icon-btn{background:none;border:none;color:var(--text3);cursor:pointer;padding:2px 5px;border-radius:4px;font-size:13px;flex-shrink:0;line-height:1;transition:all .1s}
-.icon-btn:hover{color:var(--red);background:var(--red-bg)}
-
-/* todo */
-.todo-item{display:flex;align-items:flex-start;gap:10px;padding:10px 11px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);margin-bottom:6px;transition:background .1s}
-.todo-item:hover{background:var(--surface2)}
-.todo-cb{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--border2);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;margin-top:1px;background:var(--surface)}
-.todo-cb.on{background:var(--green);border-color:var(--green)}
-.todo-cb.on::after{content:'';width:9px;height:6px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translate(1px,-1px);display:block}
-.todo-body{flex:1;min-width:0}
-.todo-text{font-size:14px;line-height:1.4;word-break:break-word}
-.todo-text.done{text-decoration:line-through;color:var(--text3)}
-.todo-meta{display:flex;gap:6px;align-items:center;margin-top:3px;flex-wrap:wrap}
-.remind-flag{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600;background:var(--amber-bg);color:var(--amber-text);border:1px solid var(--amber-bd)}
-.done-flag{font-size:11px;color:var(--green);font-family:var(--mono)}
-
-/* meeting */
-.meeting-entry{border:1px solid var(--border);border-radius:var(--r-lg);padding:13px 15px;margin-bottom:9px;background:var(--bg)}
-.me-date{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.me-date-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);font-family:var(--mono)}
-.me-notes{font-size:14px;line-height:1.7;white-space:pre-wrap;color:var(--text);margin-bottom:8px}
-.me-actions{border-top:1px solid var(--border);padding-top:9px}
-.me-act-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:7px}
-.ma-row{display:flex;align-items:flex-start;gap:9px;padding:5px 0}
-.ma-cb{width:17px;height:17px;border-radius:3px;border:1.5px solid var(--border2);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;background:var(--surface);margin-top:1px}
-.ma-cb.on{background:var(--green);border-color:var(--green)}
-.ma-cb.on::after{content:'';width:8px;height:5px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translate(1px,-1px);display:block}
-.ma-text{font-size:13px;flex:1;line-height:1.4}
-.ma-text.done{text-decoration:line-through;color:var(--text3)}
-.pend-hint{font-size:11px;color:var(--amber);margin-top:1px;font-family:var(--mono)}
-
-/* tips */
-.tip-card{display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);margin-bottom:6px;transition:background .1s}
-.tip-card:hover{background:var(--surface2)}
-.tip-card:hover .icon-btn{opacity:1}
-.tip-dot{width:6px;height:6px;border-radius:50%;background:var(--blue);flex-shrink:0;margin-top:6px}
-.tip-text{font-size:13px;color:var(--text2);flex:1;line-height:1.5}
-.tip-card .icon-btn{opacity:0}
-
-/* log form */
-.log-toggle{width:100%;padding:9px;background:var(--bg);border:1.5px dashed var(--border2);border-radius:var(--r);font-family:var(--sans);font-size:13px;color:var(--text3);cursor:pointer;margin-bottom:10px;text-align:center;transition:all .15s}
-.log-toggle:hover{border-color:var(--green);color:var(--green)}
-.log-form{background:var(--bg2);border-radius:var(--r-lg);padding:14px;margin-bottom:12px;display:none;border:1px solid var(--border)}
-.log-form.open{display:block}
-.lf-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);display:block;margin-bottom:5px}
-.lf-row{display:flex;gap:7px;margin-top:10px}
-
-.empty-state{font-size:13px;color:var(--text3);padding:14px 0;text-align:center}
-.divider{height:1px;background:var(--border);margin:18px 0}
-.no-sel{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:400px;color:var(--text3);font-size:15px;gap:8px}
-
-/* ── MODAL ── */
-.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:900;align-items:center;justify-content:center}
+/* ═══ MODAL ═══ */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:900;align-items:center;justify-content:center}
 .modal-bg.open{display:flex}
-.modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:24px;width:430px;max-width:92vw;box-shadow:var(--shadow-md)}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:24px;width:440px;max-width:94vw;box-shadow:var(--sh-md)}
 .modal-title{font-size:16px;font-weight:700;margin-bottom:16px}
-.m-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);display:block;margin-bottom:5px;margin-top:12px}
-.m-label:first-of-type{margin-top:0}
+.m-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);display:block;margin-bottom:5px;margin-top:12px}
+.m-lbl:first-of-type{margin-top:0}
 .m-input{width:100%;font-size:14px;padding:9px 12px;border:1px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--text);font-family:var(--sans);outline:none}
 .m-input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(26,107,66,.1)}
 .m-row{display:flex;gap:8px;margin-top:16px}
-.m-btn{flex:1;padding:10px;border-radius:var(--r);font-family:var(--sans);font-size:14px;font-weight:600;cursor:pointer;border:none}
-.m-save{background:var(--green);color:#fff}
+.m-btn{flex:1;padding:10px;border-radius:var(--r);font-family:var(--sans);font-size:14px;font-weight:600;cursor:pointer;border:1.5px solid transparent}
+.m-save{background:var(--green);color:#fff;border-color:var(--green)}
 .m-save:hover{background:#145535}
-.m-cancel{background:var(--bg);color:var(--text2);border:1px solid var(--border)!important;border:none}
+.m-cancel{background:var(--bg);color:var(--text2);border-color:var(--border)}
 .m-cancel:hover{background:var(--bg2)}
-.m-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-
-/* ── TIPS PAGE ── */
-.tips-page{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:calc(100vh - 52px)}
-.tips-col{padding:24px;border-right:1px solid var(--border);overflow-y:auto}
-.tips-col:last-child{border-right:none;background:var(--bg2)}
+.m-2col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 </style>
 </head>
 <body>
 
+<!-- TOPBAR -->
 <div class="topbar">
-  <div class="tb-brand">My<span>Day</span></div>
+  <div class="tb-logo">My<em>Day</em></div>
   <div class="tb-date" id="tb-date"></div>
-  <div class="tb-tabs">
-    <button class="tb-tab on" id="tab-cl" onclick="showTab('cl')">Checklist</button>
-    <button class="tb-tab" id="tab-tr" onclick="showTab('tr')">Trainees <span class="n" id="tr-badge" style="display:none"></span></button>
-    <button class="tb-tab" id="tab-tips" onclick="showTab('tips')">Coaching Library</button>
+  <div class="tb-nav">
+    <button class="tb-btn on" id="tab-cl" onclick="showTab('cl')">Checklist</button>
+    <button class="tb-btn" id="tab-tr" onclick="showTab('tr')">Trainees <span class="badge" id="tr-badge" style="display:none"></span></button>
+    <button class="tb-btn" id="tab-at" onclick="showTab('at')">All To-Dos <span class="badge" id="at-badge" style="display:none"></span></button>
+    <button class="tb-btn" id="tab-hist" onclick="showTab('hist')">History</button>
+    <button class="tb-btn" id="tab-lib" onclick="showTab('lib')">Coaching Library</button>
   </div>
-  <button class="save-btn" onclick="saveData()">
-    <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-    Save
-  </button>
-  <div class="save-st" id="save-st"></div>
+  <div class="topbar-actions">
+    <div class="save-st" id="save-st"></div>
+    <button class="save-btn" onclick="saveData()">
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      Save
+    </button>
+  </div>
 </div>
 
-<!-- CHECKLIST PAGE -->
+<div class="app-body">
+
+<!-- ═══ CHECKLIST PAGE ═══ -->
 <div class="page on" id="page-cl">
-  <div class="cl-page">
-    <div class="cl-col">
-      <div class="col-heading">
-        <div class="col-title">Daily Checklist</div>
-        <button class="btn btn-sm btn-green" onclick="openAddTask()">+ Add task</button>
-      </div>
-      <div class="prog-wrap">
-        <div class="prog-top"><span class="prog-label" id="prog-lbl">0 of 0 done</span><span class="prog-pct" id="prog-pct">0%</span></div>
-        <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0"></div></div>
-      </div>
+  <div class="sidebar">
+    <div class="sidebar-section">Categories</div>
+    <button class="sidebar-link on" id="cl-filter-all" onclick="setClFilter('all')">All tasks</button>
+    <button class="sidebar-link" id="cl-filter-review" onclick="setClFilter('review')">📋 Review</button>
+    <button class="sidebar-link" id="cl-filter-agency" onclick="setClFilter('agency')">🏢 Agency</button>
+    <button class="sidebar-link" id="cl-filter-onboard" onclick="setClFilter('onboard')">🆕 Onboarding</button>
+    <button class="sidebar-link" id="cl-filter-other" onclick="setClFilter('other')">📌 Other</button>
+    <div class="sidebar-section" style="margin-top:8px">Actions</div>
+    <button class="sidebar-link" onclick="openAddTask()">＋ Add task</button>
+    <button class="sidebar-link" onclick="resetChecklist()">↺ Reset checklist</button>
+    <div class="sidebar-footer">
+      <div style="font-size:11px;color:var(--text3);line-height:1.5">Resetting moves today's checklist to History and starts fresh.</div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="main-header">
+      <div><div class="main-title">Daily Checklist</div><div class="main-sub" id="cl-date-sub"></div></div>
+    </div>
+    <div class="main-body">
       <div id="remind-wrap"></div>
-      <div id="cl-body"></div>
-    </div>
-    <div class="cl-col">
-      <div class="col-heading">
-        <div class="col-title">One-offs &amp; To-Dos</div>
-        <button class="btn btn-sm" onclick="openAddOO()">+ Add</button>
+      <div class="cl-grid">
+        <div>
+          <div class="prog-card">
+            <div class="prog-ring-wrap">
+              <svg class="prog-ring" width="60" height="60" viewBox="0 0 60 60">
+                <circle class="prog-ring-bg" cx="30" cy="30" r="26"/>
+                <circle class="prog-ring-fill" id="prog-ring-fill" cx="30" cy="30" r="26" stroke-dasharray="163.4" stroke-dashoffset="163.4"/>
+              </svg>
+              <div class="prog-pct-label" id="prog-pct">0%</div>
+            </div>
+            <div class="prog-stats">
+              <div class="prog-stat"><div class="prog-stat-val" id="stat-done">0</div><div class="prog-stat-lbl">Done</div></div>
+              <div class="prog-stat"><div class="prog-stat-val" id="stat-left">0</div><div class="prog-stat-lbl">Left</div></div>
+              <div class="prog-stat"><div class="prog-stat-val" id="stat-total">0</div><div class="prog-stat-lbl">Total</div></div>
+            </div>
+          </div>
+          <div id="cl-body"></div>
+        </div>
+        <div>
+          <div class="notes-card" style="margin-bottom:16px">
+            <div class="notes-header">
+              <div class="notes-title">📝 Notes for today</div>
+            </div>
+            <textarea class="notes-area" id="daily-notes" placeholder="Jot anything down here — things to remember, observations, follow-ups…" oninput="S.todayNotes=this.value"></textarea>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <div style="font-size:14px;font-weight:700">One-offs &amp; To-Dos</div>
+            <button class="btn btn-sm btn-green" onclick="openAddOO()">+ Add</button>
+          </div>
+          <div id="oo-body"></div>
+        </div>
       </div>
-      <div id="oo-body"></div>
     </div>
   </div>
 </div>
 
-<!-- TRAINEES PAGE -->
+<!-- ═══ TRAINEES PAGE ═══ -->
 <div class="page" id="page-tr">
-  <div class="tr-page">
-    <div class="tr-sidebar">
-      <div class="tr-sec-lbl">Today's meetings</div>
-      <div id="tr-today-nav"></div>
-      <div class="tr-sec-lbl" style="margin-top:10px">All trainees</div>
-      <div id="tr-all-nav"></div>
-      <button class="btn btn-sm btn-green" style="width:100%;margin-top:14px;justify-content:center" onclick="openAddTrainee()">+ Add trainee</button>
+  <div class="sidebar">
+    <div class="sidebar-section">Today's meetings</div>
+    <div id="tr-today-nav"></div>
+    <div class="sidebar-section" style="margin-top:6px">All trainees</div>
+    <div id="tr-all-nav"></div>
+    <div style="padding:10px 12px">
+      <button class="btn btn-sm btn-green" style="width:100%;justify-content:center" onclick="openAddTrainee()">+ Add trainee</button>
     </div>
-    <div class="tr-main">
-      <div id="tr-detail">
-        <div class="no-sel">
-          <svg width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--border2)"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-          Select a trainee to get started
-        </div>
-      </div>
+  </div>
+  <div class="tr-detail" id="tr-detail">
+    <div class="no-sel">
+      <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--border2)"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+      Select a trainee
     </div>
   </div>
 </div>
 
-<!-- COACHING LIBRARY PAGE -->
-<div class="page" id="page-tips">
-  <div class="tips-page">
-    <div class="tips-col">
-      <div class="col-heading" style="margin-bottom:16px">
-        <div>
-          <div class="col-title">Global Coaching Library</div>
-          <div style="font-size:13px;color:var(--text3);margin-top:3px">Rules &amp; reminders that apply to everyone</div>
-        </div>
-      </div>
-      <div class="add-row" style="margin-bottom:16px">
-        <input class="flex1" type="text" id="gtip-input" placeholder="Add a rule or reminder…" onkeydown="if(event.key==='Enter')addGTip()">
-        <select id="gtip-cat">
-          <option value="call">Call technique</option>
-          <option value="quote">Quoting</option>
-          <option value="lead">Lead management</option>
-          <option value="general">General</option>
-        </select>
-        <button class="btn btn-green" onclick="addGTip()">Add</button>
-      </div>
-      <div id="gtips-body"></div>
+<!-- ═══ ALL TO-DOS PAGE ═══ -->
+<div class="page" id="page-at">
+  <div class="all-todos-page">
+    <div class="main-header" style="padding:0 0 20px">
+      <div><div class="main-title">All Trainee To-Dos</div><div class="main-sub">Every open task across all trainees at a glance</div></div>
+      <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text2);cursor:pointer">
+        <input type="checkbox" id="at-show-done" onchange="renderAllTodos()"> Show completed
+      </label>
     </div>
-    <div class="tips-col">
-      <div class="col-heading" style="margin-bottom:16px">
-        <div>
-          <div class="col-title">How to Use</div>
-          <div style="font-size:13px;color:var(--text3);margin-top:3px">Quick reference</div>
-        </div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:10px">
-        ${['<b>Global library</b> — rules that apply to every salesperson. Use as a reference when coaching.','<b>Per-trainee coaching notes</b> — go to a trainee\'s profile to add notes specific to that person.','<b>Follow-up reminders</b> — when you add a to-do item for a trainee, check the remind box and it will show up on your checklist every day until you mark it done.','<b>Pre-meeting prep</b> — toggle "Meeting today" on a trainee to unlock the pre-meeting checklist (calls, texts, quotes, lead manager, talk time).','<b>Call reviews</b> — log specific leads/calls you went through so you can reference them in the meeting.'].map(t=>`<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;font-size:13px;color:var(--text2);line-height:1.6;box-shadow:var(--shadow)">${t}</div>`).join('')}
-      </div>
-    </div>
+    <div class="at-grid" id="at-grid"></div>
   </div>
 </div>
+
+<!-- ═══ HISTORY PAGE ═══ -->
+<div class="page" id="page-hist">
+  <div class="hist-page">
+    <div class="main-header" style="padding:0 0 20px">
+      <div><div class="main-title">Past Days</div><div class="main-sub">Checklist snapshots saved when you reset</div></div>
+      <button class="btn btn-sm btn-red" onclick="clearHistory()">Clear history</button>
+    </div>
+    <div id="hist-body"></div>
+  </div>
+</div>
+
+<!-- ═══ COACHING LIBRARY PAGE ═══ -->
+<div class="page" id="page-lib">
+  <div class="lib-page">
+    <div class="main-header" style="padding:0 0 20px">
+      <div><div class="main-title">Coaching Library</div><div class="main-sub">Global rules &amp; reminders for all trainees</div></div>
+    </div>
+    <div class="add-row" style="margin-bottom:20px">
+      <input class="flex1" type="text" id="gtip-input" placeholder="Add a rule or reminder…" onkeydown="if(event.key==='Enter')addGTip()">
+      <select id="gtip-cat">
+        <option value="call">Call technique</option>
+        <option value="quote">Quoting</option>
+        <option value="lead">Lead management</option>
+        <option value="general">General</option>
+      </select>
+      <button class="btn btn-green" onclick="addGTip()">Add</button>
+    </div>
+    <div class="lib-grid" id="gtips-body"></div>
+  </div>
+</div>
+
+</div><!-- end app-body -->
 
 <!-- MODAL -->
 <div class="modal-bg" id="modal-bg" onclick="if(event.target===this)hideModal()">
@@ -379,12 +481,16 @@ textarea{width:100%;resize:vertical;line-height:1.6}
 </div>
 
 <script>
+/* ─── DATE ─── */
 const DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
 const NOW=new Date();
 const TODAY=NOW.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+const TODAY_KEY=NOW.toISOString().slice(0,10);
 document.getElementById('tb-date').textContent=DAYS[NOW.getDay()]+' · '+MONTHS[NOW.getMonth()]+' '+NOW.getDate()+', '+NOW.getFullYear();
+document.getElementById('cl-date-sub').textContent=TODAY;
 
+/* ─── DEFAULTS ─── */
 const DEF_TASKS=[
   {cat:'review',text:'Aaron Loves Me folder — Cameron, Joshua, Astra'},
   {cat:'review',text:'Call transcripts for today\'s trainees'},
@@ -417,52 +523,71 @@ const DEF_GTIPS=[
   {cat:'lead',text:'Go through Should Have Closed — get rid of non-closable/cold leads, make sure everyone has a follow-up task'},
 ];
 
-let S={tasks:[],oneoffs:[],trainees:[],gtips:[],nid:1,init:false};
-let activeTr=null;
+/* ─── STATE ─── */
+let S={tasks:[],oneoffs:[],trainees:[],gtips:[],history:[],todayNotes:'',nid:1,init:false};
+let activeTr=null,clFilter='all';
 
+/* ─── PERSIST ─── */
 function load(){
-  try{const d=localStorage.getItem('myday_v6');if(d){S=JSON.parse(d);document.getElementById('save-st').textContent='Loaded ✓';}}catch(e){}
+  try{
+    const d=localStorage.getItem('myday_v7');
+    if(d){S=JSON.parse(d);document.getElementById('save-st').textContent='Loaded ✓';}
+  }catch(e){}
   if(!S.init){
     DEF_TASKS.forEach(t=>S.tasks.push({id:S.nid++,text:t.text,cat:t.cat,done:false}));
     DEF_GTIPS.forEach(t=>S.gtips.push({id:S.nid++,text:t.text,cat:t.cat}));
+    S.history=S.history||[];
+    S.todayNotes=S.todayNotes||'';
     S.init=true;
   }
+  if(!S.history) S.history=[];
+  if(!S.todayNotes) S.todayNotes='';
+  document.getElementById('daily-notes').value=S.todayNotes||'';
 }
 function saveData(){
+  S.todayNotes=document.getElementById('daily-notes').value;
   try{
-    localStorage.setItem('myday_v6',JSON.stringify(S));
+    localStorage.setItem('myday_v7',JSON.stringify(S));
     document.getElementById('save-st').textContent='Saved '+NOW.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
   }catch(e){document.getElementById('save-st').textContent='Save failed';}
 }
 
+/* ─── UTILS ─── */
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function initials(n){return n.trim().split(/\s+/).map(w=>w[0]).join('').toUpperCase().slice(0,2);}
 function showTab(t){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('.tb-tab').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.tb-btn').forEach(b=>b.classList.remove('on'));
   document.getElementById('page-'+t).classList.add('on');
   document.getElementById('tab-'+t).classList.add('on');
+  if(t==='at') renderAllTodos();
+  if(t==='hist') renderHistory();
+  if(t==='lib') renderGTips();
 }
 function showModal(html){document.getElementById('modal-box').innerHTML=html;document.getElementById('modal-bg').classList.add('open');}
 function hideModal(){document.getElementById('modal-bg').classList.remove('open');}
 
-/* ── CHECKLIST ── */
+/* ─── CHECKLIST ─── */
 const CATS={review:'Review',agency:'Agency',onboard:'Onboarding',other:'Other'};
+const CATS_EMOJI={review:'📋',agency:'🏢',onboard:'🆕',other:'📌'};
 const CAT_ORD=['review','agency','onboard','other'];
+
+function setClFilter(f){
+  clFilter=f;
+  CAT_ORD.concat(['all']).forEach(c=>{const el=document.getElementById('cl-filter-'+c);if(el)el.classList.toggle('on',c===f);});
+  renderCL();
+}
 
 function openAddTask(){
   showModal(`<div class="modal-title">Add checklist task</div>
-    <label class="m-label">Task</label>
+    <label class="m-lbl">Task</label>
     <input class="m-input" id="m-t-text" placeholder="What needs to be done?" onkeydown="if(event.key==='Enter')doAddTask()">
-    <label class="m-label">Category</label>
+    <label class="m-lbl">Category</label>
     <select class="m-input" id="m-t-cat">
       <option value="review">Review</option><option value="agency">Agency</option>
       <option value="onboard">Onboarding</option><option value="other">Other</option>
     </select>
-    <div class="m-row">
-      <button class="m-btn m-save" onclick="doAddTask()">Add</button>
-      <button class="m-btn m-cancel" onclick="hideModal()">Cancel</button>
-    </div>`);
+    <div class="m-row"><button class="m-btn m-save" onclick="doAddTask()">Add</button><button class="m-btn m-cancel" onclick="hideModal()">Cancel</button></div>`);
   setTimeout(()=>document.getElementById('m-t-text').focus(),60);
 }
 function doAddTask(){
@@ -473,99 +598,124 @@ function doAddTask(){
 function toggleTask(id){const t=S.tasks.find(x=>x.id===id);if(t)t.done=!t.done;renderCL();}
 function delTask(id){S.tasks=S.tasks.filter(x=>x.id!==id);renderCL();}
 
-function renderCL(){
-  const tot=S.tasks.length,dn=S.tasks.filter(t=>t.done).length,pct=tot?Math.round(dn/tot*100):0;
-  document.getElementById('prog-lbl').textContent=dn+' of '+tot+' done';
-  document.getElementById('prog-pct').textContent=pct+'%';
-  document.getElementById('prog-fill').style.width=pct+'%';
-  let html='';
-  CAT_ORD.forEach(cat=>{
-    const items=S.tasks.filter(t=>t.cat===cat);if(!items.length)return;
-    html+=`<div class="sec">${CATS[cat]}</div>`;
-    html+=items.map(t=>`<div class="ci${t.done?' done':''}" onclick="toggleTask(${t.id})">
-      <div class="cb${t.done?' on':''}"></div>
-      <div class="ci-text${t.done?' done':''}">${esc(t.text)}</div>
-      <button class="ci-del" onclick="event.stopPropagation();delTask(${t.id})">✕</button>
-    </div>`).join('');
+function resetChecklist(){
+  if(!confirm('Save today\'s checklist to History and reset?')) return;
+  S.history=S.history||[];
+  S.history.unshift({
+    date:TODAY,key:TODAY_KEY,
+    tasks:S.tasks.map(t=>({...t})),
+    notes:document.getElementById('daily-notes').value
   });
-  document.getElementById('cl-body').innerHTML=html||'<div class="empty-state">No tasks</div>';
+  S.tasks.forEach(t=>t.done=false);
+  document.getElementById('daily-notes').value='';
+  S.todayNotes='';
+  renderCL();
+  alert('Saved to History. Checklist reset!');
+}
+
+function renderCL(){
+  const all=S.tasks;
+  const visible=clFilter==='all'?all:all.filter(t=>t.cat===clFilter);
+  const tot=all.length,dn=all.filter(t=>t.done).length;
+  const pct=tot?Math.round(dn/tot*100):0;
+  const circ=163.4;
+  document.getElementById('prog-pct').textContent=pct+'%';
+  document.getElementById('prog-ring-fill').style.strokeDashoffset=circ-(circ*pct/100);
+  document.getElementById('stat-done').textContent=dn;
+  document.getElementById('stat-left').textContent=tot-dn;
+  document.getElementById('stat-total').textContent=tot;
+
+  const todo=visible.filter(t=>!t.done),done=visible.filter(t=>t.done);
+  let html='';
+  if(clFilter==='all'){
+    CAT_ORD.forEach(cat=>{
+      const items=todo.filter(t=>t.cat===cat);if(!items.length)return;
+      html+=`<div class="sec-hd">${CATS_EMOJI[cat]} ${CATS[cat]}</div>`;
+      html+=items.map(t=>ciHTML(t)).join('');
+    });
+  } else {
+    html+=todo.map(t=>ciHTML(t)).join('');
+  }
+  if(done.length){
+    html+=`<div class="sec-hd" style="margin-top:18px">Done <button onclick="clearDoneTasks()">Clear</button></div>`;
+    html+=done.map(t=>ciHTML(t)).join('');
+  }
+  if(!visible.length) html='<div class="empty">No tasks</div>';
+  document.getElementById('cl-body').innerHTML=html;
   renderRemind();
 }
 
+function ciHTML(t){
+  return`<div class="ci${t.done?' done':''}" onclick="toggleTask(${t.id})">
+    <div class="cb${t.done?' on':''}"></div>
+    <div class="ci-text${t.done?' done':''}">${esc(t.text)}</div>
+    <button class="x-btn" onclick="event.stopPropagation();delTask(${t.id})">✕</button>
+  </div>`;
+}
+function clearDoneTasks(){S.tasks=S.tasks.filter(t=>!t.done);renderCL();}
+
+/* ─── ONE-OFFS ─── */
 function openAddOO(){
   showModal(`<div class="modal-title">Add one-off task</div>
-    <label class="m-label">Task</label>
+    <label class="m-lbl">Task</label>
     <input class="m-input" id="m-oo" placeholder="e.g. Call Vincent at 11 re: Slack" onkeydown="if(event.key==='Enter')doAddOO()">
-    <div class="m-row">
-      <button class="m-btn m-save" onclick="doAddOO()">Add</button>
-      <button class="m-btn m-cancel" onclick="hideModal()">Cancel</button>
-    </div>`);
+    <div class="m-row"><button class="m-btn m-save" onclick="doAddOO()">Add</button><button class="m-btn m-cancel" onclick="hideModal()">Cancel</button></div>`);
   setTimeout(()=>document.getElementById('m-oo').focus(),60);
 }
-function doAddOO(){
-  const txt=document.getElementById('m-oo').value.trim();if(!txt)return;
-  S.oneoffs.push({id:S.nid++,text:txt,done:false});hideModal();renderOO();
-}
+function doAddOO(){const txt=document.getElementById('m-oo').value.trim();if(!txt)return;S.oneoffs.push({id:S.nid++,text:txt,done:false});hideModal();renderOO();}
 function toggleOO(id){const t=S.oneoffs.find(x=>x.id===id);if(t)t.done=!t.done;renderOO();}
 function delOO(id){S.oneoffs=S.oneoffs.filter(x=>x.id!==id);renderOO();}
 function clearDoneOO(){S.oneoffs=S.oneoffs.filter(x=>!x.done);renderOO();}
-
 function renderOO(){
   const todo=S.oneoffs.filter(t=>!t.done),dn=S.oneoffs.filter(t=>t.done);
   let html='';
-  if(!S.oneoffs.length) html='<div class="empty-state">Add one-time tasks here — calls to make, things to follow up on</div>';
-  html+=todo.map(t=>`<div class="oo-item" onclick="toggleOO(${t.id})">
-    <div class="cb"></div><div class="ci-text">${esc(t.text)}</div>
-    <button class="ci-del" onclick="event.stopPropagation();delOO(${t.id})">✕</button>
-  </div>`).join('');
+  if(!S.oneoffs.length) html='<div class="empty" style="text-align:left">Nothing yet</div>';
+  html+=todo.map(t=>`<div class="oo-item" onclick="toggleOO(${t.id})"><div class="cb"></div><div class="ci-text">${esc(t.text)}</div><button class="x-btn" onclick="event.stopPropagation();delOO(${t.id})">✕</button></div>`).join('');
   if(dn.length){
-    html+=`<div class="sec">Done <button onclick="clearDoneOO()">Clear</button></div>`;
-    html+=dn.map(t=>`<div class="oo-item done" onclick="toggleOO(${t.id})">
-      <div class="cb on"></div><div class="ci-text done">${esc(t.text)}</div>
-      <button class="ci-del" onclick="event.stopPropagation();delOO(${t.id})">✕</button>
-    </div>`).join('');
+    html+=`<div class="sec-hd">Done <button onclick="clearDoneOO()">Clear</button></div>`;
+    html+=dn.map(t=>`<div class="oo-item done" onclick="toggleOO(${t.id})"><div class="cb on"></div><div class="ci-text done">${esc(t.text)}</div><button class="x-btn" onclick="event.stopPropagation();delOO(${t.id})">✕</button></div>`).join('');
   }
   document.getElementById('oo-body').innerHTML=html;
 }
 
+/* ─── REMIND STRIP ─── */
 function renderRemind(){
   const pending=[];
   S.trainees.forEach(tr=>(tr.todos||[]).filter(td=>td.remind&&!td.done).forEach(td=>pending.push({tr,td})));
   const el=document.getElementById('remind-wrap');
   if(!pending.length){el.innerHTML='';return;}
-  el.innerHTML=`<div class="remind">
-    <div class="remind-hd">
-      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      ${pending.length} trainee follow-up${pending.length!==1?'s':''} to check on
-    </div>
-    ${pending.map(({tr,td})=>`<div class="remind-item">
-      <div class="ri-cb${td.done?' on':''}" onclick="toggleTodoGlobal(${tr.id},${td.id})"></div>
-      <div style="flex:1"><div class="ri-text">${esc(td.text)}</div><div class="ri-sub">${esc(tr.name)}</div></div>
+  el.innerHTML=`<div class="remind-strip">
+    <div class="rs-hd"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    ${pending.length} trainee follow-up${pending.length!==1?'s':''} — check if they did it</div>
+    ${pending.map(({tr,td})=>`<div class="rs-item">
+      <div class="rs-cb${td.done?' on':''}" onclick="toggleTodoGlobal(${tr.id},${td.id})"></div>
+      <div style="flex:1"><div class="rs-text">${esc(td.text)}</div><div class="rs-sub">${esc(tr.name)}</div></div>
     </div>`).join('')}
   </div>`;
 }
 function toggleTodoGlobal(tid,tdid){
   const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;
   const td=tr.todos.find(x=>x.id===tdid);if(td)td.done=!td.done;
-  renderCL();if(activeTr===tid)renderDetail(tid);renderTrNav();
+  renderCL();renderAllTodosIfVisible();if(activeTr===tid)renderDetail(tid);renderTrNav();
 }
 
-/* ── TRAINEES ── */
-const PREP=[{key:'calls',label:'Calls & transcripts'},{key:'texts',label:'Texts'},{key:'quotes',label:'Quotes'},{key:'leadmgr',label:'Lead manager'},{key:'talktime',label:'Talk time & transfers'}];
+/* ─── TRAINEES ─── */
+const PREP=[
+  {key:'calls',label:'Calls & transcripts',icon:'📞'},
+  {key:'texts',label:'Texts',icon:'💬'},
+  {key:'quotes',label:'Quotes',icon:'📄'},
+  {key:'leadmgr',label:'Lead manager',icon:'🎯'},
+  {key:'talktime',label:'Talk time',icon:'⏱'},
+];
 function pendCount(tr){return(tr.todos||[]).filter(t=>t.remind&&!t.done).length;}
 
 function openAddTrainee(){
   showModal(`<div class="modal-title">Add trainee</div>
-    <label class="m-label">Name</label>
+    <label class="m-lbl">Name</label>
     <input class="m-input" id="m-tr-name" placeholder="e.g. Cameron" onkeydown="if(event.key==='Enter')doAddTrainee()">
-    <label class="m-label">Type</label>
-    <select class="m-input" id="m-tr-type">
-      <option value="trainee">Trainee</option><option value="onboard">New hire / onboarding</option>
-    </select>
-    <div class="m-row">
-      <button class="m-btn m-save" onclick="doAddTrainee()">Add</button>
-      <button class="m-btn m-cancel" onclick="hideModal()">Cancel</button>
-    </div>`);
+    <label class="m-lbl">Type</label>
+    <select class="m-input" id="m-tr-type"><option value="trainee">Trainee</option><option value="onboard">New hire / onboarding</option></select>
+    <div class="m-row"><button class="m-btn m-save" onclick="doAddTrainee()">Add</button><button class="m-btn m-cancel" onclick="hideModal()">Cancel</button></div>`);
   setTimeout(()=>document.getElementById('m-tr-name').focus(),60);
 }
 function doAddTrainee(){
@@ -577,16 +727,18 @@ function doAddTrainee(){
 function renderTrNav(){
   const today=S.trainees.filter(t=>t.todayMeeting),others=S.trainees.filter(t=>!t.todayMeeting);
   const totalPend=S.trainees.reduce((s,t)=>s+pendCount(t),0);
-  const badge=document.getElementById('tr-badge');
-  badge.style.display=totalPend?'':'none';badge.textContent=totalPend;
-  const mkBtn=t=>{const pc=pendCount(t);return`<button class="tr-btn${activeTr===t.id?' on':''}" onclick="selectTr(${t.id})">
-    <div class="tr-av${t.type==='onboard'?' ob':''}">${initials(t.name)}</div>
-    <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(t.name)}</span>
-    ${t.todayMeeting?'<span class="today-dot"></span>':''}
-    ${pc?`<span class="tr-pend">${pc}</span>`:''}
+  const b=document.getElementById('tr-badge');b.style.display=totalPend?'':'none';b.textContent=totalPend;
+  const b2=document.getElementById('at-badge');
+  const allTodos=S.trainees.reduce((s,t)=>s+(t.todos||[]).filter(td=>!td.done).length,0);
+  b2.style.display=allTodos?'':'none';b2.textContent=allTodos;
+  const mkBtn=t=>{const pc=pendCount(t);return`<button class="sidebar-link${activeTr===t.id?' on':''}" onclick="selectTr(${t.id})">
+    <div class="sidebar-av${t.type==='onboard'?' ob':''}">${initials(t.name)}</div>
+    <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px">${esc(t.name)}</span>
+    ${t.todayMeeting?'<span class="dot"></span>':''}
+    ${pc?`<span class="pend">${pc}</span>`:''}
   </button>`;};
-  document.getElementById('tr-today-nav').innerHTML=today.length?today.map(mkBtn).join(''):'<div style="font-size:12px;color:var(--text3);padding:6px 10px">None flagged yet</div>';
-  document.getElementById('tr-all-nav').innerHTML=S.trainees.length?others.map(mkBtn).join(''):'<div style="font-size:12px;color:var(--text3);padding:6px 10px">No trainees added yet</div>';
+  document.getElementById('tr-today-nav').innerHTML=today.length?today.map(mkBtn).join(''):'<div style="font-size:11px;color:var(--text3);padding:4px 12px">None flagged</div>';
+  document.getElementById('tr-all-nav').innerHTML=S.trainees.length?others.map(mkBtn).join(''):'<div style="font-size:11px;color:var(--text3);padding:4px 12px">No trainees yet</div>';
 }
 
 function selectTr(id){activeTr=id;renderTrNav();renderDetail(id);}
@@ -594,7 +746,7 @@ function selectTr(id){activeTr=id;renderTrNav();renderDetail(id);}
 function renderDetail(id){
   const tr=S.trainees.find(x=>x.id===id);
   const el=document.getElementById('tr-detail');
-  if(!tr){el.innerHTML='<div class="no-sel"><svg width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--border2)"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Select a trainee</div>';return;}
+  if(!tr){el.innerHTML='<div class="no-sel"><svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--border2)"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Select a trainee</div>';return;}
   const pc=pendCount(tr);
   const tags=[];
   if(tr.type==='onboard') tags.push(`<span class="tag tag-ob">Onboarding</span>`);
@@ -604,136 +756,103 @@ function renderDetail(id){
 
   /* todos */
   const todos=tr.todos||[];
-  const todosHTML=`<div class="panel">
-    <div class="panel-hd"><div class="panel-title">Their To-Do List</div><button class="btn btn-sm btn-green" onclick="openAddTodo(${tr.id})">+ Add item</button></div>
+  const todoHTML=`<div class="panel">
+    <div class="panel-hd"><div class="panel-title">📋 Their To-Do List</div><button class="btn btn-sm btn-green" onclick="openAddTodo(${tr.id})">+ Add</button></div>
     <div class="panel-body">
       ${todos.length?todos.map(td=>`<div class="todo-item">
         <div class="todo-cb${td.done?' on':''}" onclick="toggleTodo(${tr.id},${td.id})"></div>
         <div class="todo-body">
           <div class="todo-text${td.done?' done':''}">${esc(td.text)}</div>
           <div class="todo-meta">
-            ${td.remind&&!td.done?'<span class="remind-flag">⚑ Follow-up set</span>':''}
-            ${td.done?'<span class="done-flag">✓ Done</span>':''}
+            ${td.remind&&!td.done?'<span class="rf">⚑ Follow-up</span>':''}
+            ${td.done?'<span class="df">✓ Done</span>':''}
           </div>
         </div>
-        <button class="icon-btn" onclick="toggleTodoRemind(${tr.id},${td.id})" title="${td.remind?'Remove reminder':'Set follow-up reminder'}" style="color:${td.remind?'var(--amber)':'var(--text3)'}">⚑</button>
-        <button class="icon-btn" onclick="delTodo(${tr.id},${td.id})">✕</button>
-      </div>`).join(''):'<div class="empty-state">No to-do items yet</div>'}
+        <button class="i-btn remind-i-btn" onclick="toggleTodoRemind(${tr.id},${td.id})" title="${td.remind?'Remove reminder':'Set reminder'}" style="color:${td.remind?'var(--amber)':'var(--text3)'}">⚑</button>
+        <button class="i-btn" onclick="delTodo(${tr.id},${td.id})">✕</button>
+      </div>`).join(''):'<div class="empty">No items yet</div>'}
     </div>
   </div>`;
 
   /* calls */
   const callTypeMap={goal:'Goal lead',neglect:'Neglected',transfer:'Transfer',other:'Other'};
-  const callsHTML=`<div class="panel">
-    <div class="panel-hd"><div class="panel-title">Call Review Notes</div><button class="btn btn-sm btn-green" onclick="openAddCall(${tr.id})">+ Add call</button></div>
+  const callHTML=`<div class="panel">
+    <div class="panel-hd"><div class="panel-title">📞 Call Reviews</div><button class="btn btn-sm btn-green" onclick="openAddCall(${tr.id})">+ Add</button></div>
     <div class="panel-body">
       ${(tr.calls||[]).length?(tr.calls).map(c=>`<div class="call-card">
-        <div class="call-card-hd">
-          <div><div class="call-name">${esc(c.name)}</div>
-            <div class="call-metas">
-              ${c.type?`<span class="call-tag ct-${c.type}">${callTypeMap[c.type]||c.type}</span>`:''}
-              ${c.dur?`<span class="call-dur">${esc(c.dur)}</span>`:''}
-            </div>
-          </div>
-          <button class="icon-btn" onclick="delCall(${tr.id},${c.id})">✕</button>
-        </div>
+        <div class="call-hdr"><div>
+          <div class="call-name">${esc(c.name)}</div>
+          <div class="call-metas">${c.type?`<span class="ctag ct-${c.type}">${callTypeMap[c.type]||c.type}</span>`:''}${c.dur?`<span class="call-dur">${esc(c.dur)}</span>`:''}</div>
+        </div><button class="i-btn" onclick="delCall(${tr.id},${c.id})">✕</button></div>
         ${c.notes?`<div class="call-notes">${esc(c.notes)}</div>`:''}
-      </div>`).join(''):'<div class="empty-state">No call notes yet</div>'}
+      </div>`).join(''):'<div class="empty">No calls yet</div>'}
     </div>
   </div>`;
 
-  /* coaching tips */
+  /* coaching */
   const tips=tr.tips||[];
-  const tipCatOrd=['call','quote','lead','general'];
-  const tipCatMap={call:'Call technique',quote:'Quoting',lead:'Lead management',general:'General'};
+  const tco=['call','quote','lead','general'];
+  const tcm={call:'Call technique',quote:'Quoting',lead:'Lead management',general:'General'};
   let tipsInner='';
-  tipCatOrd.forEach(cat=>{
-    const items=tips.filter(t=>t.cat===cat);if(!items.length)return;
-    tipsInner+=`<div class="sec" style="margin-top:${cat==='call'?0:12}px">${tipCatMap[cat]}</div>`;
-    tipsInner+=items.map(t=>`<div class="tip-card"><div class="tip-dot"></div><div class="tip-text">${esc(t.text)}</div><button class="icon-btn" onclick="delTraineeTip(${tr.id},${t.id})">✕</button></div>`).join('');
-  });
+  tco.forEach(cat=>{const items=tips.filter(t=>t.cat===cat);if(!items.length)return;tipsInner+=`<div class="sec-hd" style="margin-top:${cat==='call'?0:10}px">${tcm[cat]}</div>`;tipsInner+=items.map(t=>`<div class="tip-card"><div class="tip-dot"></div><div class="tip-text">${esc(t.text)}</div><button class="i-btn" onclick="delTraineeTip(${tr.id},${t.id})">✕</button></div>`).join('');});
   const coachHTML=`<div class="panel">
-    <div class="panel-hd"><div class="panel-title">Coaching Notes for ${esc(tr.name)}</div><button class="btn btn-sm btn-green" onclick="openAddTraineeTip(${tr.id})">+ Add note</button></div>
-    <div class="panel-body">${tipsInner||'<div class="empty-state">No coaching notes yet — add things specific to this person</div>'}</div>
+    <div class="panel-hd"><div class="panel-title">💡 Coaching Notes</div><button class="btn btn-sm btn-green" onclick="openAddTraineeTip(${tr.id})">+ Add</button></div>
+    <div class="panel-body">${tipsInner||'<div class="empty">No notes yet</div>'}</div>
   </div>`;
 
   /* meetings */
-  const meetingsHTML=`<div class="panel">
-    <div class="panel-hd"><div class="panel-title">Meeting Log</div></div>
+  const meetHTML=`<div class="panel" style="margin-top:16px">
+    <div class="panel-hd"><div class="panel-title">📅 Meeting Log</div></div>
     <div class="panel-body">
       <button class="log-toggle" onclick="toggleLogForm(${tr.id})">+ Log a meeting</button>
       <div class="log-form" id="lf-${tr.id}">
         <label class="lf-label">What you covered</label>
         <textarea id="ln-${tr.id}" rows="3" placeholder="Notes from the meeting…" style="margin-bottom:10px"></textarea>
         <label class="lf-label">Action items — one per line (added to their to-do list)</label>
-        <textarea id="la-${tr.id}" rows="3" placeholder="Go through neglected quotes&#10;Review TM script&#10;Practice objection handling"></textarea>
+        <textarea id="la-${tr.id}" rows="3" placeholder="Go through neglected quotes&#10;Review TM script"></textarea>
         <label style="display:flex;align-items:center;gap:8px;margin-top:10px;cursor:pointer;font-size:13px;color:var(--text2)">
-          <input type="checkbox" id="la-remind-${tr.id}" style="width:auto;padding:0;margin:0"> Set follow-up reminders on all action items
+          <input type="checkbox" id="la-r-${tr.id}" style="width:auto;padding:0;margin:0"> Set follow-up reminders on all action items
         </label>
         <div class="lf-row">
-          <button class="btn btn-sm btn-green" onclick="saveLog(${tr.id})">Save meeting</button>
+          <button class="btn btn-sm btn-green" onclick="saveLog(${tr.id})">Save</button>
           <button class="btn btn-sm btn-ghost" onclick="toggleLogForm(${tr.id})">Cancel</button>
         </div>
       </div>
       ${(tr.meetings||[]).length?(tr.meetings).map(m=>{
-        const actHTML=(m.actions||[]).length?`<div class="me-actions">
-          <div class="me-act-label">Action items — check off when YOU confirm they did it</div>
-          ${m.actions.map(a=>`<div class="ma-row">
-            <div class="ma-cb${a.done?' on':''}" onclick="toggleMeetingAct(${tr.id},${m.id},${a.id})"></div>
-            <div style="flex:1"><div class="ma-text${a.done?' done':''}">${esc(a.text)}</div>
-            ${!a.done?'<div class="pend-hint">Not confirmed yet</div>':''}</div>
-          </div>`).join('')}
-        </div>`:'';
-        return`<div class="meeting-entry">
-          <div class="me-date"><span class="me-date-label">${esc(m.date)}</span>
-          <button class="btn btn-sm btn-red" onclick="delMeeting(${tr.id},${m.id})">Remove</button></div>
-          <div class="me-notes">${esc(m.notes)}</div>${actHTML}
-        </div>`;
-      }).join(''):'<div class="empty-state">No meetings logged yet</div>'}
+        const aHTML=(m.actions||[]).length?`<div class="me-acts"><div class="me-acts-lbl">Action items — check when YOU confirm they did it</div>${m.actions.map(a=>`<div class="ma-row"><div class="ma-cb${a.done?' on':''}" onclick="toggleMeetingAct(${tr.id},${m.id},${a.id})"></div><div style="flex:1"><div class="ma-text${a.done?' done':''}">${esc(a.text)}</div>${!a.done?'<div class="pend-hint">Not confirmed yet</div>':''}</div></div>`).join('')}</div>`:'';
+        return`<div class="meeting-entry"><div class="me-date"><span class="me-date-lbl">${esc(m.date)}</span><button class="btn btn-sm btn-red" onclick="delMeeting(${tr.id},${m.id})">Remove</button></div><div class="me-notes">${esc(m.notes)}</div>${aHTML}</div>`;
+      }).join(''):'<div class="empty">No meetings yet</div>'}
     </div>
   </div>`;
 
-  el.innerHTML=`<div class="td-wrap">
-    <div class="td-header">
-      <div class="td-av-lg${tr.type==='onboard'?' ob':''}">${initials(tr.name)}</div>
+  el.innerHTML=`
+    <div class="td-hdr">
+      <div class="td-av${tr.type==='onboard'?' ob':''}">${initials(tr.name)}</div>
       <div style="flex:1"><div class="td-name">${esc(tr.name)}</div><div class="td-tags">${tags.join('')}</div></div>
-      <button class="btn btn-sm btn-red" onclick="removeTr(${tr.id})">Remove trainee</button>
+      <button class="btn btn-sm btn-red" onclick="removeTr(${tr.id})">Remove</button>
     </div>
-    <div class="sw-row${tr.todayMeeting?' on':''}" onclick="toggleTodayMeeting(${tr.id})">
+    <div class="sw${tr.todayMeeting?' on':''}" onclick="toggleTodayMeeting(${tr.id})">
       <div class="sw-pill${tr.todayMeeting?' on':''}"></div>
-      <span class="sw-label">Meeting today</span>
-      <span class="sw-hint">${tr.todayMeeting?'Flagged ✓':'Toggle on if meeting today'}</span>
+      <span class="sw-lbl">Meeting today</span>
+      <span class="sw-hint">${tr.todayMeeting?'Flagged ✓':'Toggle if meeting today'}</span>
     </div>
-    ${tr.todayMeeting?`<div style="margin-bottom:20px">
-      <div class="sec" style="margin-top:0">Pre-meeting prep (${prepDone}/${PREP.length})</div>
-      <div class="prep-grid">${PREP.map(p=>{const d=(tr.prep||{})[p.key];return`<div class="prep-item${d?' on':''}" onclick="togglePrep(${tr.id},'${p.key}')">
-        <div class="pcb${d?' on':''}"></div><span class="prep-lbl${d?' on':''}">${p.label}</span>
-      </div>`;}).join('')}</div>
-    </div>`:''}
-    <div class="detail-grid">
-      <div>${todosHTML}</div>
-      <div>${callsHTML}</div>
-    </div>
-    <div style="margin-bottom:16px">${coachHTML}</div>
-    ${meetingsHTML}
-  </div>`;
+    ${tr.todayMeeting?`<div class="sec-hd" style="margin-top:0">Pre-meeting prep (${prepDone}/${PREP.length})</div>
+    <div class="prep-grid">${PREP.map(p=>{const d=(tr.prep||{})[p.key];return`<div class="prep-item${d?' on':''}" onclick="togglePrep(${tr.id},'${p.key}')"><div class="prep-icon">${p.icon}</div><span class="prep-lbl${d?' on':''}">${p.label}</span></div>`;}).join('')}</div>`:''}
+    <div class="td-grid">${todoHTML}${callHTML}</div>
+    ${coachHTML}
+    ${meetHTML}`;
 }
 
 function toggleTodayMeeting(id){const t=S.trainees.find(x=>x.id===id);if(t)t.todayMeeting=!t.todayMeeting;renderTrNav();renderDetail(id);}
 function togglePrep(tid,key){const t=S.trainees.find(x=>x.id===tid);if(t){t.prep=t.prep||{};t.prep[key]=!t.prep[key];}renderDetail(tid);}
-function removeTr(id){if(!confirm('Remove this trainee and all their data?'))return;S.trainees=S.trainees.filter(x=>x.id!==id);activeTr=null;renderTrNav();document.getElementById('tr-detail').innerHTML='<div class="no-sel">Select a trainee</div>';}
+function removeTr(id){if(!confirm('Remove this trainee?'))return;S.trainees=S.trainees.filter(x=>x.id!==id);activeTr=null;renderTrNav();document.getElementById('tr-detail').innerHTML='<div class="no-sel">Select a trainee</div>';}
 
 function openAddTodo(tid){
   showModal(`<div class="modal-title">Add to-do item</div>
-    <label class="m-label">Task for them</label>
+    <label class="m-lbl">Task for them</label>
     <input class="m-input" id="m-td" placeholder="e.g. Go through neglected quotes" onkeydown="if(event.key==='Enter')doAddTodo(${tid})">
-    <label style="display:flex;align-items:center;gap:9px;margin-top:14px;cursor:pointer;font-size:13px;color:var(--text2)">
-      <input type="checkbox" id="m-td-r" style="width:auto;padding:0;margin:0"> Remind me to follow up on this
-    </label>
-    <div class="m-row">
-      <button class="m-btn m-save" onclick="doAddTodo(${tid})">Add</button>
-      <button class="m-btn m-cancel" onclick="hideModal()">Cancel</button>
-    </div>`);
+    <label style="display:flex;align-items:center;gap:9px;margin-top:12px;cursor:pointer;font-size:13px;color:var(--text2)"><input type="checkbox" id="m-td-r" style="width:auto;padding:0;margin:0"> Remind me to follow up</label>
+    <div class="m-row"><button class="m-btn m-save" onclick="doAddTodo(${tid})">Add</button><button class="m-btn m-cancel" onclick="hideModal()">Cancel</button></div>`);
   setTimeout(()=>document.getElementById('m-td').focus(),60);
 }
 function doAddTodo(tid){
@@ -741,30 +860,22 @@ function doAddTodo(tid){
   const remind=document.getElementById('m-td-r').checked;
   const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;
   tr.todos=tr.todos||[];tr.todos.push({id:S.nid++,text:txt,done:false,remind});
-  hideModal();renderDetail(tid);renderTrNav();renderCL();
+  hideModal();renderDetail(tid);renderTrNav();renderCL();renderAllTodosIfVisible();
 }
-function toggleTodo(tid,tdid){const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;const td=tr.todos.find(x=>x.id===tdid);if(td)td.done=!td.done;renderDetail(tid);renderTrNav();renderCL();}
-function toggleTodoRemind(tid,tdid){const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;const td=tr.todos.find(x=>x.id===tdid);if(td)td.remind=!td.remind;renderDetail(tid);renderTrNav();renderCL();}
-function delTodo(tid,tdid){const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;tr.todos=tr.todos.filter(x=>x.id!==tdid);renderDetail(tid);renderTrNav();renderCL();}
+function toggleTodo(tid,tdid){const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;const td=tr.todos.find(x=>x.id===tdid);if(td)td.done=!td.done;renderDetail(tid);renderTrNav();renderCL();renderAllTodosIfVisible();}
+function toggleTodoRemind(tid,tdid){const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;const td=tr.todos.find(x=>x.id===tdid);if(td)td.remind=!td.remind;renderDetail(tid);renderTrNav();renderCL();renderAllTodosIfVisible();}
+function delTodo(tid,tdid){const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;tr.todos=tr.todos.filter(x=>x.id!==tdid);renderDetail(tid);renderTrNav();renderCL();renderAllTodosIfVisible();}
 
 function openAddCall(tid){
   showModal(`<div class="modal-title">Add call review</div>
-    <label class="m-label">Lead name</label>
-    <input class="m-input" id="m-c-name" placeholder="e.g. Paul Parker">
-    <div class="m-grid" style="margin-top:10px">
-      <div><label class="m-label" style="margin-top:0">Type</label>
-        <select class="m-input" id="m-c-type"><option value="goal">Goal lead</option><option value="neglect">Neglected</option><option value="transfer">Transfer</option><option value="other">Other</option></select>
-      </div>
-      <div><label class="m-label" style="margin-top:0">Duration</label>
-        <input class="m-input" id="m-c-dur" placeholder="e.g. 9 min">
-      </div>
+    <label class="m-lbl">Lead name</label><input class="m-input" id="m-c-name" placeholder="e.g. Paul Parker">
+    <div class="m-2col" style="margin-top:10px">
+      <div><label class="m-lbl" style="margin-top:0">Type</label><select class="m-input" id="m-c-type"><option value="goal">Goal lead</option><option value="neglect">Neglected</option><option value="transfer">Transfer</option><option value="other">Other</option></select></div>
+      <div><label class="m-lbl" style="margin-top:0">Duration</label><input class="m-input" id="m-c-dur" placeholder="e.g. 9 min"></div>
     </div>
-    <label class="m-label">Notes — what they did wrong</label>
-    <textarea class="m-input" id="m-c-notes" rows="3" placeholder="e.g. No rapport, said not interested in auto — should have noticed bundled with Hartford" style="resize:vertical"></textarea>
-    <div class="m-row">
-      <button class="m-btn m-save" onclick="doAddCall(${tid})">Save</button>
-      <button class="m-btn m-cancel" onclick="hideModal()">Cancel</button>
-    </div>`);
+    <label class="m-lbl">Notes — what they did wrong</label>
+    <textarea class="m-input" id="m-c-notes" rows="3" style="resize:vertical" placeholder="e.g. No rapport, guy said not interested in auto — should have noticed both bundled with Hartford"></textarea>
+    <div class="m-row"><button class="m-btn m-save" onclick="doAddCall(${tid})">Save</button><button class="m-btn m-cancel" onclick="hideModal()">Cancel</button></div>`);
   setTimeout(()=>document.getElementById('m-c-name').focus(),60);
 }
 function doAddCall(tid){
@@ -777,16 +888,9 @@ function delCall(tid,cid){const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;
 
 function openAddTraineeTip(tid){
   showModal(`<div class="modal-title">Add coaching note</div>
-    <label class="m-label">Note</label>
-    <input class="m-input" id="m-tip" placeholder="e.g. Needs to work on assumptive close" onkeydown="if(event.key==='Enter')doAddTraineeTip(${tid})">
-    <label class="m-label">Category</label>
-    <select class="m-input" id="m-tip-cat">
-      <option value="call">Call technique</option><option value="quote">Quoting</option><option value="lead">Lead management</option><option value="general">General</option>
-    </select>
-    <div class="m-row">
-      <button class="m-btn m-save" onclick="doAddTraineeTip(${tid})">Add</button>
-      <button class="m-btn m-cancel" onclick="hideModal()">Cancel</button>
-    </div>`);
+    <label class="m-lbl">Note</label><input class="m-input" id="m-tip" placeholder="e.g. Needs to work on assumptive close" onkeydown="if(event.key==='Enter')doAddTraineeTip(${tid})">
+    <label class="m-lbl">Category</label><select class="m-input" id="m-tip-cat"><option value="call">Call technique</option><option value="quote">Quoting</option><option value="lead">Lead management</option><option value="general">General</option></select>
+    <div class="m-row"><button class="m-btn m-save" onclick="doAddTraineeTip(${tid})">Add</button><button class="m-btn m-cancel" onclick="hideModal()">Cancel</button></div>`);
   setTimeout(()=>document.getElementById('m-tip').focus(),60);
 }
 function doAddTraineeTip(tid){
@@ -802,14 +906,14 @@ function saveLog(tid){
   const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;
   const notes=document.getElementById('ln-'+tid).value.trim();if(!notes){alert('Add notes first.');return;}
   const raw=document.getElementById('la-'+tid).value.trim();
-  const remind=document.getElementById('la-remind-'+tid).checked;
+  const remind=document.getElementById('la-r-'+tid).checked;
   const actions=raw?raw.split('\n').filter(x=>x.trim()).map(t=>({id:S.nid++,text:t.trim(),done:false})):[];
   actions.forEach(a=>{tr.todos=tr.todos||[];tr.todos.push({id:S.nid++,text:a.text,done:false,remind});});
   tr.meetings=tr.meetings||[];tr.meetings.unshift({id:S.nid++,date:TODAY,notes,actions});
   tr.prep={};
   document.getElementById('ln-'+tid).value='';document.getElementById('la-'+tid).value='';
   document.getElementById('lf-'+tid).classList.remove('open');
-  renderDetail(tid);renderTrNav();renderCL();
+  renderDetail(tid);renderTrNav();renderCL();renderAllTodosIfVisible();
 }
 function delMeeting(tid,mid){const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;tr.meetings=tr.meetings.filter(x=>x.id!==mid);renderDetail(tid);}
 function toggleMeetingAct(tid,mid,aid){
@@ -818,9 +922,72 @@ function toggleMeetingAct(tid,mid,aid){
   const a=m.actions.find(x=>x.id===aid);if(a)a.done=!a.done;renderDetail(tid);
 }
 
-/* ── GLOBAL TIPS ── */
+/* ─── ALL TO-DOS ─── */
+function renderAllTodosIfVisible(){if(document.getElementById('page-at').classList.contains('on'))renderAllTodos();}
+function renderAllTodos(){
+  const showDone=document.getElementById('at-show-done').checked;
+  const el=document.getElementById('at-grid');
+  if(!S.trainees.length){el.innerHTML='<div class="empty" style="grid-column:1/-1">No trainees yet</div>';return;}
+  el.innerHTML=S.trainees.map(tr=>{
+    const todos=(tr.todos||[]).filter(td=>showDone||!td.done);
+    const pend=(tr.todos||[]).filter(td=>!td.done).length;
+    return`<div class="at-card">
+      <div class="at-card-hd">
+        <div class="at-av${tr.type==='onboard'?' ob':''}">${initials(tr.name)}</div>
+        <div class="at-name">${esc(tr.name)}</div>
+        ${pend?`<span class="at-pend">${pend} left</span>`:'<span style="font-size:10px;color:var(--green);font-family:var(--mono)">all done</span>'}
+      </div>
+      <div class="at-card-body">
+        ${todos.length?todos.map(td=>`<div class="at-item" onclick="toggleTodoFromAt(${tr.id},${td.id})">
+          <div class="at-cb${td.done?' on':''}"></div>
+          <div class="at-text${td.done?' done':''}">${esc(td.text)}</div>
+          ${td.remind&&!td.done?'<span style="font-size:10px;color:var(--amber)">⚑</span>':''}
+        </div>`).join(''):'<div class="empty" style="text-align:left;padding:8px 0">Nothing here</div>'}
+      </div>
+    </div>`;
+  }).join('');
+}
+function toggleTodoFromAt(tid,tdid){
+  const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;
+  const td=tr.todos.find(x=>x.id===tdid);if(td)td.done=!td.done;
+  renderAllTodos();renderCL();renderTrNav();if(activeTr===tid)renderDetail(tid);
+}
+
+/* ─── HISTORY ─── */
+function renderHistory(){
+  const el=document.getElementById('hist-body');
+  if(!S.history||!S.history.length){el.innerHTML='<div class="empty" style="padding:40px 0">No history yet — reset your checklist to save a day</div>';return;}
+  el.innerHTML=S.history.map((day,i)=>{
+    const tot=day.tasks.length,dn=day.tasks.filter(t=>t.done).length;
+    return`<div class="hist-day">
+      <div class="hist-day-hd" onclick="toggleHistDay(${i})">
+        <div class="hist-day-date">${esc(day.date)}</div>
+        <div class="hist-day-stats">
+          <span class="hist-stat"><strong>${dn}</strong>/${tot} done</span>
+          <span class="hist-stat" style="color:${dn===tot?'var(--green)':'var(--amber)'}">${dn===tot?'✓ Complete':'Partial'}</span>
+        </div>
+        <span class="hist-chevron" id="hist-chev-${i}">▼</span>
+      </div>
+      <div class="hist-body" id="hist-body-${i}">
+        ${day.tasks.map(t=>`<div class="hist-task">
+          <div class="hist-dot ${t.done?'done':'undone'}"></div>
+          <div class="hist-task-text ${t.done?'done':''}">${esc(t.text)}</div>
+          <span class="hist-cat">${t.cat}</span>
+        </div>`).join('')}
+        ${day.notes?`<div class="hist-notes-lbl">Notes</div><div class="hist-notes-text">${esc(day.notes)}</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+function toggleHistDay(i){
+  const body=document.getElementById('hist-body-'+i),chev=document.getElementById('hist-chev-'+i);
+  if(body){body.classList.toggle('open');chev.classList.toggle('open');}
+}
+function clearHistory(){if(!confirm('Clear all history?'))return;S.history=[];renderHistory();}
+
+/* ─── COACHING LIBRARY ─── */
 const GCAT_ORD=['call','quote','lead','general'];
-const GCAT_MAP={call:'Call Technique',quote:'Quoting',lead:'Lead Management',general:'General'};
+const GCAT_MAP={call:'📞 Call Technique',quote:'📄 Quoting',lead:'🎯 Lead Management',general:'💡 General'};
 function addGTip(){
   const txt=document.getElementById('gtip-input').value.trim();if(!txt)return;
   S.gtips.push({id:S.nid++,text:txt,cat:document.getElementById('gtip-cat').value});
@@ -828,16 +995,19 @@ function addGTip(){
 }
 function delGTip(id){S.gtips=S.gtips.filter(x=>x.id!==id);renderGTips();}
 function renderGTips(){
+  const el=document.getElementById('gtips-body');
   let html='';
   GCAT_ORD.forEach(cat=>{
     const items=S.gtips.filter(t=>t.cat===cat);if(!items.length)return;
-    html+=`<div class="sec">${GCAT_MAP[cat]}</div>`;
-    html+=items.map(t=>`<div class="tip-card"><div class="tip-dot"></div><div class="tip-text">${esc(t.text)}</div><button class="icon-btn" onclick="delGTip(${t.id})">✕</button></div>`).join('');
+    html+=`<div class="panel" style="margin-bottom:0"><div class="panel-hd"><div class="panel-title">${GCAT_MAP[cat]}</div></div><div class="panel-body">`;
+    html+=items.map(t=>`<div class="tip-card"><div class="tip-dot"></div><div class="tip-text">${esc(t.text)}</div><button class="i-btn" onclick="delGTip(${t.id})">✕</button></div>`).join('');
+    html+=`</div></div>`;
   });
-  document.getElementById('gtips-body').innerHTML=html||'<div class="empty-state">No notes yet</div>';
+  el.innerHTML=html||'<div class="empty" style="grid-column:1/-1">No notes yet</div>';
 }
 
-load();renderCL();renderOO();renderTrNav();renderGTips();
+/* ─── INIT ─── */
+load();renderCL();renderOO();renderTrNav();
 window.addEventListener('beforeunload',saveData);
 </script>
 </body>
