@@ -1,488 +1,975 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Training Scheduler</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-
-<!-- Firebase SDK (modular, v12.9.0) -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-  import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyCPgkOysIRXzw_yvMnSomcrkIxstp_TD88",
-    authDomain: "trainingscheduler-ecfd4.firebaseapp.com",
-    databaseURL: "https://trainingscheduler-ecfd4-default-rtdb.firebaseio.com",
-    projectId: "trainingscheduler-ecfd4",
-    storageBucket: "trainingscheduler-ecfd4.firebasestorage.app",
-    messagingSenderId: "886466149785",
-    appId: "1:886466149785:web:fa3489ad3b3bf47b8de708",
-    measurementId: "G-QMVN5TNSZP"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-  const dataRef = ref(db, 'schedulerData');
-
-  onValue(dataRef, (snapshot) => {
-    const data = snapshot.val();
-    if (data) {
-      roster = data.roster || roster;
-      schedule = data.schedule || schedule;
-      localStorage.setItem('ts_roster', JSON.stringify(roster));
-      localStorage.setItem('ts_schedule', JSON.stringify(schedule));
-      renderPool();
-      render();
-      toast('✓ Synced from cloud');
-    }
-  }, (error) => {
-    console.error('Firebase listener error:', error);
-    toast('⚠ Could not connect to cloud – working offline');
-  });
-
-  function saveToFirebase() {
-    set(dataRef, { roster, schedule })
-      .then(() => { toast('✓ Saved to cloud'); })
-      .catch(err => { console.error('Firebase save error:', err); toast('⚠ Save failed – check connection'); });
-  }
-
-  window.saveToFirebase = saveToFirebase;
-</script>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Day — Sales Manager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#1a1d24;--bg2:#21242c;--surface:#282c36;--card:#2e333e;--cyan:#22d3ee;--magenta:#ec4899;--green:#10b981;--yellow:#fbbf24;--text:#f8fafc;--text2:#cbd5e1;--text3:#94a3b8;--border:#3d4452}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.5}
-header{background:var(--bg2);border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.logo{display:flex;align-items:center;gap:14px}
-.logo-icon{width:42px;height:42px;background:linear-gradient(135deg,var(--cyan),var(--magenta));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px}
-.logo h1{font-size:1.35rem;font-weight:700;letter-spacing:0.5px}
-.logo p{font-size:.85rem;color:var(--text3);margin-top:2px}
-.header-right{display:flex;gap:12px;align-items:center}
-.week-nav{display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 10px}
-.week-nav button{background:none;border:none;cursor:pointer;color:var(--text2);font-size:20px;width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:all .2s}
-.week-nav button:hover{background:var(--cyan);color:#000}
-.week-nav span{font-size:.95rem;font-weight:600;min-width:170px;text-align:center}
-.btn{display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:8px;background:var(--surface);border:1px solid var(--border);color:var(--text);font-size:.95rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit}
-.btn:hover{background:var(--cyan);color:#000;border-color:var(--cyan)}
-.btn-save{background:linear-gradient(135deg,var(--cyan),var(--magenta));color:#000;border:none;font-weight:700}
-.btn-save:hover{filter:brightness(1.1);background:linear-gradient(135deg,var(--cyan),var(--magenta));color:#000;border:none}
-.unsaved-dot{width:8px;height:8px;background:#f97316;border-radius:50%;display:none}
-.unsaved-dot.show{display:block}
-.layout{display:grid;grid-template-columns:250px 1fr;min-height:calc(100vh - 68px)}
-aside{background:var(--bg2);border-right:1px solid var(--border);padding:24px 18px;position:sticky;top:68px;height:calc(100vh - 68px);overflow-y:auto}
-aside h2{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--text2);margin-bottom:14px;padding:0 6px}
-.pool{display:flex;flex-direction:column;gap:6px}
-.chip{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:8px;cursor:grab;font-size:1rem;font-weight:500;border:1px solid var(--border);user-select:none;transition:all .15s;background:var(--surface);position:relative}
-.chip:hover{border-color:var(--cyan);transform:translateX(2px)}
-.chip:active{cursor:grabbing;transform:scale(.98)}
-.chip.dragging{opacity:.25}
-.chip-del{background:none;border:none;cursor:pointer;color:var(--text3);font-size:18px;width:26px;height:26px;border-radius:4px;display:flex;align-items:center;justify-content:center;opacity:0;transition:all .15s;margin-left:auto;flex-shrink:0;line-height:1}
-.chip:hover .chip-del{opacity:1}
-.chip-del:hover{background:var(--magenta)!important;color:#000!important;opacity:1!important}
-.avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:#000;flex-shrink:0}
-.add-section{margin-top:20px;padding-top:20px;border-top:1px solid var(--border)}
-.add-section label{font-size:.85rem;font-weight:600;color:var(--text2);display:block;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px}
-.add-section input{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:11px 14px;border-radius:6px;font-size:1rem;outline:none;font-family:inherit}
-.add-section input:focus{border-color:var(--cyan)}
-.add-section button{margin-top:10px;width:100%;padding:11px;background:linear-gradient(135deg,var(--cyan),var(--magenta));color:#000;border:none;border-radius:6px;font-size:1rem;font-weight:700;cursor:pointer;font-family:inherit}
-.add-section button:hover{filter:brightness(1.1)}
-main{padding:32px;overflow-x:auto !important}
-.stats{display:flex;gap:14px;margin-bottom:26px;flex-wrap:wrap}
-.stat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px 22px;min-width:140px}
-.stat .sl{font-size:.8rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:1px}
-.stat .sv{font-size:1.9rem;font-weight:700;margin-top:4px}
-.grid{display:grid;grid-template-columns:repeat(5, minmax(260px, 1fr));gap:16px;min-width:1300px;width:100%;overflow-x:auto !important;padding-bottom:16px}
-.day-col{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;min-width:260px;flex-shrink:0}
-.day-head{padding:16px 18px;border-bottom:1px solid var(--border);background:var(--surface)}
-.day-head .dn{font-size:.9rem;font-weight:700;text-transform:uppercase;letter-spacing:1px}
-.day-head .dd{font-size:.85rem;color:var(--text3);margin-top:3px}
-.slots{padding:12px;display:flex;flex-direction:column;gap:10px}
-.slot{background:var(--surface);border:2px dashed var(--border);border-radius:10px;min-height:96px;padding:12px;transition:all .2s;position:relative}
-.slot.over{border-color:var(--cyan);background:rgba(34,211,238,0.1);transform:scale(1.02)}
-.slot.filled{border-style:solid;border-color:var(--cyan);background:var(--card)}
-.slot-lbl{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:8px}
-.slot-cnt{position:absolute;top:12px;right:12px;font-size:.8rem;color:var(--cyan);font-weight:600}
-.hint{font-size:.9rem;color:var(--text3);text-align:center;padding:14px 0}
-.t-row{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:8px;font-size:.95rem;font-weight:600;cursor:grab;margin-bottom:6px;transition:all .15s}
-.t-row:active{cursor:grabbing}
-.t-row .ti{display:flex;align-items:center;gap:10px}
-.t-row .rm{background:none;border:none;cursor:pointer;color:var(--text3);font-size:18px;width:26px;height:26px;border-radius:4px;display:flex;align-items:center;justify-content:center;opacity:0;transition:all .15s}
-.t-row:hover .rm{opacity:1}
-.t-row .rm:hover{background:var(--magenta);color:#000}
-.rec{margin-top:10px;display:flex;align-items:center;gap:6px}
-.rec input{flex:1;background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;font-size:.85rem;outline:none;min-width:0;font-family:inherit}
-.rec input::placeholder{color:var(--text3)}
-.rec input:focus{border-color:var(--green)}
-.rec a{width:34px;height:34px;background:var(--green);color:#000;border-radius:6px;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:14px;flex-shrink:0;transition:all .15s}
-.rec a:hover{filter:brightness(1.15)}
-
-/* ── Notes collapsible ── */
-.notes-toggle{margin-top:8px;display:flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;padding:5px 0;font-family:inherit;font-size:.8rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.9px;transition:color .15s;width:100%}
-.notes-toggle:hover{color:var(--yellow)}
-.notes-toggle .nt-icon{font-size:13px;transition:transform .2s;display:inline-block}
-.notes-toggle.has-notes{color:var(--yellow)}
-.notes-toggle.has-notes .nt-dot{width:6px;height:6px;background:var(--yellow);border-radius:50%;display:inline-block;margin-left:auto;flex-shrink:0}
-.notes-body{overflow:hidden;max-height:0;transition:max-height .25s ease, opacity .2s ease;opacity:0}
-.notes-body.open{max-height:200px;opacity:1}
-.notes-body textarea{width:100%;margin-top:6px;background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:10px 12px;border-radius:6px;font-size:.875rem;outline:none;font-family:inherit;line-height:1.5;resize:vertical;min-height:72px;transition:border-color .15s}
-.notes-body textarea::placeholder{color:var(--text3)}
-.notes-body textarea:focus{border-color:var(--yellow)}
-/* preview line shown when collapsed but has content */
-.notes-preview{font-size:.78rem;color:var(--text3);font-style:italic;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;display:none}
-.notes-toggle.has-notes ~ .notes-preview{display:block}
-
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:200;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
-.modal-overlay.open{opacity:1;pointer-events:all}
-.modal{background:var(--bg2);border:1px solid var(--border);border-radius:14px;width:min(840px,95vw);max-height:88vh;overflow:hidden;display:flex;flex-direction:column;transform:translateY(20px) scale(.97);transition:transform .25s cubic-bezier(.175,.885,.32,1.1)}
-.modal-overlay.open .modal{transform:translateY(0) scale(1)}
-.modal-header{padding:24px 30px 20px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;background:var(--surface)}
-.modal-header h2{font-size:1.4rem;font-weight:700;letter-spacing:0.5px}
-.modal-header p{font-size:.9rem;color:var(--text3);margin-top:3px}
-.modal-actions{display:flex;gap:10px;align-items:center}
-.modal-close{background:var(--card);border:1px solid var(--border);color:var(--text2);width:38px;height:38px;border-radius:6px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center}
-.modal-close:hover{background:var(--magenta);color:#000;border-color:var(--magenta)}
-.print-btn{display:flex;align-items:center;gap:6px;padding:10px 18px;border-radius:6px;background:var(--cyan);color:#000;border:none;font-size:.95rem;font-weight:700;cursor:pointer;font-family:inherit}
-.print-btn:hover{filter:brightness(1.1)}
-.modal-body{padding:26px 30px;overflow-y:auto;background:var(--bg)}
-.sum-week-badge{display:inline-block;background:linear-gradient(135deg,var(--cyan),var(--magenta));color:#000;font-size:.9rem;font-weight:700;padding:7px 16px;border-radius:8px;margin-bottom:22px}
-.sum-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:26px}
-.sum-kpi{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px 20px;text-align:center}
-.sum-kpi .kv{font-size:2.1rem;font-weight:700}
-.sum-kpi .kl{font-size:.75rem;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-top:4px}
-.sum-table{width:100%;border-collapse:collapse;font-size:.95rem}
-.sum-table th{background:var(--surface);padding:14px 16px;text-align:left;font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text2);border-bottom:2px solid var(--border)}
-.sum-table td{padding:14px 16px;border-bottom:1px solid var(--border);vertical-align:middle}
-.sum-table tr:last-child td{border-bottom:none}
-.sum-table tr:hover td{background:var(--surface)}
-.td-day{font-weight:700;color:var(--cyan);font-size:.95rem}
-.td-name{display:flex;align-items:center;gap:10px;font-weight:600}
-.td-rec a{display:inline-flex;align-items:center;gap:5px;color:var(--green);font-size:.9rem;font-weight:600;text-decoration:none;padding:5px 12px;background:rgba(16,185,129,0.15);border-radius:6px}
-.td-rec a:hover{background:var(--green);color:#000}
-.td-empty{color:var(--text3);font-size:.9rem;font-style:italic}
-.td-notes{font-size:.85rem;color:var(--text2);max-width:220px;line-height:1.4;white-space:pre-wrap}
-.sum-person-section{margin-top:30px}
-.sum-section-title{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--text2);margin-bottom:14px}
-.sum-person-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
-.sum-person-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px}
-.sum-person-card .pcount{font-size:1.6rem;font-weight:700;margin-left:auto;color:var(--cyan)}
-.sum-person-card .pname{font-size:.95rem;font-weight:600}
-.sum-person-card .psub{font-size:.8rem;color:var(--text3)}
-.no-data{text-align:center;padding:44px 24px;color:var(--text3);font-size:1rem}
-.no-data span{font-size:2.8rem;display:block;margin-bottom:14px}
-.toast{position:fixed;bottom:24px;right:24px;background:var(--card);border:1px solid var(--border);color:var(--text);padding:14px 22px;border-radius:10px;font-size:.95rem;font-weight:500;transform:translateY(70px);opacity:0;transition:all .3s cubic-bezier(.175,.885,.32,1.275);z-index:9999;max-width:340px}
-.toast.show{transform:translateY(0);opacity:1}
-::-webkit-scrollbar{width:8px}
-::-webkit-scrollbar-track{background:var(--bg)}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px}
-::-webkit-scrollbar-thumb:hover{background:var(--text3)}
-@media (max-width: 1400px) {
-  .grid {min-width:1100px; grid-template-columns:repeat(5, minmax(220px, 1fr))}
-  .day-col {min-width:220px}
-  main {padding:16px 8px}
+/* ============================================================
+   RESET & TOKENS
+============================================================ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0e0b;
+  --bg2:#161410;
+  --bg3:#1e1b15;
+  --card:#1c1916;
+  --card2:#222018;
+  --border:#2e2b22;
+  --border2:#3a3628;
+  --text:#f0ece0;
+  --text2:#a09880;
+  --text3:#605a48;
+  --green:#3dba7a;
+  --green-dim:#1a4d32;
+  --green-bg:#0d2418;
+  --amber:#e8a020;
+  --amber-dim:#6a4800;
+  --amber-bg:#1e1508;
+  --red:#e05050;
+  --red-dim:#5a1818;
+  --red-bg:#1a0d0d;
+  --blue:#5090e8;
+  --blue-dim:#1a2f5a;
+  --blue-bg:#0d1828;
+  --purple:#9060e0;
+  --purple-bg:#180d28;
+  --r:8px;--r-lg:12px;--r-xl:16px;
+  --mono:'JetBrains Mono',monospace;
+  --sans:'Sora',sans-serif;
 }
-@media print{.modal-overlay{position:static;background:none;display:block}.modal{width:100%;max-height:none;border-radius:0}.modal-actions,.modal-close{display:none!important}body>*:not(.modal-overlay){display:none}}
+
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+
+/* ============================================================
+   TOPBAR
+============================================================ */
+.topbar{
+  height:54px;background:var(--bg2);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;padding:0 20px;gap:0;
+  position:sticky;top:0;z-index:500;
+}
+.tb-brand{font-size:15px;font-weight:700;color:var(--text);letter-spacing:-.3px;margin-right:28px;white-space:nowrap}
+.tb-brand span{color:var(--green)}
+.tb-date{font-family:var(--mono);font-size:11px;color:var(--text3);margin-right:auto;padding-top:1px}
+.tb-tabs{display:flex;height:54px;gap:2px;margin-right:20px}
+.tb-tab{
+  height:54px;padding:0 18px;display:flex;align-items:center;gap:7px;
+  font-size:13px;font-weight:500;color:var(--text3);
+  cursor:pointer;border:none;background:none;font-family:var(--sans);
+  border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;
+}
+.tb-tab:hover{color:var(--text2)}
+.tb-tab.on{color:var(--text);border-bottom-color:var(--green)}
+.tb-tab .n{
+  font-size:10px;font-weight:700;background:var(--amber);color:#000;
+  padding:1px 5px;border-radius:20px;font-family:var(--mono);
+}
+.save-btn{
+  display:flex;align-items:center;gap:7px;padding:8px 18px;
+  background:var(--green-dim);color:var(--green);border:1px solid #2a6040;
+  border-radius:var(--r);font-family:var(--sans);font-size:13px;font-weight:600;
+  cursor:pointer;transition:all .15s;white-space:nowrap;
+}
+.save-btn:hover{background:var(--green);color:#000}
+.save-st{font-family:var(--mono);font-size:11px;color:var(--text3);margin-left:10px;min-width:80px}
+
+/* ============================================================
+   PAGE / LAYOUT
+============================================================ */
+.page{display:none}
+.page.on{display:block}
+
+/* ============================================================
+   CHECKLIST PAGE
+============================================================ */
+.cl-page{display:grid;grid-template-columns:1fr 320px;gap:1px;background:var(--border);min-height:calc(100vh - 54px)}
+.cl-col{background:var(--bg);padding:22px 20px;overflow-y:auto}
+
+.col-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.col-title{font-size:17px;font-weight:700;letter-spacing:-.3px}
+
+/* progress */
+.prog-wrap{margin-bottom:20px}
+.prog-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.prog-label{font-size:12px;color:var(--text3)}
+.prog-pct{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--green)}
+.prog-track{height:4px;background:var(--border2);border-radius:4px;overflow:hidden}
+.prog-fill{height:100%;background:var(--green);border-radius:4px;transition:width .4s cubic-bezier(.4,0,.2,1)}
+
+/* reminder strip */
+.remind{background:var(--amber-bg);border:1px solid var(--amber-dim);border-radius:var(--r-lg);padding:14px 16px;margin-bottom:18px}
+.remind-hd{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--amber);margin-bottom:10px}
+.remind-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-top:1px solid var(--amber-dim)}
+.ri-cb{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--amber-dim);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;background:transparent;transition:all .15s;margin-top:1px}
+.ri-cb.on{background:var(--green);border-color:var(--green)}
+.ri-cb.on::after{content:'';width:9px;height:6px;border-left:2px solid #000;border-bottom:2px solid #000;transform:rotate(-45deg) translate(1px,-1px);display:block}
+.ri-body{flex:1}
+.ri-text{font-size:13px;color:var(--amber)}
+.ri-sub{font-size:11px;color:var(--amber-dim);font-family:var(--mono);margin-top:2px}
+
+/* section label */
+.sec{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin:16px 0 8px 2px;display:flex;align-items:center;justify-content:space-between}
+.sec:first-child{margin-top:0}
+.sec button{font-size:11px;text-transform:none;letter-spacing:0;font-weight:400;color:var(--text3);background:none;border:none;cursor:pointer;font-family:var(--sans)}
+.sec button:hover{color:var(--red)}
+
+/* check item */
+.ci{
+  display:flex;align-items:flex-start;gap:10px;padding:10px 12px;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r);
+  margin-bottom:5px;cursor:pointer;transition:background .1s;user-select:none;
+}
+.ci:hover{background:var(--card2)}
+.ci:hover .ci-del{opacity:1}
+.ci.done{opacity:.45}
+.cb{
+  width:18px;height:18px;border-radius:4px;border:1.5px solid var(--border2);
+  flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .15s;
+}
+.cb.on{background:var(--green);border-color:var(--green)}
+.cb.on::after{content:'';width:9px;height:6px;border-left:2px solid #000;border-bottom:2px solid #000;transform:rotate(-45deg) translate(1px,-1px);display:block}
+.ci-text{font-size:14px;flex:1;line-height:1.4;word-break:break-word}
+.ci-text.done{text-decoration:line-through;color:var(--text3)}
+.ci-del{opacity:0;background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:2px 4px;border-radius:4px;flex-shrink:0;transition:all .1s;line-height:1}
+.ci-del:hover{color:var(--red);background:var(--red-bg)}
+
+/* add task inline */
+.add-row{display:flex;gap:7px;margin-top:10px}
+input,select,textarea{
+  font-family:var(--sans);font-size:14px;padding:9px 12px;
+  border:1px solid var(--border2);border-radius:var(--r);
+  background:var(--card2);color:var(--text);outline:none;transition:border-color .15s;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--green)}
+input.flex1,textarea.flex1{flex:1}
+select{color:var(--text2);cursor:pointer;font-size:13px}
+textarea{width:100%;resize:vertical;line-height:1.6}
+
+.btn{
+  padding:8px 14px;border:1px solid var(--border2);border-radius:var(--r);
+  background:var(--card2);color:var(--text);font-size:13px;font-weight:600;
+  cursor:pointer;font-family:var(--sans);white-space:nowrap;transition:all .12s;
+  display:inline-flex;align-items:center;gap:6px;
+}
+.btn:hover{background:var(--card);border-color:var(--border2)}
+.btn-green{background:var(--green-dim);color:var(--green);border-color:#2a5040}
+.btn-green:hover{background:var(--green);color:#000;border-color:var(--green)}
+.btn-sm{padding:6px 11px;font-size:12px}
+.btn-ghost{background:transparent;border-color:transparent;color:var(--text2)}
+.btn-ghost:hover{background:var(--card);border-color:var(--border)}
+.btn-red{background:transparent;border-color:transparent;color:var(--red)}
+.btn-red:hover{background:var(--red-bg);border-color:var(--red-dim)}
+
+/* one-offs */
+.oo-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-bottom:5px;cursor:pointer}
+.oo-item:hover{background:var(--card2)}
+.oo-item:hover .ci-del{opacity:1}
+.oo-item.done{opacity:.45}
+
+/* ============================================================
+   TRAINEES PAGE
+============================================================ */
+.tr-page{display:grid;grid-template-columns:220px 1fr;background:var(--border);gap:1px;min-height:calc(100vh - 54px)}
+.tr-sidebar{background:var(--bg2);padding:14px 10px;overflow-y:auto}
+.tr-main{background:var(--bg);overflow-y:auto}
+
+.tr-sec-label{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);padding:10px 8px 5px}
+.tr-btn{
+  display:flex;align-items:center;gap:9px;width:100%;padding:9px 10px;
+  border:none;background:none;font-family:var(--sans);font-size:13px;font-weight:500;
+  color:var(--text2);cursor:pointer;border-radius:var(--r);transition:all .12s;text-align:left;
+}
+.tr-btn:hover{background:var(--card);color:var(--text)}
+.tr-btn.on{background:var(--card2);color:var(--text)}
+.tr-av{width:28px;height:28px;border-radius:50%;background:var(--blue-dim);color:var(--blue);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tr-av.ob{background:var(--purple-bg);color:var(--purple)}
+.tr-pend{margin-left:auto;font-size:10px;font-weight:700;color:var(--amber);font-family:var(--mono)}
+.today-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0}
+
+/* TRAINEE DETAIL */
+.td-wrap{padding:24px 28px;max-width:860px}
+
+.td-header{display:flex;align-items:flex-start;gap:16px;margin-bottom:22px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.td-av-lg{width:48px;height:48px;border-radius:50%;background:var(--blue-dim);color:var(--blue);font-size:17px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.td-av-lg.ob{background:var(--purple-bg);color:var(--purple)}
+.td-name{font-size:22px;font-weight:700;letter-spacing:-.4px}
+.td-tags{display:flex;gap:6px;margin-top:5px;flex-wrap:wrap}
+.tag{font-size:11px;padding:2px 9px;border-radius:20px;font-weight:600;font-family:var(--mono)}
+.tag-ob{background:var(--purple-bg);color:var(--purple)}
+.tag-today{background:var(--green-bg);color:var(--green);border:1px solid var(--green-dim)}
+.tag-pend{background:var(--amber-bg);color:var(--amber)}
+.tag-ok{background:var(--green-bg);color:var(--green)}
+
+/* toggle switch */
+.sw-row{display:flex;align-items:center;gap:11px;padding:11px 14px;background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);cursor:pointer;margin-bottom:20px;transition:all .15s}
+.sw-row:hover{background:var(--card2)}
+.sw-row.on{border-color:var(--green-dim);background:var(--green-bg)}
+.sw-pill{width:34px;height:18px;border-radius:20px;background:var(--border2);transition:background .2s;position:relative;flex-shrink:0}
+.sw-pill.on{background:var(--green)}
+.sw-pill::after{content:'';width:12px;height:12px;border-radius:50%;background:#fff;position:absolute;top:3px;left:3px;transition:transform .2s}
+.sw-pill.on::after{transform:translateX(16px)}
+.sw-label{font-size:14px;font-weight:600}
+.sw-hint{font-size:12px;color:var(--text3);margin-left:auto}
+
+/* prep grid */
+.prep-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:20px}
+.prep-item{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--card);border:1px solid var(--border);border-radius:var(--r);cursor:pointer;transition:all .15s}
+.prep-item:hover{background:var(--card2)}
+.prep-item.on{background:var(--green-bg);border-color:var(--green-dim)}
+.pcb{width:16px;height:16px;border-radius:3px;border:1.5px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.pcb.on{background:var(--green);border-color:var(--green)}
+.pcb.on::after{content:'';width:8px;height:5px;border-left:2px solid #000;border-bottom:2px solid #000;transform:rotate(-45deg) translate(1px,-1px);display:block}
+.prep-lbl{font-size:13px;font-weight:500}
+.prep-lbl.on{color:var(--green)}
+
+/* PANEL SECTIONS */
+.panel{background:var(--card);border:1px solid var(--border);border-radius:var(--r-xl);margin-bottom:16px;overflow:hidden}
+.panel-hd{padding:13px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.panel-title{font-size:14px;font-weight:700}
+.panel-body{padding:14px}
+
+/* call review */
+.call-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;margin-bottom:7px}
+.call-card-hd{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:6px}
+.call-name{font-size:14px;font-weight:600}
+.call-metas{display:flex;gap:6px;margin-top:3px;flex-wrap:wrap;align-items:center}
+.call-tag{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:600;font-family:var(--mono)}
+.ct-goal{background:var(--blue-bg);color:var(--blue)}
+.ct-neglect{background:var(--red-bg);color:var(--red)}
+.ct-transfer{background:var(--purple-bg);color:var(--purple)}
+.ct-other{background:var(--card2);color:var(--text2)}
+.call-dur{font-size:11px;color:var(--text3);font-family:var(--mono)}
+.call-notes{font-size:13px;color:var(--text2);line-height:1.6;white-space:pre-wrap}
+.icon-btn{background:none;border:none;color:var(--text3);cursor:pointer;padding:2px 5px;border-radius:4px;font-size:13px;flex-shrink:0;line-height:1}
+.icon-btn:hover{color:var(--red);background:var(--red-bg)}
+
+/* TO-DO LIST */
+.todo-item{display:flex;align-items:flex-start;gap:10px;padding:10px 11px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);margin-bottom:6px}
+.todo-item:hover{background:var(--card)}
+.todo-item:hover .icon-btn{opacity:1}
+.todo-cb{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--border2);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;margin-top:1px;background:transparent}
+.todo-cb.on{background:var(--green);border-color:var(--green)}
+.todo-cb.on::after{content:'';width:9px;height:6px;border-left:2px solid #000;border-bottom:2px solid #000;transform:rotate(-45deg) translate(1px,-1px);display:block}
+.todo-body{flex:1;min-width:0}
+.todo-text{font-size:14px;line-height:1.4;word-break:break-word}
+.todo-text.done{text-decoration:line-through;color:var(--text3)}
+.todo-meta{display:flex;gap:6px;align-items:center;margin-top:4px;flex-wrap:wrap}
+.remind-flag{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600;background:var(--amber-bg);color:var(--amber);display:flex;align-items:center;gap:4px;font-family:var(--mono)}
+.done-flag{font-size:11px;color:var(--green);font-family:var(--mono)}
+
+/* meeting log */
+.meeting-entry{border:1px solid var(--border);border-radius:var(--r-lg);padding:13px 15px;margin-bottom:9px;background:var(--bg3)}
+.me-date{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.me-date-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);font-family:var(--mono)}
+.me-notes{font-size:14px;line-height:1.7;white-space:pre-wrap;color:var(--text);margin-bottom:8px}
+.me-actions{border-top:1px solid var(--border);padding-top:9px}
+.me-act-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:7px}
+.ma-row{display:flex;align-items:flex-start;gap:9px;padding:5px 0}
+.ma-cb{width:17px;height:17px;border-radius:3px;border:1.5px solid var(--border2);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;background:transparent;margin-top:1px}
+.ma-cb.on{background:var(--green);border-color:var(--green)}
+.ma-cb.on::after{content:'';width:8px;height:5px;border-left:2px solid #000;border-bottom:2px solid #000;transform:rotate(-45deg) translate(1px,-1px);display:block}
+.ma-text{font-size:13px;flex:1;line-height:1.4}
+.ma-text.done{text-decoration:line-through;color:var(--text3)}
+.pend-hint{font-size:11px;color:var(--amber);margin-top:1px;font-family:var(--mono)}
+
+/* coaching tips */
+.tip-card{display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);margin-bottom:6px}
+.tip-card:hover .icon-btn{opacity:1}
+.tip-dot{width:6px;height:6px;border-radius:50%;background:var(--blue);flex-shrink:0;margin-top:6px}
+.tip-text{font-size:13px;color:var(--text2);flex:1;line-height:1.5}
+
+/* log form */
+.log-toggle{width:100%;padding:9px;background:var(--bg3);border:1px dashed var(--border2);border-radius:var(--r);font-family:var(--sans);font-size:13px;color:var(--text3);cursor:pointer;margin-bottom:10px;text-align:center;transition:all .15s}
+.log-toggle:hover{border-color:var(--green);color:var(--green)}
+.log-form{background:var(--bg3);border-radius:var(--r-lg);padding:14px;margin-bottom:12px;display:none}
+.log-form.open{display:block}
+.lf-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);display:block;margin-bottom:5px}
+.lf-row{display:flex;gap:7px;margin-top:10px}
+
+.empty-state{font-size:13px;color:var(--text3);padding:14px 0;text-align:center}
+.divider{height:1px;background:var(--border);margin:18px 0}
+.no-sel{display:flex;align-items:center;justify-content:center;min-height:300px;color:var(--text3);font-size:15px}
+
+/* ============================================================
+   MODAL
+============================================================ */
+.modal-bg{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);
+  z-index:900;align-items:center;justify-content:center;
+}
+.modal-bg.open{display:flex}
+.modal{background:var(--card2);border:1px solid var(--border2);border-radius:var(--r-xl);padding:22px;width:420px;max-width:92vw}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:16px}
+.m-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);display:block;margin-bottom:5px;margin-top:12px}
+.m-label:first-of-type{margin-top:0}
+.m-input{width:100%;font-size:14px;padding:9px 12px;border:1px solid var(--border2);border-radius:var(--r);background:var(--bg3);color:var(--text);font-family:var(--sans);outline:none}
+.m-input:focus{border-color:var(--green)}
+.m-row{display:flex;gap:8px;margin-top:16px}
+.m-btn{flex:1;padding:10px;border-radius:var(--r);font-family:var(--sans);font-size:14px;font-weight:600;cursor:pointer;border:none}
+.m-save{background:var(--green);color:#000}
+.m-save:hover{background:#50d890}
+.m-cancel{background:var(--bg3);color:var(--text2);border:1px solid var(--border2)!important;border:none}
+.m-cancel:hover{background:var(--card)}
+.m-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* ============================================================
+   TIPS PAGE (global reference)
+============================================================ */
+.tips-page{padding:24px 28px;max-width:720px}
 </style>
 </head>
 <body>
-<header>
-  <div class="logo">
-    <div class="logo-icon">⚡</div>
-    <div><h1>Training Scheduler</h1><p>Shared • Manual Save</p></div>
+
+<!-- ============================================================
+     TOPBAR
+============================================================ -->
+<div class="topbar">
+  <div class="tb-brand">My<span>Day</span></div>
+  <div class="tb-date" id="tb-date"></div>
+  <div class="tb-tabs">
+    <button class="tb-tab on" id="tab-cl" onclick="showTab('cl')">Checklist</button>
+    <button class="tb-tab" id="tab-tr" onclick="showTab('tr')">Trainees <span class="n" id="tr-badge" style="display:none"></span></button>
+    <button class="tb-tab" id="tab-tips" onclick="showTab('tips')">Coaching Library</button>
   </div>
-  <div class="header-right">
-    <div class="week-nav">
-      <button id="prevW">‹</button>
-      <span id="wkLabel"></span>
-      <button id="nextW">›</button>
+  <button class="save-btn" onclick="saveData()">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+    Save
+  </button>
+  <div class="save-st" id="save-st"></div>
+</div>
+
+<!-- ============================================================
+     CHECKLIST PAGE
+============================================================ -->
+<div class="page on" id="page-cl">
+  <div class="cl-page">
+    <div class="cl-col">
+      <div class="col-heading">
+        <div class="col-title">Daily Checklist</div>
+        <button class="btn btn-sm btn-green" onclick="openAddTask()">+ Add task</button>
+      </div>
+      <div class="prog-wrap">
+        <div class="prog-top"><span class="prog-label" id="prog-lbl">0 of 0 done</span><span class="prog-pct" id="prog-pct">0%</span></div>
+        <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0"></div></div>
+      </div>
+      <div id="remind-wrap"></div>
+      <div id="cl-body"></div>
     </div>
-    <button class="btn" id="summaryBtn">📊 Summary</button>
-    <div class="unsaved-dot" id="unsavedDot" title="Unsaved changes"></div>
-    <button class="btn btn-save" id="saveBtn">💾 Save</button>
+    <div class="cl-col">
+      <div class="col-heading">
+        <div class="col-title">One-offs</div>
+        <button class="btn btn-sm" onclick="openAddOO()">+ Add</button>
+      </div>
+      <div id="oo-body"></div>
+    </div>
   </div>
-</header>
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal">
-    <div class="modal-header">
-      <div><h2>Weekly Summary</h2><p id="modalWeekLabel"></p></div>
-      <div class="modal-actions">
-        <button class="print-btn" onclick="window.print()">🖨 Print / PDF</button>
-        <button class="modal-close" id="modalClose">×</button>
+</div>
+
+<!-- ============================================================
+     TRAINEES PAGE
+============================================================ -->
+<div class="page" id="page-tr">
+  <div class="tr-page">
+    <div class="tr-sidebar">
+      <div class="tr-sec-label">Today's meetings</div>
+      <div id="tr-today-nav"></div>
+      <div class="tr-sec-label" style="margin-top:10px">All trainees</div>
+      <div id="tr-all-nav"></div>
+      <button class="btn btn-sm btn-green" style="width:100%;margin-top:14px;justify-content:center" onclick="openAddTrainee()">+ Add trainee</button>
+    </div>
+    <div class="tr-main">
+      <div class="td-wrap" id="tr-detail"><div class="no-sel">← Select a trainee</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     COACHING LIBRARY PAGE (global tips)
+============================================================ -->
+<div class="page" id="page-tips">
+  <div class="tips-page">
+    <div class="col-heading" style="margin-bottom:18px">
+      <div>
+        <div class="col-title">Coaching Library</div>
+        <div style="font-size:13px;color:var(--text3);margin-top:3px">Global rules &amp; reminders — available when coaching any trainee</div>
       </div>
     </div>
-    <div class="modal-body" id="modalBody"></div>
+    <div class="add-row" style="margin-bottom:18px">
+      <input class="flex1" type="text" id="gtip-input" placeholder="Add a rule or reminder…" onkeydown="if(event.key==='Enter')addGTip()">
+      <select id="gtip-cat">
+        <option value="call">Call technique</option>
+        <option value="quote">Quoting</option>
+        <option value="lead">Lead management</option>
+        <option value="general">General</option>
+      </select>
+      <button class="btn btn-green" onclick="addGTip()">Add</button>
+    </div>
+    <div id="gtips-body"></div>
   </div>
 </div>
-<div class="layout">
-  <aside>
-    <h2>Roster</h2>
-    <div class="pool" id="pool"></div>
-    <div class="add-section">
-      <label>Add Person</label>
-      <input id="nameIn" placeholder="Full name..." maxlength="30"/>
-      <button id="addBtn">+ Add to Roster</button>
-    </div>
-  </aside>
-  <main>
-    <div class="stats" id="stats"></div>
-    <div class="grid" id="grid"></div>
-  </main>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modal-bg" onclick="if(event.target===this)hideModal()">
+  <div class="modal" id="modal-box"></div>
 </div>
-<div class="toast" id="toast"></div>
 
+<!-- ============================================================
+     SCRIPT
+============================================================ -->
 <script>
-const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
-const SLOTS = 3;
-const COLORS = ['#22d3ee','#ec4899','#10b981','#fbbf24','#8b5cf6','#f97316','#0ea5e9','#14b8a6','#a855f7','#f43f5e'];
-let offset = 0, roster = [], schedule = {}, drag = null;
-let hasUnsavedChanges = false;
+/* ---- DATE ---- */
+const DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const NOW=new Date();
+const TODAY=NOW.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+document.getElementById('tb-date').textContent=DAYS[NOW.getDay()]+' · '+MONTHS[NOW.getMonth()]+' '+NOW.getDate()+', '+NOW.getFullYear();
 
-function ini(n){return n.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2)}
-function rColor(n){return(roster.find(r=>r.name===n)||{color:'#22d3ee'}).color}
-function monday(off){const d=new Date(),day=d.getDay();d.setDate(d.getDate()-(day===0?6:day-1)+off*7);d.setHours(0,0,0,0);return d}
-function wkKey(off){return 'w'+monday(off).toISOString().slice(0,10)}
-function fmtWeek(off){const m=monday(off),f=monday(off);f.setDate(f.getDate()+4);const o={month:'short',day:'numeric'};return m.toLocaleDateString('en-US',o)+' – '+f.toLocaleDateString('en-US',o)}
-function dayDate(di,off){const m=monday(off);m.setDate(m.getDate()+di);return m.toLocaleDateString('en-US',{month:'short',day:'numeric'})}
+/* ---- DEFAULT DATA ---- */
+const DEF_TASKS=[
+  {cat:'review',text:'Aaron Loves Me folder — Cameron, Joshua, Astra'},
+  {cat:'review',text:'Call transcripts for today\'s trainees'},
+  {cat:'review',text:'Texts for today\'s trainees'},
+  {cat:'review',text:'Quotes — make sure everything done correctly'},
+  {cat:'review',text:'Talk time, transfers & call counts for everyone'},
+  {cat:'review',text:'Neglected quotes'},
+  {cat:'agency',text:'Ricochet — cross-reference & mark sold policies'},
+  {cat:'agency',text:'DASH reports — verify subproducer codes'},
+  {cat:'agency',text:'Should Have Closed folder — clear non-closable leads, ensure everyone has a follow-up task'},
+  {cat:'onboard',text:'Check in with new hires / onboarding progress'},
+  {cat:'other',text:'Tech issues / anything that came up'},
+];
+const DEF_GTIPS=[
+  {cat:'call',text:'Start assumptively — confirm, don\'t ask. "I have you listed as married, is that correct?"'},
+  {cat:'call',text:'Confirm in sets of 2 — always confirm more than one thing at a time and explain why'},
+  {cat:'call',text:'Acknowledge prior confirmation: "I know you already confirmed your info, I\'m going to run through it real quick to make sure I have all your discounts correct"'},
+  {cat:'call',text:'Overcome objections — don\'t accept the first one. Don\'t be too pushy or they hang up'},
+  {cat:'call',text:'Home objection: "My system makes me run through it but I can take it off at the end and show you what it looks like without it if you want"'},
+  {cat:'call',text:'Don\'t ask why they\'re shopping. No question for PD. Don\'t say "down payment"'},
+  {cat:'quote',text:'Always run auto quote in both named insured names if it\'s a higher IS score'},
+  {cat:'quote',text:'Girlfriend and boyfriend are considered married'},
+  {cat:'quote',text:'Not required to ask about other drivers listed — just ask if any other drivers need to be on the policy'},
+  {cat:'quote',text:'Waiving PIP is a last resort option'},
+  {cat:'quote',text:'Rental car coverage starts at 200'},
+  {cat:'quote',text:'Renters gets 15k not 20k'},
+  {cat:'lead',text:'All quoted leads go into the Aaron Loves Me folder'},
+  {cat:'lead',text:'All quoted hot leads go into the Should Have Closed folder'},
+  {cat:'lead',text:'Every follow-up needs a text'},
+  {cat:'lead',text:'Go through Should Have Closed — get rid of non-closable/cold leads, make sure everyone has a follow-up task'},
+];
 
-function slotData(day, si) {
-  const k = wkKey(offset);
-  if (!schedule[k]) schedule[k] = {};
-  const key = day + '-' + si;
-  if (!schedule[k][key]) schedule[k][key] = { names: [], rec: '', notes: '' };
-  const slot = schedule[k][key];
-  if (!Array.isArray(slot.names)) slot.names = [];
-  if (typeof slot.rec !== 'string') slot.rec = '';
-  if (typeof slot.notes !== 'string') slot.notes = '';
-  return slot;
-}
+/* ---- STATE ---- */
+let S={tasks:[],oneoffs:[],trainees:[],gtips:[],nid:1,init:false};
+let activeTr=null;
 
-function markUnsaved() {
-  hasUnsavedChanges = true;
-  document.getElementById('unsavedDot').classList.add('show');
-}
-
-function saveLocal() {
-  localStorage.setItem('ts_roster', JSON.stringify(roster));
-  localStorage.setItem('ts_schedule', JSON.stringify(schedule));
-}
-
-function saveAll() {
-  saveLocal();
-  if (window.saveToFirebase) {
-    window.saveToFirebase();
-  }
-  hasUnsavedChanges = false;
-  document.getElementById('unsavedDot').classList.remove('show');
-}
-
-function toast(msg){
-  const el=document.getElementById('toast');
-  el.textContent=msg;el.classList.add('show');
-  setTimeout(()=>el.classList.remove('show'),4000);
-}
-
-function deleteFromRoster(name) {
-  if (!confirm(`Remove ${name} from the roster?\n\nThey will also be removed from all scheduled sessions.`)) return;
-  roster = roster.filter(r => r.name !== name);
-  Object.keys(schedule).forEach(wk => {
-    Object.keys(schedule[wk]).forEach(key => {
-      if (Array.isArray(schedule[wk][key].names)) {
-        schedule[wk][key].names = schedule[wk][key].names.filter(n => n !== name);
-      }
-    });
-  });
-  saveLocal();
-  markUnsaved();
-  renderPool();
-  render();
-  toast(`✓ ${name} removed from roster`);
-}
-
-function renderPool(){
-  const p=document.getElementById('pool');p.innerHTML='';
-  roster.forEach(({name,color})=>{
-    const el=document.createElement('div');el.className='chip';el.draggable=true;
-    el.innerHTML=`<div class="avatar" style="background:${color}">${ini(name)}</div><span>${name}</span><button class="chip-del" title="Remove from roster">×</button>`;
-    el.addEventListener('dragstart',e=>{drag={name,from:null};el.classList.add('dragging');e.dataTransfer.effectAllowed='move'});
-    el.addEventListener('dragend',()=>el.classList.remove('dragging'));
-    el.querySelector('.chip-del').addEventListener('click', e => {
-      e.stopPropagation();
-      e.preventDefault();
-      deleteFromRoster(name);
-    });
-    p.appendChild(el);
-  });
-}
-
-function render(){
-  document.getElementById('wkLabel').textContent=fmtWeek(offset);
-  const grid=document.getElementById('grid');grid.innerHTML='';
-  DAYS.forEach((day,di)=>{
-    const col=document.createElement('div');col.className='day-col';
-    col.innerHTML=`<div class="day-head"><div class="dn">${day}</div><div class="dd">${dayDate(di,offset)}</div></div><div class="slots" id="sc-${day}"></div>`;
-    grid.appendChild(col);
-    const sc=col.querySelector(`#sc-${day}`);
-    for(let si=0;si<SLOTS;si++)sc.appendChild(mkSlot(day,si));
-  });
-  renderStats();
-}
-
-function mkSlot(day,si){
-  const d=slotData(day,si);
-  const el=document.createElement('div');el.className=`slot${(d.names||[]).length?' filled':''}`;
-  el.addEventListener('dragover',e=>{e.preventDefault();el.classList.add('over')});
-  el.addEventListener('dragleave',()=>el.classList.remove('over'));
-  el.addEventListener('drop',e=>{
-    e.preventDefault();el.classList.remove('over');if(!drag)return;
-    const t=slotData(day,si);
-    if((t.names||[]).includes(drag.name))return;
-    if((t.names||[]).length>=1){toast('⚠ Session already has a trainee');return}
-    if(drag.from){const s=slotData(drag.from.day,drag.from.si);s.names=(s.names||[]).filter(n=>n!==drag.name)}
-    t.names.push(drag.name);drag=null;
-    saveLocal();markUnsaved();render();renderPool();
-  });
-
-  const lbl=document.createElement('div');lbl.className='slot-lbl';lbl.textContent='Session '+(si+1);
-  const cnt=document.createElement('div');cnt.className='slot-cnt';cnt.textContent=(d.names||[]).length+'/1';
-  el.appendChild(lbl);el.appendChild(cnt);
-
-  if(!(d.names||[]).length){
-    const h=document.createElement('div');h.className='hint';h.textContent='Drop trainee here';el.appendChild(h);
-  }else{
-    (d.names||[]).forEach(name=>{
-      const c=rColor(name),row=document.createElement('div');row.className='t-row';row.draggable=true;
-      row.style.cssText=`background:rgba(${parseInt(c.slice(1,3),16)},${parseInt(c.slice(3,5),16)},${parseInt(c.slice(5,7),16)},0.12);border-left:4px solid ${c}`;
-      row.innerHTML=`<div class="ti"><div class="avatar" style="background:${c};width:30px;height:30px;font-size:.7rem">${ini(name)}</div>${name}</div><button class="rm">×</button>`;
-      row.addEventListener('dragstart',e=>{drag={name,from:{day,si}};e.dataTransfer.effectAllowed='move'});
-      row.querySelector('.rm').addEventListener('click',()=>{const s=slotData(day,si);s.names=(s.names||[]).filter(n=>n!==name);saveLocal();markUnsaved();render();renderPool()});
-      el.appendChild(row);
-    });
-  }
-
-  // Recording URL row
-  const rec=document.createElement('div');rec.className='rec';
-  const inp=document.createElement('input');inp.type='url';inp.placeholder='Recording URL...';inp.value=d.rec||'';
-  const lnk=document.createElement('a');lnk.target='_blank';lnk.textContent='▶';
-  const updL=()=>{const v=inp.value.trim();lnk.href=v||'#';lnk.style.display=v?'flex':'none'};updL();
-  inp.addEventListener('input',()=>{d.rec=inp.value;saveLocal();markUnsaved();updL()});
-  rec.appendChild(inp);rec.appendChild(lnk);el.appendChild(rec);
-
-  // ── Notes collapsible ──
-  const hasNotes = !!(d.notes && d.notes.trim());
-
-  const notesToggle = document.createElement('button');
-  notesToggle.className = 'notes-toggle' + (hasNotes ? ' has-notes' : '');
-  notesToggle.innerHTML = `<span class="nt-icon">▸</span>&nbsp;Notes${hasNotes ? '<span class="nt-dot"></span>' : ''}`;
-
-  const notesPreview = document.createElement('div');
-  notesPreview.className = 'notes-preview';
-  if (hasNotes) notesPreview.textContent = d.notes.trim();
-
-  const notesBody = document.createElement('div');
-  notesBody.className = 'notes-body';
-
-  const textarea = document.createElement('textarea');
-  textarea.placeholder = 'Session summary, observations, follow-ups…';
-  textarea.value = d.notes || '';
-  textarea.addEventListener('input', () => {
-    d.notes = textarea.value;
-    saveLocal();
-    markUnsaved();
-    const filled = !!(d.notes && d.notes.trim());
-    notesToggle.classList.toggle('has-notes', filled);
-    // update dot
-    const existingDot = notesToggle.querySelector('.nt-dot');
-    if (filled && !existingDot) {
-      notesToggle.innerHTML = `<span class="nt-icon" style="${notesToggle.querySelector('.nt-icon') ? notesToggle.querySelector('.nt-icon').getAttribute('style') : ''}">▾</span>&nbsp;Notes<span class="nt-dot"></span>`;
-    } else if (!filled && existingDot) {
-      notesToggle.innerHTML = `<span class="nt-icon">▾</span>&nbsp;Notes`;
-    }
-    notesPreview.textContent = filled ? d.notes.trim() : '';
-  });
-  notesBody.appendChild(textarea);
-
-  notesToggle.addEventListener('click', () => {
-    const isOpen = notesBody.classList.toggle('open');
-    const icon = notesToggle.querySelector('.nt-icon');
-    if (icon) icon.textContent = isOpen ? '▾' : '▸';
-    notesPreview.style.display = isOpen ? 'none' : (hasNotes ? 'block' : 'none');
-    if (isOpen) textarea.focus();
-  });
-
-  el.appendChild(notesToggle);
-  el.appendChild(notesPreview);
-  el.appendChild(notesBody);
-
-  return el;
-}
-
-function renderStats(){
-  const bar=document.getElementById('stats');bar.innerHTML='';
-  const wk=schedule[wkKey(offset)]||{};let total=0,withRec=0,filled=0,withNotes=0;const pc={};
-  DAYS.forEach(day=>{for(let si=0;si<SLOTS;si++){const d=wk[day+'-'+si]||{names:[]};if((d.names||[]).length){filled++;(d.names||[]).forEach(n=>{pc[n]=(pc[n]||0)+1;total});if(d.rec)withRec++;if(d.notes&&d.notes.trim())withNotes++}}});
-  const all=DAYS.length*SLOTS,top=Object.entries(pc).sort((a,b)=>b[1]-a[1])[0];
-  [{l:'Sessions',v:total,c:'#22d3ee'},{l:'Slots Filled',v:filled+'/'+all,c:'#10b981'},{l:'Recordings',v:withRec,c:'#fbbf24'},{l:'Notes',v:withNotes,c:'#f97316'},...(top?[{l:'Top Trainee',v:top[0],c:'#ec4899'}]:[])].forEach(({l,v,c})=>{
-    const s=document.createElement('div');s.className='stat';
-    s.innerHTML=`<div class="sl">${l}</div><div class="sv" style="color:${c}">${v}</div>`;bar.appendChild(s);
-  });
-}
-
-function openSummary(){
-  const overlay=document.getElementById('modalOverlay'),body=document.getElementById('modalBody');
-  document.getElementById('modalWeekLabel').textContent=fmtWeek(offset);
-  overlay.classList.add('open');
-  const wk=schedule[wkKey(offset)]||{};let totalSessions=0,withRec=0,filled=0;const pc={},rows=[];
-  DAYS.forEach((day,di)=>{const date=dayDate(di,offset);for(let si=0;si<SLOTS;si++){const d=wk[day+'-'+si]||{names:[]};const hasName=(d.names||[]).length>0;rows.push({day,date,si,name:hasName?d.names[0]:null,rec:hasName&&d.rec?d.rec:null,notes:d.notes||''});if(hasName){filled++;totalSessions++;pc[d.names[0]]=(pc[d.names[0]]||0)+1;if(d.rec)withRec++}}});
-  if(totalSessions===0){body.innerHTML='<div class="no-data"><span>📭</span>No sessions logged yet.<br>Drag trainees into sessions to get started.</div>';return}
-  const pct=Math.round(filled/(DAYS.length*SLOTS)*100);
-  let html=`<div class="sum-week-badge">Week of ${fmtWeek(offset)}</div><div class="sum-kpis"><div class="sum-kpi"><div class="kv" style="color:#22d3ee">${totalSessions}</div><div class="kl">Total Sessions</div></div><div class="sum-kpi"><div class="kv" style="color:#10b981">${pct}%</div><div class="kl">Completion</div></div><div class="sum-kpi"><div class="kv" style="color:#fbbf24">${withRec}</div><div class="kl">Recordings</div></div><div class="sum-kpi"><div class="kv" style="color:#ec4899">${Object.keys(pc).length}</div><div class="kl">Trainees</div></div></div><table class="sum-table"><thead><tr><th>Day</th><th>Date</th><th>Session</th><th>Trainee</th><th>Recording</th><th>Notes</th></tr></thead><tbody>`;
-  let lastDay='';
-  rows.forEach(({day,date,si,name,rec,notes})=>{
-    const dc=day!==lastDay?`<td class="td-day" rowspan="${SLOTS}">${day}</td>`:'';if(day!==lastDay)lastDay=day;
-    const color=name?rColor(name):'#94a3b8';
-    const nc=name?`<div class="td-name"><div class="avatar" style="background:${color};width:26px;height:26px;font-size:.65rem">${ini(name)}</div>${name}</div>`:'<span class="td-empty">— unscheduled —</span>';
-    const rc=rec?`<a href="${rec}" target="_blank">▶ Watch</a>`:'<span class="td-empty">No link</span>';
-    const notesHtml = notes && notes.trim()
-      ? `<div class="td-notes">${notes.trim().replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`
-      : '<span class="td-empty">—</span>';
-    html+=`<tr>${dc}<td style="color:#cbd5e1">${date}</td><td style="font-weight:600">Session ${si+1}</td><td>${nc}</td><td class="td-rec">${rc}</td><td>${notesHtml}</td></tr>`;
-  });
-  html+='</tbody></table>';
-  if(Object.keys(pc).length){html+='<div class="sum-person-section"><div class="sum-section-title">Trainee Breakdown</div><div class="sum-person-grid">';Object.entries(pc).sort((a,b)=>b[1]-a[1]).forEach(([name,count])=>{const color=rColor(name);html+=`<div class="sum-person-card"><div class="avatar" style="background:${color}">${ini(name)}</div><div><div class="pname">${name}</div><div class="psub">${count} session${count>1?'s':''}</div></div><div class="pcount">${count}</div></div>`});html+='</div></div>'}
-  body.innerHTML=html;
-}
-
-document.getElementById('saveBtn').addEventListener('click', saveAll);
-document.getElementById('summaryBtn').addEventListener('click',openSummary);
-document.getElementById('modalClose').addEventListener('click',()=>document.getElementById('modalOverlay').classList.remove('open'));
-document.getElementById('modalOverlay').addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('open')});
-document.addEventListener('keydown',e=>{if(e.key==='Escape')document.getElementById('modalOverlay').classList.remove('open')});
-document.getElementById('addBtn').addEventListener('click',()=>{
-  const inp=document.getElementById('nameIn'),name=inp.value.trim();if(!name)return;
-  if(roster.find(r=>r.name.toLowerCase()===name.toLowerCase())){toast('⚠ Already in roster');return}
-  roster.push({name,color:COLORS[roster.length%COLORS.length]});inp.value='';
-  saveLocal();markUnsaved();renderPool();toast('✓ '+name+' added');
-});
-document.getElementById('nameIn').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('addBtn').click()});
-document.getElementById('prevW').addEventListener('click',()=>{offset--;render()});
-document.getElementById('nextW').addEventListener('click',()=>{offset++;render()});
-
-window.addEventListener('beforeunload', e => {
-  if (hasUnsavedChanges) { e.preventDefault(); e.returnValue = ''; }
-});
-
-function boot(){
+/* ---- PERSIST ---- */
+function load(){
   try{
-    const r=localStorage.getItem('ts_roster');if(r)roster=JSON.parse(r);
-    const s=localStorage.getItem('ts_schedule');if(s)schedule=JSON.parse(s);
-  }catch{}
-  if(!roster.length)['Tyler','Julie','Adam','Carnell','Kris','Cameron','Cynthia'].forEach((n,i)=>roster.push({name:n,color:COLORS[i]}));
-  renderPool();render();
-  toast('Connected – click 💾 Save to push your changes to the cloud');
+    const d=localStorage.getItem('myday_v5');
+    if(d){S=JSON.parse(d);document.getElementById('save-st').textContent='Loaded ✓';}
+  }catch(e){}
+  if(!S.init){
+    DEF_TASKS.forEach(t=>S.tasks.push({id:S.nid++,text:t.text,cat:t.cat,done:false}));
+    DEF_GTIPS.forEach(t=>S.gtips.push({id:S.nid++,text:t.text,cat:t.cat}));
+    S.init=true;
+  }
 }
-boot();
+function saveData(){
+  try{
+    localStorage.setItem('myday_v5',JSON.stringify(S));
+    document.getElementById('save-st').textContent='Saved '+NOW.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  }catch(e){document.getElementById('save-st').textContent='Save failed';}
+}
+
+/* ---- UTILS ---- */
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function initials(n){return n.trim().split(/\s+/).map(w=>w[0]).join('').toUpperCase().slice(0,2);}
+function showTab(t){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tb-tab').forEach(b=>b.classList.remove('on'));
+  document.getElementById('page-'+t).classList.add('on');
+  document.getElementById('tab-'+t).classList.add('on');
+}
+function showModal(html){document.getElementById('modal-box').innerHTML=html;document.getElementById('modal-bg').classList.add('open');}
+function hideModal(){document.getElementById('modal-bg').classList.remove('open');}
+
+/* ============================================================
+   CHECKLIST
+============================================================ */
+const CATS={review:'Review',agency:'Agency',onboard:'Onboarding',other:'Other'};
+const CAT_ORD=['review','agency','onboard','other'];
+
+function openAddTask(){
+  showModal(`<div class="modal-title">Add checklist task</div>
+    <label class="m-label">Task</label>
+    <input class="m-input" id="m-t-text" placeholder="What needs to be done?" onkeydown="if(event.key==='Enter')doAddTask()">
+    <label class="m-label">Category</label>
+    <select class="m-input" id="m-t-cat">
+      <option value="review">Review</option><option value="agency">Agency</option>
+      <option value="onboard">Onboarding</option><option value="other">Other</option>
+    </select>
+    <div class="m-row">
+      <button class="m-btn m-save" onclick="doAddTask()">Add</button>
+      <button class="m-btn m-cancel" onclick="hideModal()">Cancel</button>
+    </div>`);
+  setTimeout(()=>document.getElementById('m-t-text').focus(),60);
+}
+function doAddTask(){
+  const txt=document.getElementById('m-t-text').value.trim();if(!txt)return;
+  S.tasks.push({id:S.nid++,text:txt,cat:document.getElementById('m-t-cat').value,done:false});
+  hideModal();renderCL();
+}
+function toggleTask(id){const t=S.tasks.find(x=>x.id===id);if(t)t.done=!t.done;renderCL();}
+function delTask(id){S.tasks=S.tasks.filter(x=>x.id!==id);renderCL();}
+
+function renderCL(){
+  const tot=S.tasks.length,dn=S.tasks.filter(t=>t.done).length,pct=tot?Math.round(dn/tot*100):0;
+  document.getElementById('prog-lbl').textContent=dn+' of '+tot+' done';
+  document.getElementById('prog-pct').textContent=pct+'%';
+  document.getElementById('prog-fill').style.width=pct+'%';
+  let html='';
+  CAT_ORD.forEach(cat=>{
+    const items=S.tasks.filter(t=>t.cat===cat);if(!items.length)return;
+    html+=`<div class="sec">${CATS[cat]}</div>`;
+    html+=items.map(t=>`<div class="ci${t.done?' done':''}" onclick="toggleTask(${t.id})">
+      <div class="cb${t.done?' on':''}"></div>
+      <div class="ci-text${t.done?' done':''}">${esc(t.text)}</div>
+      <button class="ci-del" onclick="event.stopPropagation();delTask(${t.id})">✕</button>
+    </div>`).join('');
+  });
+  document.getElementById('cl-body').innerHTML=html||'<div class="empty-state">No tasks</div>';
+  renderRemind();
+}
+
+/* ---- ONE-OFFS ---- */
+function openAddOO(){
+  showModal(`<div class="modal-title">Add one-off</div>
+    <label class="m-label">Task</label>
+    <input class="m-input" id="m-oo-text" placeholder="e.g. Call Vincent at 11 re: Slack" onkeydown="if(event.key==='Enter')doAddOO()">
+    <div class="m-row">
+      <button class="m-btn m-save" onclick="doAddOO()">Add</button>
+      <button class="m-btn m-cancel" onclick="hideModal()">Cancel</button>
+    </div>`);
+  setTimeout(()=>document.getElementById('m-oo-text').focus(),60);
+}
+function doAddOO(){
+  const txt=document.getElementById('m-oo-text').value.trim();if(!txt)return;
+  S.oneoffs.push({id:S.nid++,text:txt,done:false});hideModal();renderOO();
+}
+function toggleOO(id){const t=S.oneoffs.find(x=>x.id===id);if(t)t.done=!t.done;renderOO();}
+function delOO(id){S.oneoffs=S.oneoffs.filter(x=>x.id!==id);renderOO();}
+
+function renderOO(){
+  const todo=S.oneoffs.filter(t=>!t.done),dn=S.oneoffs.filter(t=>t.done);
+  let html='';
+  if(!S.oneoffs.length){html='<div class="empty-state">Nothing here — add one-time tasks like calls to make, things to follow up on, etc.</div>';}
+  html+=todo.map(t=>`<div class="oo-item" onclick="toggleOO(${t.id})">
+    <div class="cb"></div><div class="ci-text">${esc(t.text)}</div>
+    <button class="ci-del" onclick="event.stopPropagation();delOO(${t.id})">✕</button>
+  </div>`).join('');
+  if(dn.length){
+    html+=`<div class="sec">Done <button onclick="clearDoneOO()">Clear</button></div>`;
+    html+=dn.map(t=>`<div class="oo-item done" onclick="toggleOO(${t.id})">
+      <div class="cb on"></div><div class="ci-text done">${esc(t.text)}</div>
+      <button class="ci-del" onclick="event.stopPropagation();delOO(${t.id})">✕</button>
+    </div>`).join('');
+  }
+  document.getElementById('oo-body').innerHTML=html;
+}
+function clearDoneOO(){S.oneoffs=S.oneoffs.filter(x=>!x.done);renderOO();}
+
+/* ---- REMIND STRIP ---- */
+function renderRemind(){
+  const pending=[];
+  S.trainees.forEach(tr=>tr.todos.filter(td=>td.remind&&!td.done).forEach(td=>pending.push({tr,td})));
+  const el=document.getElementById('remind-wrap');
+  if(!pending.length){el.innerHTML='';return;}
+  el.innerHTML=`<div class="remind">
+    <div class="remind-hd">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      ${pending.length} follow-up reminder${pending.length!==1?'s':''} — check if they did it
+    </div>
+    ${pending.map(({tr,td})=>`<div class="remind-item">
+      <div class="ri-cb${td.done?' on':''}" onclick="toggleTodoGlobal(${tr.id},${td.id})"></div>
+      <div class="ri-body">
+        <div class="ri-text">${esc(td.text)}</div>
+        <div class="ri-sub">${esc(tr.name)}</div>
+      </div>
+    </div>`).join('')}
+  </div>`;
+}
+function toggleTodoGlobal(tid,todoid){
+  const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;
+  const td=tr.todos.find(x=>x.id===todoid);if(td)td.done=!td.done;
+  renderCL();if(activeTr===tid)renderDetail(tid);renderTrNav();
+}
+
+/* ============================================================
+   TRAINEES
+============================================================ */
+const PREP=[
+  {key:'calls',label:'Calls & transcripts'},
+  {key:'texts',label:'Texts'},
+  {key:'quotes',label:'Quotes'},
+  {key:'leadmgr',label:'Lead manager'},
+  {key:'talktime',label:'Talk time & transfers'},
+];
+function pendCount(tr){return(tr.todos||[]).filter(t=>t.remind&&!t.done).length;}
+
+function openAddTrainee(){
+  showModal(`<div class="modal-title">Add trainee</div>
+    <label class="m-label">Name</label>
+    <input class="m-input" id="m-tr-name" placeholder="e.g. Cameron" onkeydown="if(event.key==='Enter')doAddTrainee()">
+    <label class="m-label">Type</label>
+    <select class="m-input" id="m-tr-type">
+      <option value="trainee">Trainee</option><option value="onboard">New hire / onboarding</option>
+    </select>
+    <div class="m-row">
+      <button class="m-btn m-save" onclick="doAddTrainee()">Add</button>
+      <button class="m-btn m-cancel" onclick="hideModal()">Cancel</button>
+    </div>`);
+  setTimeout(()=>document.getElementById('m-tr-name').focus(),60);
+}
+function doAddTrainee(){
+  const name=document.getElementById('m-tr-name').value.trim();if(!name)return;
+  S.trainees.push({id:S.nid++,name,type:document.getElementById('m-tr-type').value,todayMeeting:false,prep:{},calls:[],todos:[],meetings:[],tips:[]});
+  hideModal();renderTrNav();
+}
+
+function renderTrNav(){
+  const today=S.trainees.filter(t=>t.todayMeeting),others=S.trainees.filter(t=>!t.todayMeeting);
+  const totalPend=S.trainees.reduce((s,t)=>s+pendCount(t),0);
+  const badge=document.getElementById('tr-badge');
+  badge.style.display=totalPend?'':'none';badge.textContent=totalPend;
+
+  const mkBtn=(t)=>{const pc=pendCount(t);return`<button class="tr-btn${activeTr===t.id?' on':''}" onclick="selectTr(${t.id})">
+    <div class="tr-av${t.type==='onboard'?' ob':''}">${initials(t.name)}</div>
+    <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(t.name)}</span>
+    ${t.todayMeeting?'<span class="today-dot"></span>':''}
+    ${pc?`<span class="tr-pend">${pc}</span>`:''}
+  </button>`;};
+
+  document.getElementById('tr-today-nav').innerHTML=today.length?today.map(mkBtn).join(''):'<div style="font-size:12px;color:var(--text3);padding:6px 10px">None flagged yet</div>';
+  document.getElementById('tr-all-nav').innerHTML=S.trainees.length?others.map(mkBtn).join(''):'<div style="font-size:12px;color:var(--text3);padding:6px 10px">No trainees yet</div>';
+}
+
+function selectTr(id){activeTr=id;renderTrNav();renderDetail(id);}
+
+function renderDetail(id){
+  const tr=S.trainees.find(x=>x.id===id);
+  const el=document.getElementById('tr-detail');
+  if(!tr){el.innerHTML='<div class="no-sel">← Select a trainee</div>';return;}
+
+  const pc=pendCount(tr);
+  const tags=[];
+  if(tr.type==='onboard') tags.push(`<span class="tag tag-ob">Onboarding</span>`);
+  if(tr.todayMeeting) tags.push(`<span class="tag tag-today">Meeting today</span>`);
+  if(pc) tags.push(`<span class="tag tag-pend">${pc} follow-up${pc!==1?'s':''}</span>`);
+  else tags.push(`<span class="tag tag-ok">All clear</span>`);
+
+  const prepDone=PREP.filter(p=>(tr.prep||{})[p.key]).length;
+
+  /* TODOS */
+  const todos=tr.todos||[];
+  const todosHTML=`
+    <div class="panel">
+      <div class="panel-hd">
+        <div class="panel-title">Their To-Do List</div>
+        <button class="btn btn-sm btn-green" onclick="openAddTodo(${tr.id})">+ Add item</button>
+      </div>
+      <div class="panel-body" id="todos-${tr.id}">
+        ${todos.length?todos.map(td=>`<div class="todo-item">
+          <div class="todo-cb${td.done?' on':''}" onclick="toggleTodo(${tr.id},${td.id})"></div>
+          <div class="todo-body">
+            <div class="todo-text${td.done?' done':''}">${esc(td.text)}</div>
+            <div class="todo-meta">
+              ${td.remind&&!td.done?'<span class="remind-flag">⚑ Follow up needed</span>':''}
+              ${td.done?'<span class="done-flag">✓ Done</span>':''}
+            </div>
+          </div>
+          <button class="icon-btn" onclick="toggleTodoRemind(${tr.id},${td.id})" title="${td.remind?'Remove follow-up reminder':'Set follow-up reminder'}" style="opacity:0.5;color:${td.remind?'var(--amber)':'var(--text3)'}">⚑</button>
+          <button class="icon-btn" onclick="delTodo(${tr.id},${td.id})">✕</button>
+        </div>`).join(''):'<div class="empty-state">No to-do items yet</div>'}
+      </div>
+    </div>`;
+
+  /* CALL REVIEWS */
+  const callTypeMap={goal:'Goal lead',neglect:'Neglected',transfer:'Transfer',other:'Other'};
+  const callsHTML=`
+    <div class="panel">
+      <div class="panel-hd">
+        <div class="panel-title">Call Review Notes</div>
+        <button class="btn btn-sm btn-green" onclick="openAddCall(${tr.id})">+ Add call</button>
+      </div>
+      <div class="panel-body">
+        ${(tr.calls||[]).length?(tr.calls).map(c=>`<div class="call-card">
+          <div class="call-card-hd">
+            <div><div class="call-name">${esc(c.name)}</div>
+              <div class="call-metas">
+                ${c.type?`<span class="call-tag ct-${c.type}">${callTypeMap[c.type]||c.type}</span>`:''}
+                ${c.dur?`<span class="call-dur">${esc(c.dur)}</span>`:''}
+              </div>
+            </div>
+            <button class="icon-btn" onclick="delCall(${tr.id},${c.id})">✕</button>
+          </div>
+          ${c.notes?`<div class="call-notes">${esc(c.notes)}</div>`:''}
+        </div>`).join(''):'<div class="empty-state">No call notes yet</div>'}
+      </div>
+    </div>`;
+
+  /* COACHING TIPS (per trainee) */
+  const tips=tr.tips||[];
+  const tipCatMap={call:'Call technique',quote:'Quoting',lead:'Lead management',general:'General'};
+  const tipCatOrd=['call','quote','lead','general'];
+  let tipsInner='';
+  tipCatOrd.forEach(cat=>{
+    const items=tips.filter(t=>t.cat===cat);if(!items.length)return;
+    tipsInner+=`<div class="sec">${tipCatMap[cat]}</div>`;
+    tipsInner+=items.map(t=>`<div class="tip-card">
+      <div class="tip-dot"></div>
+      <div class="tip-text">${esc(t.text)}</div>
+      <button class="icon-btn" onclick="delTraineeTip(${tr.id},${t.id})">✕</button>
+    </div>`).join('');
+  });
+  const coachHTML=`
+    <div class="panel">
+      <div class="panel-hd">
+        <div class="panel-title">Coaching Notes for ${esc(tr.name)}</div>
+        <button class="btn btn-sm btn-green" onclick="openAddTraineeTip(${tr.id})">+ Add note</button>
+      </div>
+      <div class="panel-body">
+        ${tipsInner||'<div class="empty-state">No coaching notes yet — add things specific to this person</div>'}
+      </div>
+    </div>`;
+
+  /* MEETING LOG */
+  const meetingsHTML=`
+    <div class="panel">
+      <div class="panel-hd"><div class="panel-title">Meeting Log</div></div>
+      <div class="panel-body">
+        <button class="log-toggle" onclick="toggleLogForm(${tr.id})">+ Log a meeting</button>
+        <div class="log-form" id="lf-${tr.id}">
+          <label class="lf-label">What you covered</label>
+          <textarea id="ln-${tr.id}" rows="3" placeholder="Notes from the meeting…" style="margin-bottom:10px"></textarea>
+          <label class="lf-label">Action items — one per line (these go to their to-do list)</label>
+          <textarea id="la-${tr.id}" rows="3" placeholder="Go through neglected quotes&#10;Review TM script&#10;Practice objection handling"></textarea>
+          <label style="display:flex;align-items:center;gap:8px;margin-top:10px;cursor:pointer;font-size:13px;color:var(--text2)">
+            <input type="checkbox" id="la-remind-${tr.id}" style="width:auto;padding:0;margin:0"> Set follow-up reminders on all action items
+          </label>
+          <div class="lf-row">
+            <button class="btn btn-sm btn-green" onclick="saveLog(${tr.id})">Save meeting</button>
+            <button class="btn btn-sm btn-ghost" onclick="toggleLogForm(${tr.id})">Cancel</button>
+          </div>
+        </div>
+        ${(tr.meetings||[]).length?(tr.meetings).map(m=>{
+          const actHTML=(m.actions||[]).length?`<div class="me-actions">
+            <div class="me-act-label">Action items — check off when YOU confirm they did it</div>
+            ${m.actions.map(a=>`<div class="ma-row">
+              <div class="ma-cb${a.done?' on':''}" onclick="toggleMeetingAct(${tr.id},${m.id},${a.id})"></div>
+              <div style="flex:1"><div class="ma-text${a.done?' done':''}">${esc(a.text)}</div>
+              ${!a.done?'<div class="pend-hint">Not confirmed yet</div>':''}</div>
+            </div>`).join('')}
+          </div>`:'';
+          return`<div class="meeting-entry">
+            <div class="me-date"><span class="me-date-label">${esc(m.date)}</span>
+            <button class="btn btn-sm btn-red" onclick="delMeeting(${tr.id},${m.id})">Remove</button></div>
+            <div class="me-notes">${esc(m.notes)}</div>${actHTML}
+          </div>`;
+        }).join(''):'<div class="empty-state">No meetings logged yet</div>'}
+      </div>
+    </div>`;
+
+  el.innerHTML=`<div class="td-wrap">
+    <div class="td-header">
+      <div class="td-av-lg${tr.type==='onboard'?' ob':''}">${initials(tr.name)}</div>
+      <div style="flex:1"><div class="td-name">${esc(tr.name)}</div><div class="td-tags">${tags.join('')}</div></div>
+      <button class="btn btn-sm btn-red" onclick="removeTr(${tr.id})">Remove trainee</button>
+    </div>
+
+    <div class="sw-row${tr.todayMeeting?' on':''}" onclick="toggleTodayMeeting(${tr.id})">
+      <div class="sw-pill${tr.todayMeeting?' on':''}"></div>
+      <span class="sw-label">Meeting today</span>
+      <span class="sw-hint">${tr.todayMeeting?'Flagged for today':'Toggle on if you\'re meeting today'}</span>
+    </div>
+
+    ${tr.todayMeeting?`<div style="margin-bottom:20px">
+      <div class="sec" style="margin-top:0">Pre-meeting prep (${prepDone}/${PREP.length})</div>
+      <div class="prep-grid">${PREP.map(p=>{const d=(tr.prep||{})[p.key];return`<div class="prep-item${d?' on':''}" onclick="togglePrep(${tr.id},'${p.key}')">
+        <div class="pcb${d?' on':''}"></div><span class="prep-lbl${d?' on':''}">${p.label}</span>
+      </div>`;}).join('')}</div>
+    </div>`:''}
+
+    ${todosHTML}
+    ${callsHTML}
+    ${coachHTML}
+    ${meetingsHTML}
+  </div>`;
+}
+
+function toggleTodayMeeting(id){const t=S.trainees.find(x=>x.id===id);if(t)t.todayMeeting=!t.todayMeeting;renderTrNav();renderDetail(id);}
+function togglePrep(tid,key){const t=S.trainees.find(x=>x.id===tid);if(t){t.prep=t.prep||{};t.prep[key]=!t.prep[key];}renderDetail(tid);}
+function removeTr(id){if(!confirm('Remove this trainee and all their data?'))return;S.trainees=S.trainees.filter(x=>x.id!==id);activeTr=null;renderTrNav();document.getElementById('tr-detail').innerHTML='<div class="no-sel">← Select a trainee</div>';}
+
+/* TODOS */
+function openAddTodo(tid){
+  showModal(`<div class="modal-title">Add to-do item</div>
+    <label class="m-label">Task for them</label>
+    <input class="m-input" id="m-td-text" placeholder="e.g. Go through neglected quotes" onkeydown="if(event.key==='Enter')doAddTodo(${tid})">
+    <label style="display:flex;align-items:center;gap:9px;margin-top:14px;cursor:pointer;font-size:13px;color:var(--text2)">
+      <input type="checkbox" id="m-td-remind" style="width:auto;padding:0;margin:0"> Remind me to follow up on this
+    </label>
+    <div class="m-row">
+      <button class="m-btn m-save" onclick="doAddTodo(${tid})">Add</button>
+      <button class="m-btn m-cancel" onclick="hideModal()">Cancel</button>
+    </div>`);
+  setTimeout(()=>document.getElementById('m-td-text').focus(),60);
+}
+function doAddTodo(tid){
+  const txt=document.getElementById('m-td-text').value.trim();if(!txt)return;
+  const remind=document.getElementById('m-td-remind').checked;
+  const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;
+  tr.todos=tr.todos||[];
+  tr.todos.push({id:S.nid++,text:txt,done:false,remind});
+  hideModal();renderDetail(tid);renderTrNav();renderCL();
+}
+function toggleTodo(tid,todoid){
+  const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;
+  const td=tr.todos.find(x=>x.id===todoid);if(td)td.done=!td.done;
+  renderDetail(tid);renderTrNav();renderCL();
+}
+function toggleTodoRemind(tid,todoid){
+  const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;
+  const td=tr.todos.find(x=>x.id===todoid);if(td)td.remind=!td.remind;
+  renderDetail(tid);renderTrNav();renderCL();
+}
+function delTodo(tid,todoid){
+  const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;
+  tr.todos=tr.todos.filter(x=>x.id!==todoid);
+  renderDetail(tid);renderTrNav();renderCL();
+}
+
+/* CALLS */
+function openAddCall(tid){
+  showModal(`<div class="modal-title">Add call review</div>
+    <label class="m-label">Lead name</label>
+    <input class="m-input" id="m-c-name" placeholder="e.g. Paul Parker">
+    <div class="m-grid" style="margin-top:10px">
+      <div>
+        <label class="m-label" style="margin-top:0">Type</label>
+        <select class="m-input" id="m-c-type"><option value="goal">Goal lead</option><option value="neglect">Neglected</option><option value="transfer">Transfer</option><option value="other">Other</option></select>
+      </div>
+      <div>
+        <label class="m-label" style="margin-top:0">Duration</label>
+        <input class="m-input" id="m-c-dur" placeholder="e.g. 9 min">
+      </div>
+    </div>
+    <label class="m-label">What they did wrong / notes</label>
+    <textarea class="m-input" id="m-c-notes" rows="3" placeholder="e.g. No rapport, said not interested in auto — should have noticed bundled with Hartford" style="resize:vertical"></textarea>
+    <div class="m-row">
+      <button class="m-btn m-save" onclick="doAddCall(${tid})">Save</button>
+      <button class="m-btn m-cancel" onclick="hideModal()">Cancel</button>
+    </div>`);
+  setTimeout(()=>document.getElementById('m-c-name').focus(),60);
+}
+function doAddCall(tid){
+  const name=document.getElementById('m-c-name').value.trim();if(!name)return;
+  const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;
+  tr.calls=tr.calls||[];
+  tr.calls.push({id:S.nid++,name,type:document.getElementById('m-c-type').value,dur:document.getElementById('m-c-dur').value.trim(),notes:document.getElementById('m-c-notes').value.trim()});
+  hideModal();renderDetail(tid);
+}
+function delCall(tid,cid){const tr=S.trainees.find(x=>x.id===tid);if(tr)tr.calls=tr.calls.filter(x=>x.id!==cid);renderDetail(tid);}
+
+/* TRAINEE TIPS */
+function openAddTraineeTip(tid){
+  showModal(`<div class="modal-title">Add coaching note</div>
+    <label class="m-label">Note</label>
+    <input class="m-input" id="m-tip-text" placeholder="e.g. Needs to work on assumptive close" onkeydown="if(event.key==='Enter')doAddTraineeTip(${tid})">
+    <label class="m-label">Category</label>
+    <select class="m-input" id="m-tip-cat">
+      <option value="call">Call technique</option><option value="quote">Quoting</option><option value="lead">Lead management</option><option value="general">General</option>
+    </select>
+    <div class="m-row">
+      <button class="m-btn m-save" onclick="doAddTraineeTip(${tid})">Add</button>
+      <button class="m-btn m-cancel" onclick="hideModal()">Cancel</button>
+    </div>`);
+  setTimeout(()=>document.getElementById('m-tip-text').focus(),60);
+}
+function doAddTraineeTip(tid){
+  const txt=document.getElementById('m-tip-text').value.trim();if(!txt)return;
+  const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;
+  tr.tips=tr.tips||[];
+  tr.tips.push({id:S.nid++,text:txt,cat:document.getElementById('m-tip-cat').value});
+  hideModal();renderDetail(tid);
+}
+function delTraineeTip(tid,tipid){const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;tr.tips=tr.tips.filter(x=>x.id!==tipid);renderDetail(tid);}
+
+/* MEETING LOG */
+function toggleLogForm(tid){const el=document.getElementById('lf-'+tid);if(el)el.classList.toggle('open');}
+function saveLog(tid){
+  const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;
+  const notes=document.getElementById('ln-'+tid).value.trim();if(!notes){alert('Add notes first.');return;}
+  const raw=document.getElementById('la-'+tid).value.trim();
+  const remind=document.getElementById('la-remind-'+tid).checked;
+  const actions=raw?raw.split('\n').filter(x=>x.trim()).map(t=>({id:S.nid++,text:t.trim(),done:false})):[];
+  // also add to their todo list
+  actions.forEach(a=>{ tr.todos=tr.todos||[]; tr.todos.push({id:S.nid++,text:a.text,done:false,remind}); });
+  tr.meetings=tr.meetings||[];
+  tr.meetings.unshift({id:S.nid++,date:TODAY,notes,actions});
+  tr.prep={};
+  document.getElementById('ln-'+tid).value='';document.getElementById('la-'+tid).value='';
+  document.getElementById('lf-'+tid).classList.remove('open');
+  renderDetail(tid);renderTrNav();renderCL();
+}
+function delMeeting(tid,mid){const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;tr.meetings=tr.meetings.filter(x=>x.id!==mid);renderDetail(tid);}
+function toggleMeetingAct(tid,mid,aid){
+  const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;
+  const m=tr.meetings.find(x=>x.id===mid);if(!m)return;
+  const a=m.actions.find(x=>x.id===aid);if(a)a.done=!a.done;
+  renderDetail(tid);
+}
+
+/* ============================================================
+   GLOBAL COACHING LIBRARY
+============================================================ */
+const GCAT_ORD=['call','quote','lead','general'];
+const GCAT_MAP={call:'Call technique',quote:'Quoting',lead:'Lead management',general:'General'};
+function addGTip(){
+  const txt=document.getElementById('gtip-input').value.trim();if(!txt)return;
+  S.gtips.push({id:S.nid++,text:txt,cat:document.getElementById('gtip-cat').value});
+  document.getElementById('gtip-input').value='';renderGTips();
+}
+function delGTip(id){S.gtips=S.gtips.filter(x=>x.id!==id);renderGTips();}
+function renderGTips(){
+  let html='';
+  GCAT_ORD.forEach(cat=>{
+    const items=S.gtips.filter(t=>t.cat===cat);if(!items.length)return;
+    html+=`<div class="sec" style="margin-top:${cat==='call'?0:16}px">${GCAT_MAP[cat]}</div>`;
+    html+=items.map(t=>`<div class="tip-card">
+      <div class="tip-dot"></div>
+      <div class="tip-text">${esc(t.text)}</div>
+      <button class="icon-btn" onclick="delGTip(${t.id})" style="opacity:0">✕</button>
+    </div>`).join('');
+  });
+  document.getElementById('gtips-body').innerHTML=html||'<div class="empty-state">No global coaching notes yet</div>';
+  // show del buttons on hover via CSS — add hover via JS since icon-btn opacity:0
+  document.querySelectorAll('.tip-card').forEach(c=>{
+    c.addEventListener('mouseenter',()=>c.querySelector('.icon-btn').style.opacity='1');
+    c.addEventListener('mouseleave',()=>c.querySelector('.icon-btn').style.opacity='0');
+  });
+}
+
+/* ============================================================
+   INIT
+============================================================ */
+load();
+renderCL();
+renderOO();
+renderTrNav();
+renderGTips();
+window.addEventListener('beforeunload',saveData);
 </script>
 </body>
 </html>
