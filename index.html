@@ -356,7 +356,7 @@ function renderFollowups(){
     <button class="btn-primary" style="margin-bottom:20px" onclick="openFuModal()">+ add follow-up</button>
     <div class="card">
       <div class="card-title">Open${open.length?`<span class="badge amber">${open.length}</span>`:''}</div>
-      ${open.length?open.map(f=>fuRow(f)).join(''):'<div class="empty-state">Nothing open — you\\'re caught up</div>'}
+      ${open.length?open.map(f=>fuRow(f)).join(''):'<div class="empty-state">Nothing open — you\'re caught up</div>'}
     </div>
     ${done.length?`<div class="card"><div class="card-title">Done<button class="btn-secondary btn-sm" onclick="clearDoneFu()">clear done</button></div>${done.map(f=>fuRow(f)).join('')}</div>`:''}`;
 }
