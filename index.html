@@ -299,35 +299,9 @@ function showPage(name) {
   updateNav();
 }
 
-function updateNav() {
-  const nav = document.getElementById('nav-buttons');
-  const items = [
-    {id:'home',label:'Home'},
-    {id:'yaakov',label:'Yaakov'},
-    {id:'meetings',label:'Meetings'},
-    {id:'coaching',label:'Coaching'},
-  ];
-  STATE.trainees.forEach(t => items.push({id:'trainee-'+t.id,label:t.name}));
-  
-  nav.innerHTML = items.map(item => `
-    <button class="nav-btn ${currentPage === item.id ? 'active' : ''}" onclick="showPage('${item.id}')">
-      ${esc(item.label)}
-    </button>
-  `).join('');
-}
 
-function renderPage(name) {
-  if (name === 'home') return renderHome();
-  if (name === 'yaakov') return renderYaakovPage();
-  if (name === 'meetings') return renderMeetingsPage();
-  if (name === 'coaching') return renderCoachingNotes();
-  if (name.startsWith('trainee-')) {
-    const id = parseInt(name.split('-')[1]);
-    const tr = STATE.trainees.find(t => t.id === id);
-    return tr ? renderTraineeDetail(tr) : '<div class="empty-state">Trainee not found</div>';
-  }
-  return '';
-}
+
+
 
 // ── HOME PAGE ──
 function renderHome() {
@@ -380,26 +354,7 @@ function renderHome() {
   `;
 }
 
-// ── MEETINGS PAGE ──
-function renderMeetingsPage() {
-  const meetings = STATE.meetings.sort((a,b) => new Date(b.date) - new Date(a.date));
-  
-  return `
-    <h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">🎙️ Meeting Transcripts</h1>
-    <button class="btn-primary" style="margin-bottom:20px" onclick="openRecordModal()">+ record meeting</button>
-    
-    ${meetings.length === 0 ? '<div class="empty-state">No meetings recorded yet</div>' : ''}
-    
-    ${meetings.map(m => `
-      <div class="card">
-        <div class="card-title">${m.trainees}</div>
-        <div style="font-size:11px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;margin-bottom:12px">${m.date}</div>
-        ${m.notes ? `<div style="background:var(--bg-dark);padding:10px;border-radius:6px;margin-bottom:12px;font-size:12px;color:var(--text-dim)"><strong>Notes:</strong> ${esc(m.notes)}</div>` : ''}
-        <div class="transcript-box">${m.transcript ? esc(m.transcript) : '<div class="transcript-empty">No transcript</div>'}</div>
-      </div>
-    `).join('')}
-  `;
-}
+
 
 // ── YAAKOV PAGE ──
 function renderYaakovPage() {
@@ -603,15 +558,7 @@ function saveYaakovMeeting() {
   showPage('yaakov');
 }
 
-function removeTrainee(id) {
-  if (!confirm('Remove this trainee?')) return;
-  STATE.trainees = STATE.trainees.filter(t => t.id !== id);
-  save();
-  updateNav();
-  showPage('home');
-}
 
-// ── DATA EXPORT/IMPORT ──
 function exportData() {
   const dataStr = JSON.stringify(STATE, null, 2);
   const dataBlob = new Blob([dataStr], {type: 'application/json'});
@@ -661,18 +608,7 @@ function importData() {
 // ── INIT ──
 load();
 
-const sidebar = document.getElementById('sidebar');
-sidebar.innerHTML = `
-  <div class="sidebar-section">Navigation</div>
-  ${['home','yaakov','meetings','coaching'].map(id => {
-    const labels = {home:'Home',yaakov:'Yaakov',meetings:'Meetings',coaching:'Coaching'};
-    return `<div class="sidebar-item ${currentPage === id ? 'active' : ''}" onclick="showPage('${id}')">${labels[id]}</div>`;
-  }).join('')}
-  <div class="sidebar-section" style="margin-top:16px">Trainees</div>
-  ${STATE.trainees.map(t => `
-    <div class="sidebar-item ${currentPage === 'trainee-'+t.id ? 'active' : ''}" onclick="showPage('trainee-${t.id}')">${esc(t.name)}</div>
-  `).join('')}
-`;
+
 
 showPage('home');
 window.addEventListener('beforeunload', save);
