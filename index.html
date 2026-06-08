@@ -33,137 +33,80 @@ html,body{height:100%;margin:0;padding:0;background:var(--bg-dark);color:var(--t
 .nav-btn:hover{background:var(--border);color:var(--accent)}
 .nav-btn.active{color:var(--accent);background:rgba(212,165,116,.1)}
 .save-ind{font-size:10px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace}
+.data-controls{display:flex;gap:8px}
+.data-btn{background:var(--border);border:none;color:var(--text-dim);font-size:11px;padding:6px 10px;border-radius:6px;cursor:pointer;transition:all .2s;font-family:'IBM Plex Mono',monospace}
+.data-btn:hover{background:var(--accent);color:var(--bg-dark)}
 
 .main{flex:1;display:flex;overflow:hidden}
-.sidebar{width:200px;background:var(--bg-card);border-right:1px solid var(--border);padding:16px 0;overflow-y:auto;flex-shrink:0}
+.sidebar{width:220px;background:var(--bg-card);border-right:1px solid var(--border);padding:16px 0;overflow-y:auto;flex-shrink:0}
 .sidebar-section{padding:12px 16px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);border-bottom:1px solid var(--border);margin-bottom:4px}
 .sidebar-item{padding:10px 16px;font-size:13px;cursor:pointer;color:var(--text-dim);transition:all .15s;border-left:3px solid transparent;display:flex;align-items:center;gap:8px;justify-content:space-between}
 .sidebar-item:hover{background:var(--bg-hover);color:var(--text)}
 .sidebar-item.active{border-left-color:var(--accent);color:var(--accent);background:rgba(212,165,116,.08)}
-.sidebar-badge{font-size:10px;background:var(--accent);color:var(--bg-dark);padding:2px 6px;border-radius:3px;font-weight:600}
 
-.content{flex:1;overflow-y:auto;padding:32px 40px;max-width:1000px}
+.content{flex:1;overflow-y:auto;padding:32px 40px;max-width:1200px}
 .page{display:none}
 .page.active{display:block;animation:fadeIn .25s}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-/* ── CARDS & SECTIONS ── */
 .card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px}
 .card-title{font-size:14px;font-weight:700;color:var(--accent-light);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
-.card-action{font-size:12px;color:var(--accent);cursor:pointer;background:none;border:none;font-family:'Outfit',sans-serif;font-weight:500;padding:0}
-.card-action:hover{color:var(--accent-light)}
 
-/* ── HOME LAYOUT ── */
-.home-three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;margin-bottom:24px}
-.home-two{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px}
-@media(max-width:1200px){.home-three{grid-template-columns:1fr 1fr}.home-two{grid-template-columns:1fr}}
-@media(max-width:900px){.home-three{grid-template-columns:1fr}.home-two{grid-template-columns:1fr}}
+.section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-dim);margin:16px 0 10px;border-bottom:1px solid var(--border);padding-bottom:6px}
+.section-label:first-child{margin-top:0}
 
-.section-box{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:18px}
-.section-title{font-size:14px;font-weight:700;margin-bottom:14px;color:var(--accent-light)}
+.call-item{background:var(--bg-dark);border-left:4px solid var(--blue);padding:14px;border-radius:6px;margin-bottom:12px}
+.call-name{font-weight:600;color:var(--accent-light);margin-bottom:4px}
+.call-meta{font-size:11px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;margin-bottom:8px}
+.call-issue{color:var(--red);font-size:12px;margin:4px 0}
 
-/* ── CHECKLIST ── */
-.task-group{margin-bottom:18px}
-.task-group-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-dim);margin-bottom:8px;border-bottom:1px solid var(--border);padding-bottom:6px}
-.checklist-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;cursor:pointer;transition:opacity .15s}
-.checklist-item:hover{opacity:.8}
-.cb{width:18px;height:18px;border:1.5px solid var(--border);border-radius:5px;background:var(--bg-dark);cursor:pointer;transition:all .15s;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:2px}
-.cb:hover{border-color:var(--accent)}
-.cb.on{background:var(--green);border-color:var(--green)}
-.cb.on::after{content:'✓';color:#fff;font-size:9px;font-weight:700}
-.checklist-item.done .cb-text{text-decoration:line-through;color:var(--text-dim)}
-.cb-text{flex:1;font-size:13px;line-height:1.4}
+.coaching-box{background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:12px;font-size:12px;line-height:1.6}
+.coaching-title{font-weight:600;color:var(--accent-light);margin-bottom:6px}
+.coaching-text{color:var(--text-dim)}
 
-/* ── TRAINEES ── */
-.trainee-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:rgba(212,165,116,.1);border:1px solid var(--border);border-radius:8px;margin-right:8px;margin-bottom:8px;cursor:pointer;transition:all .2s;font-size:13px}
-.trainee-pill:hover{background:rgba(212,165,116,.2);border-color:var(--accent)}
-.trainee-pill.onboard{background:rgba(184,168,209,.1);border-color:rgba(184,168,209,.3)}
-.trainee-pill.onboard:hover{background:rgba(184,168,209,.2);border-color:var(--purple)}
-.trainee-av{width:24px;height:24px;border-radius:50%;background:var(--accent);color:var(--bg-dark);font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center}
-.trainee-av.onboard{background:var(--purple)}
-
-/* ── INPUTS ── */
 input[type=text],input[type=date],textarea,select{
   width:100%;padding:10px 12px;background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;transition:border .15s;margin-bottom:8px
 }
 input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
 textarea{resize:vertical;min-height:80px}
 
-/* ── BUTTONS ── */
 .btn-primary{padding:10px 16px;background:var(--accent);color:var(--bg-dark);border:none;border-radius:8px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;font-size:13px;transition:all .2s}
 .btn-primary:hover{background:var(--accent-light)}
-.btn-primary:disabled{opacity:.5;cursor:not-allowed}
 .btn-secondary{padding:10px 14px;background:var(--border);color:var(--text);border:none;border-radius:8px;font-weight:500;cursor:pointer;font-family:'Outfit',sans-serif;font-size:13px;transition:all .2s}
 .btn-secondary:hover{background:var(--bg-hover)}
-.btn-danger{background:var(--red);color:#fff}
-.btn-danger:hover{background:#a85656}
+.btn-record{padding:10px 14px;background:var(--green);color:#fff;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;font-size:13px}
+.btn-record:hover{background:#5a9472}
+.btn-record.recording{background:var(--red);animation:pulse-bg .6s infinite}
+@keyframes pulse-bg{0%,100%{opacity:1}50%{opacity:.8}}
 
-/* ── NOTES INBOX ── */
-.note-card{background:var(--bg-dark);border-left:4px solid var(--accent);padding:14px;border-radius:6px;margin-bottom:10px}
-.note-card.unassigned{border-left-color:var(--amber)}
-.note-date{font-size:10px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;margin-bottom:6px}
-.note-text{font-size:13px;line-height:1.5;margin-bottom:8px;word-break:break-word}
-.note-actions{display:flex;gap:6px;flex-wrap:wrap}
-.note-btn{font-size:11px;padding:4px 8px;background:var(--border);color:var(--text-dim);border:none;border-radius:4px;cursor:pointer;transition:all .15s}
-.note-btn:hover{background:var(--accent);color:var(--bg-dark)}
+.recording-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:rgba(201,112,112,.15);border:1px solid rgba(201,112,112,.3);border-radius:6px;color:var(--red);font-size:11px;font-weight:600}
+.recording-dot{width:6px;height:6px;border-radius:50%;background:var(--red);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
-/* ── CALENDAR ── */
-.calendar-month{margin-bottom:20px}
-.cal-header{font-size:14px;font-weight:700;color:var(--accent-light);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
-.cal-nav{display:flex;gap:8px}
-.cal-nav button{background:var(--border);border:none;color:var(--text-dim);padding:4px 8px;border-radius:4px;cursor:pointer;font-size:11px}
-.cal-nav button:hover{background:var(--accent);color:var(--bg-dark)}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:12px}
-.cal-day{aspect-ratio:1;background:var(--bg-dark);border:1px solid var(--border);border-radius:6px;padding:6px;font-size:11px;text-align:center;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.cal-day:hover{border-color:var(--accent)}
-.cal-day.today{border-color:var(--accent);background:rgba(212,165,116,.15)}
-.cal-day.has-meetings{background:rgba(107,181,131,.15)}
-.cal-day-num{font-weight:700}
-.cal-day-count{font-size:9px;color:var(--text-dim)}
+.transcript-box{background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;padding:12px;margin:12px 0;font-size:12px;line-height:1.6;color:var(--text);max-height:250px;overflow-y:auto}
+.transcript-empty{color:var(--text-dim);font-style:italic}
 
-/* ── MEETING LOG ── */
-.meeting-entry{background:var(--bg-dark);border-left:3px solid var(--green);padding:12px;border-radius:6px;margin-bottom:10px;font-size:13px;line-height:1.5}
-.meeting-names{font-weight:600;color:var(--accent-light);margin-bottom:4px}
-.meeting-notes{color:var(--text-dim);margin-bottom:6px;font-size:12px;font-style:italic}
-.meeting-meta{font-size:10px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace}
-
-/* ── TRAINEE DETAIL ── */
-.trainee-header{background:linear-gradient(135deg,rgba(212,165,116,.15),rgba(184,168,209,.1));border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:24px;display:flex;align-items:center;gap:20px}
-.tr-avatar{width:64px;height:64px;border-radius:50%;background:var(--accent);color:var(--bg-dark);font-size:24px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.tr-avatar.onboard{background:var(--purple)}
-.tr-info h2{font-size:20px;font-weight:700;margin-bottom:4px}
-.tr-type{font-size:11px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.5px}
-
-.split-section{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
-@media(max-width:900px){.split-section{grid-template-columns:1fr}}
-
-.note-item{background:var(--bg-dark);border-left:3px solid var(--accent);padding:12px;border-radius:6px;margin-bottom:10px;font-size:13px;line-height:1.5}
-.note-item.call{border-left-color:var(--blue)}
-.note-item.todo{border-left-color:var(--green)}
-.note-date-small{font-size:10px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;margin-bottom:4px}
-
-/* ── MODAL ── */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;align-items:center;justify-content:center}
 .modal-overlay.open{display:flex}
-.modal-box{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:24px;width:500px;max-width:90vw;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.modal-box{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:24px;width:600px;max-width:90vw;box-shadow:0 20px 60px rgba(0,0,0,.4);max-height:85vh;overflow-y:auto}
 .modal-title{font-size:16px;font-weight:700;margin-bottom:16px;color:var(--accent-light)}
 .modal-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-dim);display:block;margin-bottom:6px;margin-top:12px}
 .modal-label:first-of-type{margin-top:0}
 .modal-buttons{display:flex;gap:8px;justify-content:flex-end;margin-top:20px}
 
-/* ── QUICK ADD ── */
-.quick-add-btn{position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:50%;background:var(--accent);color:var(--bg-dark);border:none;font-size:24px;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(212,165,116,.3);z-index:50}
-.quick-add-btn:hover{transform:scale(1.1);box-shadow:0 6px 24px rgba(212,165,116,.4)}
+.warning-box{background:rgba(201,112,112,.1);border:1px solid rgba(201,112,112,.3);border-left:4px solid var(--red);padding:12px;border-radius:6px;margin-bottom:14px;font-size:12px;color:var(--text)}
+
+.split-section{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+@media(max-width:1000px){.split-section{grid-template-columns:1fr}}
 
 .empty-state{text-align:center;padding:20px;color:var(--text-dim);font-size:13px}
 
-/* ── SCROLLBAR ── */
 ::-webkit-scrollbar{width:8px}
 ::-webkit-scrollbar-track{background:var(--bg-dark)}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
 ::-webkit-scrollbar-thumb:hover{background:var(--text-dim)}
 
-.badge{display:inline-block;font-size:10px;background:var(--accent);color:var(--bg-dark);padding:2px 6px;border-radius:3px;font-weight:600;margin-left:6px}
+.badge{display:inline-block;font-size:10px;background:var(--red);color:#fff;padding:2px 6px;border-radius:3px;font-weight:600;margin-left:6px}
 </style>
 </head>
 <body>
@@ -174,6 +117,10 @@ textarea{resize:vertical;min-height:80px}
     <div style="display:flex;align-items:center;gap:16px">
       <div class="nav-dots" id="nav-buttons"></div>
       <div class="save-ind" id="save-indicator">saved</div>
+      <div class="data-controls">
+        <button class="data-btn" onclick="exportData()" title="Download your data">⬇ export</button>
+        <button class="data-btn" onclick="openImportModal()" title="Load data from file">⬆ import</button>
+      </div>
     </div>
   </div>
 
@@ -183,81 +130,156 @@ textarea{resize:vertical;min-height:80px}
   </div>
 </div>
 
-<!-- ADD NOTE MODAL -->
-<div class="modal-overlay" id="add-note-modal">
+<!-- RECORD MEETING MODAL -->
+<div class="modal-overlay" id="record-meeting-modal">
   <div class="modal-box">
-    <div class="modal-title">➕ Add Note</div>
-    <label class="modal-label">Your note</label>
-    <textarea id="m-note-text" style="width:100%;min-height:100px"></textarea>
-    <label class="modal-label">Category</label>
-    <select id="m-note-cat" style="width:100%">
-      <option value="">--unassigned--</option>
-      <option value="trainee">Trainee coaching</option>
-      <option value="system">System / daily process</option>
-      <option value="agency">Agency business</option>
-      <option value="other">Other</option>
-    </select>
+    <div class="modal-title">🎙️ Record Meeting</div>
+    <label class="modal-label">Trainee(s)</label>
+    <input type="text" id="m-meet-trainees" placeholder="Cameron, Joshua, Astra">
+    <label class="modal-label">Notes (optional)</label>
+    <textarea id="m-meet-notes" placeholder="Any context about what you're working on..."></textarea>
+    
+    <div style="margin:16px 0;padding:16px;background:var(--bg-dark);border-radius:8px;border:1px solid var(--border)">
+      <div style="font-weight:600;color:var(--accent-light);margin-bottom:8px">🎙️ Recording</div>
+      <div id="recording-status" style="font-size:12px;color:var(--text-dim);margin-bottom:12px">Ready to record</div>
+      <div style="display:flex;gap:8px;margin-bottom:12px">
+        <button class="btn-record" id="record-btn" onclick="startRecording()">● Record</button>
+        <button class="btn-secondary" id="stop-btn" onclick="stopRecording()" style="display:none">⏹ Stop</button>
+      </div>
+      <div id="transcript-display" class="transcript-box"><div class="transcript-empty">Transcript will appear here...</div></div>
+    </div>
+    
     <div class="modal-buttons">
-      <button class="btn-secondary" onclick="closeAddNoteModal()">cancel</button>
-      <button class="btn-primary" onclick="saveNewNote()">save</button>
+      <button class="btn-secondary" onclick="closeRecordModal()">cancel</button>
+      <button class="btn-primary" onclick="saveMeeting()">save meeting</button>
     </div>
   </div>
 </div>
 
-<!-- LOG MEETING MODAL -->
-<div class="modal-overlay" id="log-meeting-modal">
+<!-- YAAKOV 9:30 MODAL -->
+<div class="modal-overlay" id="yaakov-meeting-modal">
   <div class="modal-box">
-    <div class="modal-title">📅 Log Meeting</div>
+    <div class="modal-title">📅 Yaakov 9:30 Meeting</div>
+    <p style="font-size:12px;color:var(--text-dim);margin-bottom:14px">What does he want you to focus on today? Who should you work with?</p>
     <label class="modal-label">Date</label>
-    <input type="date" id="m-meet-date">
-    <label class="modal-label">Who you met with (names)</label>
-    <input type="text" id="m-meet-names" placeholder="Cameron, Joshua, Astra">
-    <label class="modal-label">What you covered</label>
-    <textarea id="m-meet-notes" style="width:100%;min-height:80px" placeholder="Key points from the meeting..."></textarea>
+    <input type="date" id="m-yak-date">
+    <label class="modal-label">What Yaakov said</label>
+    <textarea id="m-yak-notes" placeholder="Focus on Joshua's transfers, make sure Astra is doing AI roleplay, check Carnell's closing technique..."></textarea>
+    <label class="modal-label">Trainees to work with today</label>
+    <input type="text" id="m-yak-trainees" placeholder="Cameron, Joshua, Astra">
     <div class="modal-buttons">
-      <button class="btn-secondary" onclick="closeLogMeetingModal()">cancel</button>
-      <button class="btn-primary" onclick="saveLogMeeting()">log it</button>
+      <button class="btn-secondary" onclick="closeYaakovModal()">cancel</button>
+      <button class="btn-primary" onclick="saveYaakovMeeting()">log it</button>
     </div>
   </div>
 </div>
 
-<button class="quick-add-btn" onclick="openAddNoteModal()">+</button>
+<!-- IMPORT MODAL -->
+<div class="modal-overlay" id="import-modal">
+  <div class="modal-box">
+    <div class="modal-title">📥 Import Data</div>
+    <p style="font-size:12px;color:var(--text-dim);margin-bottom:16px">Select your saved data file (.json)</p>
+    <input type="file" id="import-file" accept=".json" style="width:100%;margin-bottom:16px;padding:8px;background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;color:var(--text);cursor:pointer">
+    <div class="modal-buttons">
+      <button class="btn-secondary" onclick="closeImportModal()">cancel</button>
+      <button class="btn-primary" onclick="importData()">import</button>
+    </div>
+  </div>
+</div>
 
 <script>
+// ── SPEECH RECOGNITION ──
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recognition = null;
+let isRecording = false;
+let currentTranscript = '';
+
+if (SpeechRecognition) {
+  recognition = new SpeechRecognition();
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.lang = 'en-US';
+  
+  recognition.onstart = () => {
+    isRecording = true;
+    document.getElementById('recording-status').textContent = '🔴 Recording...';
+    document.getElementById('record-btn').classList.add('recording');
+    document.getElementById('record-btn').style.display = 'none';
+    document.getElementById('stop-btn').style.display = 'block';
+  };
+  
+  recognition.onresult = (event) => {
+    let interimTranscript = '';
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      const transcript = event.results[i][0].transcript;
+      if (event.results[i].isFinal) {
+        currentTranscript += transcript + ' ';
+      } else {
+        interimTranscript += transcript;
+      }
+    }
+    
+    const display = currentTranscript + interimTranscript;
+    document.getElementById('transcript-display').innerHTML = display ? `<div>${esc(display)}</div>` : '<div class="transcript-empty">Transcript will appear here...</div>';
+  };
+  
+  recognition.onend = () => {
+    isRecording = false;
+    document.getElementById('recording-status').textContent = 'Recording stopped';
+    document.getElementById('record-btn').classList.remove('recording');
+    document.getElementById('record-btn').style.display = 'block';
+    document.getElementById('stop-btn').style.display = 'none';
+  };
+  
+  recognition.onerror = (event) => {
+    document.getElementById('recording-status').textContent = 'Error: ' + event.error;
+  };
+}
+
+function startRecording() {
+  if (!recognition) {
+    alert('Speech recognition not supported in your browser. Try Chrome, Edge, or Safari.');
+    return;
+  }
+  currentTranscript = '';
+  document.getElementById('transcript-display').innerHTML = '<div class="transcript-empty">Listening...</div>';
+  recognition.start();
+}
+
+function stopRecording() {
+  if (recognition) recognition.stop();
+}
+
 // ── STATE ──
 let STATE = {
   trainees: [],
-  notes: [],
   meetings: [],
-  dailyTasks: { trainees: [], system: [], agency: [] },
+  yaakovMeetings: [],
   noteId: 1,
   traineeId: 1,
 };
 
-const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const NOW = new Date();
 const TODAY = NOW.toISOString().slice(0,10);
-const TODAY_DISPLAY = `${MONTHS[NOW.getMonth()]} ${NOW.getDate()}, ${NOW.getFullYear()}`;
+const TODAY_DISPLAY = NOW.toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'});
 
 // ── LOAD/SAVE ──
 function load() {
   try {
-    const saved = localStorage.getItem('coaching_v2');
+    const saved = localStorage.getItem('coaching_v4');
     if (saved) STATE = JSON.parse(saved);
   } catch(e) {}
   
   if (!STATE.trainees) STATE.trainees = [];
-  if (!STATE.notes) STATE.notes = [];
   if (!STATE.meetings) STATE.meetings = [];
-  if (!STATE.dailyTasks) STATE.dailyTasks = { trainees: [], system: [], agency: [] };
+  if (!STATE.yaakovMeetings) STATE.yaakovMeetings = [];
   
   document.getElementById('save-indicator').textContent = 'loaded';
 }
 
 function save() {
   try {
-    localStorage.setItem('coaching_v2', JSON.stringify(STATE));
+    localStorage.setItem('coaching_v4', JSON.stringify(STATE));
     document.getElementById('save-indicator').textContent = 'saved';
   } catch(e) {
     document.getElementById('save-indicator').textContent = 'error';
@@ -281,25 +303,24 @@ function updateNav() {
   const nav = document.getElementById('nav-buttons');
   const items = [
     {id:'home',label:'Home'},
-    {id:'notes',label:'Notes',count:STATE.notes.filter(n=>!n.traineeId).length},
-    {id:'calendar',label:'Calendar'},
     {id:'yaakov',label:'Yaakov'},
+    {id:'meetings',label:'Meetings'},
+    {id:'coaching',label:'Coaching'},
   ];
   STATE.trainees.forEach(t => items.push({id:'trainee-'+t.id,label:t.name}));
   
   nav.innerHTML = items.map(item => `
     <button class="nav-btn ${currentPage === item.id ? 'active' : ''}" onclick="showPage('${item.id}')">
       ${esc(item.label)}
-      ${item.count ? `<span style="font-size:10px;color:var(--accent)">${item.count}</span>` : ''}
     </button>
   `).join('');
 }
 
 function renderPage(name) {
   if (name === 'home') return renderHome();
-  if (name === 'notes') return renderNotesInbox();
-  if (name === 'calendar') return renderCalendar();
-  if (name === 'yaakov') return renderYaakov();
+  if (name === 'yaakov') return renderYaakovPage();
+  if (name === 'meetings') return renderMeetingsPage();
+  if (name === 'coaching') return renderCoachingNotes();
   if (name.startsWith('trainee-')) {
     const id = parseInt(name.split('-')[1]);
     const tr = STATE.trainees.find(t => t.id === id);
@@ -310,457 +331,347 @@ function renderPage(name) {
 
 // ── HOME PAGE ──
 function renderHome() {
-  const todayTrainees = STATE.trainees.filter(t => t.todayMeeting);
-  const unassignedNotes = STATE.notes.filter(n => !n.traineeId).length;
-  const pendingTodos = STATE.dailyTasks.trainees.filter(t => !t.done).length +
-                       STATE.dailyTasks.system.filter(t => !t.done).length +
-                       STATE.dailyTasks.agency.filter(t => !t.done).length;
+  const todayYaakov = STATE.yaakovMeetings.filter(y => y.date === TODAY);
+  const todayMeetings = STATE.meetings.filter(m => m.date === TODAY).length;
   
   return `
-    <h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">Today's View</h1>
+    <h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">📊 Today's Workflow</h1>
     
-    <div class="home-three">
-      <div class="section-box">
-        <div class="section-title">👥 Meeting Today</div>
-        ${todayTrainees.length > 0 ? todayTrainees.map(t => `
-          <div class="trainee-pill ${t.type === 'onboard' ? 'onboard' : ''}" onclick="showPage('trainee-${t.id}')">
-            <div class="trainee-av ${t.type === 'onboard' ? 'onboard' : ''}">${initials(t.name)}</div>
-            ${esc(t.name)}
+    <div class="split-section">
+      <div class="card">
+        <div class="card-title">🎯 Yaakov 9:30${todayYaakov.length ? ' ✓' : ''}</div>
+        ${todayYaakov.length > 0 ? `
+          <div style="font-size:12px;line-height:1.6;color:var(--text)">
+            <strong>Working with:</strong> ${esc(todayYaakov[0].trainees)}<br>
+            <strong>Focus:</strong> ${esc(todayYaakov[0].notes.slice(0,100))}${todayYaakov[0].notes.length > 100 ? '...' : ''}
           </div>
-        `).join('') : '<div style="color:var(--text-dim);font-size:13px">No meetings scheduled</div>'}
-        <button class="btn-secondary" style="width:100%;margin-top:12px" onclick="editTodayMeetings()">edit schedule</button>
+        ` : '<div class="empty-state">Not logged yet</div>'}
+        <button class="btn-secondary" style="width:100%;margin-top:12px" onclick="openYaakovModal()">log 9:30 meeting</button>
       </div>
       
-      <div class="section-box">
-        <div class="section-title">📝 Quick Notes<span class="badge">${unassignedNotes}</span></div>
-        <div style="font-size:12px;color:var(--text-dim);margin-bottom:12px">Unassigned notes waiting</div>
-        ${unassignedNotes > 0 ? `<button class="btn-primary" style="width:100%" onclick="showPage('notes')">assign them</button>` : '<div class="empty-state" style="padding:12px 0">All caught up!</div>'}
-      </div>
-      
-      <div class="section-box">
-        <div class="section-title">✅ To-Do's<span class="badge">${pendingTodos}</span></div>
-        <div style="font-size:12px;color:var(--text-dim);margin-bottom:12px">Tasks pending today</div>
-        <button class="btn-primary" style="width:100%" onclick="showPage('home');document.getElementById('tasks-anchor').scrollIntoView()">view tasks</button>
+      <div class="card">
+        <div class="card-title">🎙️ Meetings Today<span class="badge">${todayMeetings}</span></div>
+        <button class="btn-primary" style="width:100%" onclick="openRecordModal()">+ record meeting</button>
+        <button class="btn-secondary" style="width:100%;margin-top:8px" onclick="showPage('meetings')">view all</button>
       </div>
     </div>
-
-    <div id="tasks-anchor"></div>
-    <h2 style="font-size:18px;font-weight:700;margin-bottom:16px;margin-top:32px;color:var(--accent-light)">Today's Tasks</h2>
     
-    <div class="home-two">
-      <div class="card">
-        <div class="card-title">With Trainees</div>
-        ${renderTaskGroup(STATE.dailyTasks.trainees, 'trainee')}
-        <input type="text" placeholder="Add task..." onkeydown="if(event.key==='Enter'){addTask('trainees',this.value);this.value='';}">
+    <div class="card">
+      <div class="card-title">📋 Quick Reminders</div>
+      <div class="warning-box">
+        <strong>Before you meet:</strong> Check last meeting transcripts, review notes, plan focus areas
       </div>
-      
-      <div class="card">
-        <div class="card-title">System / Process</div>
-        ${renderTaskGroup(STATE.dailyTasks.system, 'system')}
-        <input type="text" placeholder="Add task..." onkeydown="if(event.key==='Enter'){addTask('system',this.value);this.value='';}">
+      <div class="coaching-box">
+        <div class="coaching-title">Meeting Workflow:</div>
+        <div class="coaching-text">
+          1. Click "record meeting" → name trainee(s) → hit record → speak naturally<br>
+          2. Transcript appears in real-time as you talk<br>
+          3. Stop recording and save when done<br>
+          4. Everything automatically saved with timestamp
+        </div>
       </div>
-      
-      <div class="card">
-        <div class="card-title">Agency Business</div>
-        ${renderTaskGroup(STATE.dailyTasks.agency, 'agency')}
-        <input type="text" placeholder="Add task..." onkeydown="if(event.key==='Enter'){addTask('agency',this.value);this.value='';}">
-      </div>
-      
-      <div class="card">
-        <div class="card-title">Expectations / Results</div>
-        <p style="font-size:12px;color:var(--text-dim);margin-bottom:10px">What do you want to see happen today?</p>
-        <textarea id="expect-notes" style="width:100%;min-height:100px" placeholder="Who needs to close what? What metrics matter? Any constraints?"></textarea>
-        <button class="btn-primary" style="width:100%;margin-top:8px" onclick="saveExpectations()">save expectations</button>
+      <div class="coaching-box">
+        <div class="coaching-title">Trainee Management:</div>
+        <div class="coaching-text">
+          All meetings with a trainee auto-appear on their page. Add names and they're tracked.
+        </div>
       </div>
     </div>
   `;
 }
 
-function renderTaskGroup(tasks, type) {
-  const todo = tasks.filter(t => !t.done);
-  const done = tasks.filter(t => t.done);
-  let html = '';
-  
-  if (todo.length > 0) {
-    html += todo.map(t => `
-      <div class="checklist-item" onclick="toggleTask('${type}',${t.id})">
-        <div class="cb"></div>
-        <div class="cb-text">${esc(t.text)}</div>
-      </div>
-    `).join('');
-  }
-  
-  if (done.length > 0) {
-    html += done.map(t => `
-      <div class="checklist-item done" onclick="toggleTask('${type}',${t.id})">
-        <div class="cb on"></div>
-        <div class="cb-text">${esc(t.text)}</div>
-      </div>
-    `).join('');
-  }
-  
-  if (tasks.length === 0) {
-    html = '<div class="empty-state" style="padding:8px 0">No tasks yet</div>';
-  }
-  
-  return html;
-}
-
-function toggleTask(category, id) {
-  const tasks = STATE.dailyTasks[category];
-  const task = tasks.find(t => t.id === id);
-  if (task) task.done = !task.done;
-  save();
-  showPage('home');
-}
-
-function addTask(category, text) {
-  if (!text.trim()) return;
-  STATE.dailyTasks[category].push({ id: STATE.noteId++, text, done: false });
-  save();
-  showPage('home');
-}
-
-function saveExpectations() {
-  const text = document.getElementById('expect-notes').value;
-  // Could save this somewhere, for now just acknowledge
-  if (text.trim()) {
-    alert('Expectations saved in your notes');
-    document.getElementById('expect-notes').value = '';
-  }
-}
-
-function editTodayMeetings() {
-  let html = '<div class="modal-box"><div class="modal-title">Who are you meeting today?</div>';
-  html += STATE.trainees.map(t => `
-    <label style="display:flex;align-items:center;gap:8px;padding:8px 0;cursor:pointer;font-size:13px">
-      <input type="checkbox" ${t.todayMeeting ? 'checked' : ''} onchange="toggleTodayMeeting(${t.id})">
-      ${esc(t.name)}
-    </label>
-  `).join('');
-  html += '<div class="modal-buttons"><button class="btn-secondary" onclick="closeEditModal()">done</button></div>';
-  html += '</div>';
-  document.getElementById('add-note-modal').innerHTML = html;
-  document.getElementById('add-note-modal').classList.add('open');
-}
-
-function closeEditModal() {
-  document.getElementById('add-note-modal').classList.remove('open');
-  save();
-  showPage('home');
-}
-
-function toggleTodayMeeting(id) {
-  const tr = STATE.trainees.find(t => t.id === id);
-  if (tr) tr.todayMeeting = !tr.todayMeeting;
-  save();
-}
-
-// ── NOTES INBOX ──
-function renderNotesInbox() {
-  const unassigned = STATE.notes.filter(n => !n.traineeId);
+// ── MEETINGS PAGE ──
+function renderMeetingsPage() {
+  const meetings = STATE.meetings.sort((a,b) => new Date(b.date) - new Date(a.date));
   
   return `
-    <h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">Unassigned Notes</h1>
+    <h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">🎙️ Meeting Transcripts</h1>
+    <button class="btn-primary" style="margin-bottom:20px" onclick="openRecordModal()">+ record meeting</button>
     
-    ${unassigned.length === 0 ? '<div class="empty-state">All notes assigned!</div>' : ''}
+    ${meetings.length === 0 ? '<div class="empty-state">No meetings recorded yet</div>' : ''}
     
-    ${unassigned.map(n => `
-      <div class="note-card unassigned">
-        <div class="note-date">${n.date} • ${n.category || 'unassigned'}</div>
-        <div class="note-text">${esc(n.text)}</div>
-        <div class="note-actions">
-          ${STATE.trainees.length > 0 ? `
-            <select style="font-size:11px;padding:4px 8px;background:var(--border);border:none;color:var(--text-dim);border-radius:4px;cursor:pointer" onchange="assignNoteToTrainee(${n.id},this.value);this.value='';">
-              <option value="">assign to...</option>
-              ${STATE.trainees.map(t => `<option value="${t.id}">${esc(t.name)}</option>`).join('')}
-            </select>
-          ` : ''}
-          <button class="note-btn" onclick="deleteNote(${n.id})">delete</button>
-        </div>
+    ${meetings.map(m => `
+      <div class="card">
+        <div class="card-title">${m.trainees}</div>
+        <div style="font-size:11px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;margin-bottom:12px">${m.date}</div>
+        ${m.notes ? `<div style="background:var(--bg-dark);padding:10px;border-radius:6px;margin-bottom:12px;font-size:12px;color:var(--text-dim)"><strong>Notes:</strong> ${esc(m.notes)}</div>` : ''}
+        <div class="transcript-box">${m.transcript ? esc(m.transcript) : '<div class="transcript-empty">No transcript</div>'}</div>
       </div>
     `).join('')}
   `;
 }
 
-function assignNoteToTrainee(noteId, traineeId) {
-  if (!traineeId) return;
-  const note = STATE.notes.find(n => n.id === noteId);
-  const tr = STATE.trainees.find(t => t.id === parseInt(traineeId));
-  if (note && tr) {
-    note.traineeId = tr.id;
-    tr.notes = tr.notes || [];
-    tr.notes.push({...note});
-    STATE.notes = STATE.notes.filter(n => n.id !== noteId);
-    save();
-    showPage('notes');
-  }
-}
-
-function deleteNote(id) {
-  STATE.notes = STATE.notes.filter(n => n.id !== id);
-  save();
-  showPage('notes');
-}
-
-// ── CALENDAR ──
-function renderCalendar() {
-  const meetings = STATE.meetings;
-  let html = '<h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">Meeting History</h1>';
+// ── YAAKOV PAGE ──
+function renderYaakovPage() {
+  const meetings = STATE.yaakovMeetings.sort((a,b) => new Date(b.date) - new Date(a.date));
   
-  // Group by date
-  const byDate = {};
-  meetings.forEach(m => {
-    if (!byDate[m.date]) byDate[m.date] = [];
-    byDate[m.date].push(m);
-  });
-  
-  const sortedDates = Object.keys(byDate).sort().reverse();
-  
-  if (sortedDates.length === 0) {
-    html += '<div class="empty-state">No meetings logged yet</div><button class="btn-primary" onclick="openLogMeetingModal()">Log a meeting</button>';
-  } else {
-    html += '<button class="btn-primary" style="margin-bottom:20px" onclick="openLogMeetingModal()">+ Log meeting</button>';
-    sortedDates.forEach(date => {
-      html += `<div class="card">
-        <div class="card-title" style="font-size:14px">${date}</div>
-        ${byDate[date].map(m => `
-          <div class="meeting-entry">
-            <div class="meeting-names">Met with: ${esc(m.names)}</div>
-            ${m.notes ? `<div class="meeting-notes">${esc(m.notes)}</div>` : ''}
-            <div class="meeting-meta">logged</div>
-          </div>
-        `).join('')}
-      </div>`;
-    });
-  }
-  
-  return html;
-}
-
-// ── YAAKOV ──
-function renderYaakov() {
   return `
-    <h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">Yaakov Notes & Direction</h1>
-    <div class="card">
-      <div class="card-title">Latest direction from your boss</div>
-      ${STATE.notes.filter(n => n.yaakov).length === 0 ? '<div class="empty-state">No notes yet</div>' : ''}
-      ${STATE.notes.filter(n => n.yaakov).map(n => `
-        <div class="note-card" style="border-left-color:var(--amber)">
-          <div class="note-date">${n.date}</div>
-          <div class="note-text">${esc(n.text)}</div>
-          <button class="note-btn" onclick="deleteNote(${n.id})">delete</button>
+    <h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">🎯 Yaakov Meetings</h1>
+    <button class="btn-primary" style="margin-bottom:20px" onclick="openYaakovModal()">+ log 9:30 meeting</button>
+    
+    ${meetings.length === 0 ? '<div class="empty-state">No meetings logged yet</div>' : ''}
+    
+    ${meetings.map(y => `
+      <div class="card">
+        <div class="card-title">${y.date}</div>
+        <div style="margin-bottom:12px">
+          <strong style="color:var(--accent-light)">Working with:</strong> ${esc(y.trainees)}<br>
+          <strong style="color:var(--accent-light)">Direction:</strong>
         </div>
-      `).join('')}
-    </div>
-    <div class="card">
-      <div class="card-title">Add direction</div>
-      <textarea id="yaakov-input" style="width:100%;min-height:100px" placeholder="What did Yaakov tell you? What's he expecting?"></textarea>
-      <button class="btn-primary" style="width:100%" onclick="saveYaakovNote()">save</button>
-    </div>
+        <div style="background:var(--bg-dark);padding:12px;border-radius:6px;font-size:13px;line-height:1.6;color:var(--text)">${esc(y.notes)}</div>
+      </div>
+    `).join('')}
   `;
 }
 
-function saveYaakovNote() {
-  const text = document.getElementById('yaakov-input').value.trim();
-  if (!text) return;
-  STATE.notes.push({
-    id: STATE.noteId++,
-    date: TODAY_DISPLAY,
-    text,
-    yaakov: true,
-    traineeId: null,
-  });
-  save();
-  document.getElementById('yaakov-input').value = '';
-  showPage('yaakov');
+// ── COACHING NOTES PAGE ──
+function renderCoachingNotes() {
+  return `
+    <h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">💡 Coaching Scripts & Reminders</h1>
+    
+    <div class="card">
+      <div class="section-label">Call Technique</div>
+      <div class="coaching-box">
+        <div class="coaching-title">Start assumptively — confirm, don't ask</div>
+        <div class="coaching-text">"I have you listed as married, is that correct?"</div>
+      </div>
+      <div class="coaching-box">
+        <div class="coaching-title">Confirm in sets of 2 — explain why</div>
+        <div class="coaching-text">Always confirm more than one thing at a time. Explain what you're doing and why.</div>
+      </div>
+      <div class="coaching-box">
+        <div class="coaching-title">Acknowledge prior confirmation first</div>
+        <div class="coaching-text">"I know you already confirmed your info with my colleague, I'm going to run through it real quick to make sure I have all your discounts correct."</div>
+      </div>
+      <div class="coaching-box">
+        <div class="coaching-title">Home objection overcome</div>
+        <div class="coaching-text">"My system makes me run through it but I can take it off at the end and show you what it looks like without it if you want"</div>
+      </div>
+      <div class="coaching-box">
+        <div class="coaching-title">Overcome objections — don't accept the first one</div>
+        <div class="coaching-text">Don't be too pushy or they'll hang up. Be firm but respectful.</div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="section-label">Quoting</div>
+      <div class="coaching-box">
+        <div class="coaching-title">Always run in both named insureds</div>
+        <div class="coaching-text">If IS score is higher, run the quote in both names.</div>
+      </div>
+      <div class="coaching-box">
+        <div class="coaching-title">Girlfriend and boyfriend = married</div>
+        <div class="coaching-text">Treat them as married for quoting purposes.</div>
+      </div>
+      <div class="coaching-box">
+        <div class="coaching-title">Don't ask about other drivers</div>
+        <div class="coaching-text">Just ask: "Do any other drivers need to be on the policy?"</div>
+      </div>
+      <div class="coaching-box">
+        <div class="coaching-title">Waiving PIP = last resort</div>
+        <div class="coaching-text">Only use this as a final option.</div>
+      </div>
+      <div class="coaching-box">
+        <div class="coaching-title">Coverage minimums</div>
+        <div class="coaching-text">Rental car: starts at $200 | Renters: 15k not 20k</div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="section-label">Lead Management</div>
+      <div class="coaching-box">
+        <div class="coaching-title">Don't ask "Why are you shopping?"</div>
+        <div class="coaching-text">No question for PD. Don't say "down payment."</div>
+      </div>
+      <div class="coaching-box">
+        <div class="coaching-title">Every follow-up needs a text</div>
+        <div class="coaching-text">If you set a follow-up, you must text them.</div>
+      </div>
+    </div>
+  `;
 }
 
 // ── TRAINEE DETAIL ──
 function renderTraineeDetail(tr) {
-  const trainerNotes = tr.notes || [];
+  const trMeetings = STATE.meetings.filter(m => m.traineesArray && m.traineesArray.includes(tr.id));
   
   return `
-    <div class="trainee-header">
-      <div class="tr-avatar ${tr.type === 'onboard' ? 'onboard' : ''}">${initials(tr.name)}</div>
-      <div class="tr-info">
-        <h2>${esc(tr.name)}</h2>
-        <div class="tr-type">${tr.type === 'onboard' ? 'New Hire / Onboarding' : 'Trainee'}</div>
-      </div>
-    </div>
-    
-    <div class="split-section">
-      <div class="card">
-        <div class="card-title">📝 Coaching Notes</div>
-        ${trainerNotes.length === 0 ? '<div class="empty-state">No notes yet</div>' : ''}
-        ${trainerNotes.map(n => `
-          <div class="note-item">
-            <div class="note-date-small">${n.date}</div>
-            ${esc(n.text)}
-          </div>
-        `).join('')}
-      </div>
-      
-      <div class="card">
-        <div class="card-title">💬 Call Reviews</div>
-        ${tr.calls && tr.calls.length > 0 ? tr.calls.map(c => `
-          <div class="note-item call">
-            <div class="note-date-small">${c.date} • ${esc(c.name)}</div>
-            ${esc(c.notes)}
-          </div>
-        `).join('') : '<div class="empty-state">No call reviews yet</div>'}
-        <button class="btn-secondary" style="width:100%;margin-top:12px" onclick="addCallReview(${tr.id})">+ add call review</button>
-      </div>
-    </div>
+    <h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">👤 ${esc(tr.name)}</h1>
     
     <div class="card">
-      <div class="card-title">✅ To-Do List for ${esc(tr.name)}</div>
-      ${renderTaskGroup(tr.todos || [], 'trainee-' + tr.id)}
-      <input type="text" placeholder="Add task for them..." onkeydown="if(event.key==='Enter'){addTraineeTodo(${tr.id},this.value);this.value='';}">
+      <div class="card-title">Recent Meetings</div>
+      ${trMeetings.length === 0 ? '<div class="empty-state">No meetings recorded for this trainee yet</div>' : ''}
+      ${trMeetings.slice(0,5).map(m => `
+        <div style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border)">
+          <div style="font-size:12px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;margin-bottom:8px">${m.date}</div>
+          ${m.notes ? `<div style="font-size:12px;color:var(--accent-light);margin-bottom:8px"><strong>Notes:</strong> ${esc(m.notes)}</div>` : ''}
+          <div class="transcript-box" style="max-height:150px">${m.transcript ? esc(m.transcript) : '<div class="transcript-empty">No transcript</div>'}</div>
+        </div>
+      `).join('')}
     </div>
     
-    <button class="btn-danger" style="width:100%;margin-top:20px" onclick="removeTrainee(${tr.id})">Remove Trainee</button>
+    <button class="btn-danger" style="width:100%;" onclick="removeTrainee(${tr.id})">Remove Trainee</button>
   `;
 }
 
-// ── ACTIONS ──
-function openAddNoteModal() {
-  document.getElementById('m-note-text').value = '';
-  document.getElementById('m-note-cat').value = '';
-  document.getElementById('add-note-modal').classList.add('open');
-  document.getElementById('m-note-text').focus();
-}
-
-function closeAddNoteModal() {
-  document.getElementById('add-note-modal').classList.remove('open');
-}
-
-function saveNewNote() {
-  const text = document.getElementById('m-note-text').value.trim();
-  const cat = document.getElementById('m-note-cat').value;
-  if (!text) return;
-  STATE.notes.push({
-    id: STATE.noteId++,
-    date: TODAY_DISPLAY,
-    text,
-    category: cat,
-    traineeId: null,
-  });
-  save();
-  closeAddNoteModal();
-  showPage('notes');
-}
-
-function openLogMeetingModal() {
-  const today = NOW.toISOString().slice(0,10);
-  document.getElementById('m-meet-date').value = today;
-  document.getElementById('m-meet-names').value = '';
+// ── MODALS ──
+function openRecordModal() {
+  document.getElementById('m-meet-trainees').value = '';
   document.getElementById('m-meet-notes').value = '';
-  document.getElementById('log-meeting-modal').classList.add('open');
+  currentTranscript = '';
+  document.getElementById('transcript-display').innerHTML = '<div class="transcript-empty">Transcript will appear here...</div>';
+  document.getElementById('recording-status').textContent = 'Ready to record';
+  document.getElementById('record-btn').style.display = 'block';
+  document.getElementById('stop-btn').style.display = 'none';
+  document.getElementById('record-btn').classList.remove('recording');
+  
+  document.getElementById('record-meeting-modal').classList.add('open');
+  document.getElementById('m-meet-trainees').focus();
 }
 
-function closeLogMeetingModal() {
-  document.getElementById('log-meeting-modal').classList.remove('open');
+function closeRecordModal() {
+  if (isRecording) stopRecording();
+  document.getElementById('record-meeting-modal').classList.remove('open');
 }
 
-function saveLogMeeting() {
-  const date = document.getElementById('m-meet-date').value;
-  const names = document.getElementById('m-meet-names').value.trim();
+function saveMeeting() {
+  const trainees = document.getElementById('m-meet-trainees').value.trim();
   const notes = document.getElementById('m-meet-notes').value.trim();
   
-  if (!date || !names) {
-    alert('Fill in date and who you met with');
+  if (!trainees) {
+    alert('Please enter trainee names');
     return;
   }
   
+  // Parse trainee names and map to IDs
+  const traineeNames = trainees.split(',').map(n => n.trim());
+  const traineesArray = [];
+  traineeNames.forEach(name => {
+    let tr = STATE.trainees.find(t => t.name.toLowerCase() === name.toLowerCase());
+    if (!tr) {
+      tr = { id: STATE.traineeId++, name };
+      STATE.trainees.push(tr);
+    }
+    traineesArray.push(tr.id);
+  });
+  
   STATE.meetings.push({
     id: STATE.noteId++,
-    date,
-    names,
+    date: TODAY_DISPLAY,
+    trainees,
+    traineesArray,
     notes,
+    transcript: currentTranscript.trim(),
   });
-  save();
-  closeLogMeetingModal();
-  showPage('calendar');
-}
-
-function addTrainee() {
-  const name = prompt('Trainee name:');
-  if (!name) return;
-  const type = confirm('New hire/onboarding? (OK=yes, Cancel=regular trainee)') ? 'onboard' : 'trainee';
-  STATE.trainees.push({
-    id: STATE.traineeId++,
-    name,
-    type,
-    todayMeeting: false,
-    notes: [],
-    calls: [],
-    todos: [],
-  });
+  
   save();
   updateNav();
-  showPage('trainee-' + (STATE.traineeId - 1));
+  closeRecordModal();
+  showPage('meetings');
+}
+
+function openYaakovModal() {
+  document.getElementById('m-yak-date').value = TODAY;
+  document.getElementById('m-yak-notes').value = '';
+  document.getElementById('m-yak-trainees').value = '';
+  document.getElementById('yaakov-meeting-modal').classList.add('open');
+  document.getElementById('m-yak-notes').focus();
+}
+
+function closeYaakovModal() {
+  document.getElementById('yaakov-meeting-modal').classList.remove('open');
+}
+
+function saveYaakovMeeting() {
+  const date = document.getElementById('m-yak-date').value;
+  const notes = document.getElementById('m-yak-notes').value.trim();
+  const trainees = document.getElementById('m-yak-trainees').value.trim();
+  
+  if (!notes || !trainees) {
+    alert('Fill in what Yaakov said and who to work with');
+    return;
+  }
+  
+  STATE.yaakovMeetings.push({
+    id: STATE.noteId++,
+    date,
+    notes,
+    trainees,
+  });
+  save();
+  closeYaakovModal();
+  showPage('yaakov');
 }
 
 function removeTrainee(id) {
   if (!confirm('Remove this trainee?')) return;
   STATE.trainees = STATE.trainees.filter(t => t.id !== id);
   save();
+  updateNav();
   showPage('home');
 }
 
-function addCallReview(traineeId) {
-  const name = prompt('Lead name:');
-  if (!name) return;
-  const notes = prompt('Review notes:');
-  const tr = STATE.trainees.find(t => t.id === traineeId);
-  if (tr) {
-    tr.calls = tr.calls || [];
-    tr.calls.push({
-      id: STATE.noteId++,
-      date: TODAY_DISPLAY,
-      name,
-      notes,
-    });
-    save();
-    showPage('trainee-' + traineeId);
-  }
+// ── DATA EXPORT/IMPORT ──
+function exportData() {
+  const dataStr = JSON.stringify(STATE, null, 2);
+  const dataBlob = new Blob([dataStr], {type: 'application/json'});
+  const url = URL.createObjectURL(dataBlob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `coaching-hub-${new Date().toISOString().slice(0,10)}.json`;
+  link.click();
+  URL.revokeObjectURL(url);
 }
 
-function addTraineeTodo(traineeId, text) {
-  if (!text.trim()) return;
-  const tr = STATE.trainees.find(t => t.id === traineeId);
-  if (tr) {
-    tr.todos = tr.todos || [];
-    tr.todos.push({ id: STATE.noteId++, text, done: false });
-    save();
-    showPage('trainee-' + traineeId);
-  }
+function openImportModal() {
+  document.getElementById('import-modal').classList.add('open');
 }
 
-function toggleTraineeTodo(id, taskId) {
-  const tasks = STATE.dailyTasks['trainee-' + id];
-  if (!tasks) return;
-  const task = tasks.find(t => t.id === taskId);
-  if (task) task.done = !task.done;
-  save();
-  showPage('trainee-' + id);
+function closeImportModal() {
+  document.getElementById('import-modal').classList.remove('open');
+  document.getElementById('import-file').value = '';
+}
+
+function importData() {
+  const fileInput = document.getElementById('import-file');
+  const file = fileInput.files[0];
+  if (!file) {
+    alert('Please select a file');
+    return;
+  }
+  
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const imported = JSON.parse(e.target.result);
+      STATE = imported;
+      localStorage.setItem('coaching_v4', JSON.stringify(STATE));
+      document.getElementById('save-indicator').textContent = 'imported ✓';
+      closeImportModal();
+      updateNav();
+      showPage('home');
+      setTimeout(() => alert('Data imported successfully!'), 200);
+    } catch (err) {
+      alert('Error importing: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
 }
 
 // ── INIT ──
 load();
+
 const sidebar = document.getElementById('sidebar');
 sidebar.innerHTML = `
   <div class="sidebar-section">Navigation</div>
-  ${['home','notes','calendar','yaakov'].map(id => {
-    const labels = {home:'Home',notes:'Notes',calendar:'Calendar',yaakov:'Yaakov'};
+  ${['home','yaakov','meetings','coaching'].map(id => {
+    const labels = {home:'Home',yaakov:'Yaakov',meetings:'Meetings',coaching:'Coaching'};
     return `<div class="sidebar-item ${currentPage === id ? 'active' : ''}" onclick="showPage('${id}')">${labels[id]}</div>`;
   }).join('')}
   <div class="sidebar-section" style="margin-top:16px">Trainees</div>
   ${STATE.trainees.map(t => `
     <div class="sidebar-item ${currentPage === 'trainee-'+t.id ? 'active' : ''}" onclick="showPage('trainee-${t.id}')">${esc(t.name)}</div>
   `).join('')}
-  <div class="sidebar-item" onclick="addTrainee()" style="color:var(--accent);border-left-color:var(--accent);">+ add trainee</div>
 `;
 
 showPage('home');
