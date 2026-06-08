@@ -107,28 +107,7 @@ textarea{resize:vertical;min-height:80px}
   </div>
 </div>
 
-<div class="modal-overlay" id="record-meeting-modal">
-  <div class="modal-box">
-    <div class="modal-title">🎙️ Record Meeting</div>
-    <label class="modal-label">Trainee(s)</label>
-    <input type="text" id="m-meet-trainees" placeholder="Cameron, Joshua, Astra">
-    <label class="modal-label">Notes (optional)</label>
-    <textarea id="m-meet-notes" placeholder="Any context about what you're working on..."></textarea>
-    <div style="margin:16px 0;padding:16px;background:var(--bg-dark);border-radius:8px;border:1px solid var(--border)">
-      <div style="font-weight:600;color:var(--accent-light);margin-bottom:8px">🎙️ Recording</div>
-      <div id="recording-status" class="recording-status">Ready to record</div>
-      <div style="display:flex;gap:8px;margin-bottom:12px">
-        <button class="btn-record" id="record-btn" onclick="startRecording()">● Record</button>
-        <button class="btn-secondary" id="stop-btn" onclick="stopRecording()" style="display:none">⏹ Stop</button>
-      </div>
-      <div id="transcript-display" class="transcript-box"><div class="transcript-empty">Transcript will appear here...</div></div>
-    </div>
-    <div class="modal-buttons">
-      <button class="btn-secondary" onclick="closeRecordModal()">cancel</button>
-      <button class="btn-primary" onclick="saveMeeting()">save meeting</button>
-    </div>
-  </div>
-</div>
+
 
 <div class="modal-overlay" id="yaakov-meeting-modal">
   <div class="modal-box">
@@ -192,13 +171,7 @@ if (SpeechRecognition) {
     const display = currentTranscript + interimTranscript;
     document.getElementById('transcript-display').innerHTML = display ? `<div>${esc(display)}</div>` : '<div class="transcript-empty">Transcript will appear here...</div>';
   };
-  recognition.onend = () => {
-    isRecording = false;
-    document.getElementById('recording-status').textContent = 'Recording stopped';
-    document.getElementById('record-btn').classList.remove('recording');
-    document.getElementById('record-btn').style.display = 'block';
-    document.getElementById('stop-btn').style.display = 'none';
-  };
+
   recognition.onerror = (event) => {
     document.getElementById('recording-status').textContent = 'Error: ' + event.error;
   };
@@ -214,9 +187,7 @@ function startRecording() {
   recognition.start();
 }
 
-function stopRecording() {
-  if (recognition) recognition.stop();
-}
+
 
 let STATE = {
   trainees: [],
@@ -325,54 +296,11 @@ function renderTraineeDetail(tr) {
   return `<h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">👤 ${esc(tr.name)}</h1><div class="card"><div class="card-title">Recent Meetings</div>${trMeetings.length === 0 ? '<div class="empty-state">No meetings recorded for this trainee yet</div>' : ''}${trMeetings.slice(0,5).map(m => `<div style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border)"><div style="font-size:12px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;margin-bottom:8px">${m.date}</div>${m.notes ? `<div style="font-size:12px;color:var(--accent-light);margin-bottom:8px"><strong>Notes:</strong> ${esc(m.notes)}</div>` : ''}<div class="transcript-box" style="max-height:150px">${m.transcript ? esc(m.transcript) : '<div class="transcript-empty">No transcript</div>'}</div></div>`).join('')}</div><button class="btn-danger" style="width:100%;" onclick="removeTrainee(${tr.id})">Remove Trainee</button>`;
 }
 
-function openRecordModal() {
-  document.getElementById('m-meet-trainees').value = '';
-  document.getElementById('m-meet-notes').value = '';
-  currentTranscript = '';
-  document.getElementById('transcript-display').innerHTML = '<div class="transcript-empty">Transcript will appear here...</div>';
-  document.getElementById('recording-status').textContent = 'Ready to record';
-  document.getElementById('record-btn').style.display = 'block';
-  document.getElementById('stop-btn').style.display = 'none';
-  document.getElementById('record-btn').classList.remove('recording');
-  document.getElementById('record-meeting-modal').classList.add('open');
-  document.getElementById('m-meet-trainees').focus();
-}
 
-function closeRecordModal() {
-  if (isRecording) stopRecording();
-  document.getElementById('record-meeting-modal').classList.remove('open');
-}
 
-function saveMeeting() {
-  const trainees = document.getElementById('m-meet-trainees').value.trim();
-  const notes = document.getElementById('m-meet-notes').value.trim();
-  if (!trainees) {
-    alert('Please enter trainee names');
-    return;
-  }
-  const traineeNames = trainees.split(',').map(n => n.trim());
-  const traineesArray = [];
-  traineeNames.forEach(name => {
-    let tr = STATE.trainees.find(t => t.name.toLowerCase() === name.toLowerCase());
-    if (!tr) {
-      tr = { id: STATE.traineeId++, name };
-      STATE.trainees.push(tr);
-    }
-    traineesArray.push(tr.id);
-  });
-  STATE.meetings.push({
-    id: STATE.noteId++,
-    date: TODAY_DISPLAY,
-    trainees,
-    traineesArray,
-    notes,
-    transcript: currentTranscript.trim(),
-  });
-  save();
-  updateNav();
-  closeRecordModal();
-  showPage('meetings');
-}
+
+
+
 
 function openYaakovModal() {
   document.getElementById('m-yak-date').value = TODAY;
