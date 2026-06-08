@@ -409,7 +409,7 @@ function renderTrainee(tr){
       </div>
     </div>
     <div class="card">
-      <div class="card-title">🎙️ Meeting History<button class="btn-secondary btn-sm" onclick="openMeetingFor('${esc(tr.name)}')">+ log meeting</button></div>
+      <div class="card-title">🎙️ Meeting History<button class="btn-secondary btn-sm" onclick="openMeetingFor('${tr.name}')">+ log meeting</button></div>
       ${trMeetings.length===0?'<div class="empty-state">No meetings logged yet</div>':''}
       ${trMeetings.map(m=>`<div style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border)"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div class="note-date">${m.date}</div><button class="del-btn" onclick="deleteMeeting(${m.id})">✕</button></div>${m.notes?`<div style="font-size:12px;color:var(--accent-light);margin-bottom:8px"><strong>Covered:</strong> ${esc(m.notes)}</div>`:''}${m.transcript?`<div class="transcript-box" style="max-height:150px">${esc(m.transcript)}</div>`:''}</div>`).join('')}
     </div>
@@ -447,8 +447,9 @@ function saveMeeting(){
   });
   STATE.meetings.push({id:STATE.noteId++,date:dispDate,dateKey:dateInput,trainees,traineesArray,notes,transcript});
   if(followup){ STATE.followups.push({id:STATE.noteId++,text:followup,traineeId:traineesArray[0]||null,dueDate:'',done:false,created:TODAY}); }
-  save();updateNav();closeMeetingModal();showPage(currentPage.startsWith('trainee-')?currentPage:'calendar');
-  if(currentPage==='calendar'){selectedCalKey=dateInput;showPage('calendar');}
+  save();updateNav();closeMeetingModal();
+  if(currentPage==='calendar'){selectedCalKey=dateInput;}
+  showPage(currentPage.startsWith('trainee-')?currentPage:currentPage==='calendar'?'calendar':'home');
 }
 function deleteMeeting(id){if(!confirm('Delete this meeting?'))return;STATE.meetings=STATE.meetings.filter(m=>m.id!==id);save();updateNav();showPage(currentPage);}
 
@@ -471,7 +472,7 @@ function saveYaakovMeeting(){
   const[yy,mm,dd]=dateInput.split('-').map(Number);
   const dispDate=new Date(yy,mm-1,dd).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
   STATE.yaakovMeetings.push({id:STATE.noteId++,date:dispDate,dateKey:dateInput,time:time||'',notes,trainees});
-  save();closeYaakovModal();showPage('yaakov');
+  save();closeYaakovModal();showPage(currentPage);
 }
 function deleteYaakov(id){if(!confirm('Delete this Yaakov meeting?'))return;STATE.yaakovMeetings=STATE.yaakovMeetings.filter(y=>y.id!==id);save();showPage(currentPage);}
 
