@@ -156,23 +156,7 @@ textarea{resize:vertical;min-height:80px}
   </div>
 </div>
 
-<!-- YAAKOV 9:30 MODAL -->
-<div class="modal-overlay" id="yaakov-meeting-modal">
-  <div class="modal-box">
-    <div class="modal-title">📅 Yaakov 9:30 Meeting</div>
-    <p style="font-size:12px;color:var(--text-dim);margin-bottom:14px">What does he want you to focus on today? Who should you work with?</p>
-    <label class="modal-label">Date</label>
-    <input type="date" id="m-yak-date">
-    <label class="modal-label">What Yaakov said</label>
-    <textarea id="m-yak-notes" placeholder="Focus on Joshua's transfers, make sure Astra is doing AI roleplay, check Carnell's closing technique..."></textarea>
-    <label class="modal-label">Trainees to work with today</label>
-    <input type="text" id="m-yak-trainees" placeholder="Cameron, Joshua, Astra">
-    <div class="modal-buttons">
-      <button class="btn-secondary" onclick="closeYaakovModal()">cancel</button>
-      <button class="btn-primary" onclick="saveYaakovMeeting()">log it</button>
-    </div>
-  </div>
-</div>
+
 
 <!-- IMPORT MODAL -->
 <div class="modal-overlay" id="import-modal">
@@ -299,9 +283,35 @@ function showPage(name) {
   updateNav();
 }
 
+function updateNav() {
+  const nav = document.getElementById('nav-buttons');
+  const items = [
+    {id:'home',label:'Home'},
+    {id:'yaakov',label:'Yaakov'},
+    {id:'meetings',label:'Meetings'},
+    {id:'coaching',label:'Coaching'},
+  ];
+  STATE.trainees.forEach(t => items.push({id:'trainee-'+t.id,label:t.name}));
+  
+  nav.innerHTML = items.map(item => `
+    <button class="nav-btn ${currentPage === item.id ? 'active' : ''}" onclick="showPage('${item.id}')">
+      ${esc(item.label)}
+    </button>
+  `).join('');
+}
 
-
-
+function renderPage(name) {
+  if (name === 'home') return renderHome();
+  if (name === 'yaakov') return renderYaakovPage();
+  if (name === 'meetings') return renderMeetingsPage();
+  if (name === 'coaching') return renderCoachingNotes();
+  if (name.startsWith('trainee-')) {
+    const id = parseInt(name.split('-')[1]);
+    const tr = STATE.trainees.find(t => t.id === id);
+    return tr ? renderTraineeDetail(tr) : '<div class="empty-state">Trainee not found</div>';
+  }
+  return '';
+}
 
 // ── HOME PAGE ──
 function renderHome() {
@@ -311,17 +321,7 @@ function renderHome() {
   return `
     <h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">📊 Today's Workflow</h1>
     
-    <div class="split-section">
-      <div class="card">
-        <div class="card-title">🎯 Yaakov 9:30${todayYaakov.length ? ' ✓' : ''}</div>
-        ${todayYaakov.length > 0 ? `
-          <div style="font-size:12px;line-height:1.6;color:var(--text)">
-            <strong>Working with:</strong> ${esc(todayYaakov[0].trainees)}<br>
-            <strong>Focus:</strong> ${esc(todayYaakov[0].notes.slice(0,100))}${todayYaakov[0].notes.length > 100 ? '...' : ''}
-          </div>
-        ` : '<div class="empty-state">Not logged yet</div>'}
-        <button class="btn-secondary" style="width:100%;margin-top:12px" onclick="openYaakovModal()">log 9:30 meeting</button>
-      </div>
+
       
       <div class="card">
         <div class="card-title">🎙️ Meetings Today<span class="badge">${todayMeetings}</span></div>
@@ -354,30 +354,28 @@ function renderHome() {
   `;
 }
 
-
-
-// ── YAAKOV PAGE ──
-function renderYaakovPage() {
-  const meetings = STATE.yaakovMeetings.sort((a,b) => new Date(b.date) - new Date(a.date));
+// ── MEETINGS PAGE ──
+function renderMeetingsPage() {
+  const meetings = STATE.meetings.sort((a,b) => new Date(b.date) - new Date(a.date));
   
   return `
-    <h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">🎯 Yaakov Meetings</h1>
-    <button class="btn-primary" style="margin-bottom:20px" onclick="openYaakovModal()">+ log 9:30 meeting</button>
+    <h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">🎙️ Meeting Transcripts</h1>
+    <button class="btn-primary" style="margin-bottom:20px" onclick="openRecordModal()">+ record meeting</button>
     
-    ${meetings.length === 0 ? '<div class="empty-state">No meetings logged yet</div>' : ''}
+    ${meetings.length === 0 ? '<div class="empty-state">No meetings recorded yet</div>' : ''}
     
-    ${meetings.map(y => `
+    ${meetings.map(m => `
       <div class="card">
-        <div class="card-title">${y.date}</div>
-        <div style="margin-bottom:12px">
-          <strong style="color:var(--accent-light)">Working with:</strong> ${esc(y.trainees)}<br>
-          <strong style="color:var(--accent-light)">Direction:</strong>
-        </div>
-        <div style="background:var(--bg-dark);padding:12px;border-radius:6px;font-size:13px;line-height:1.6;color:var(--text)">${esc(y.notes)}</div>
+        <div class="card-title">${m.trainees}</div>
+        <div style="font-size:11px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;margin-bottom:12px">${m.date}</div>
+        ${m.notes ? `<div style="background:var(--bg-dark);padding:10px;border-radius:6px;margin-bottom:12px;font-size:12px;color:var(--text-dim)"><strong>Notes:</strong> ${esc(m.notes)}</div>` : ''}
+        <div class="transcript-box">${m.transcript ? esc(m.transcript) : '<div class="transcript-empty">No transcript</div>'}</div>
       </div>
     `).join('')}
   `;
 }
+
+
 
 // ── COACHING NOTES PAGE ──
 function renderCoachingNotes() {
@@ -525,40 +523,23 @@ function saveMeeting() {
   showPage('meetings');
 }
 
-function openYaakovModal() {
-  document.getElementById('m-yak-date').value = TODAY;
-  document.getElementById('m-yak-notes').value = '';
-  document.getElementById('m-yak-trainees').value = '';
-  document.getElementById('yaakov-meeting-modal').classList.add('open');
-  document.getElementById('m-yak-notes').focus();
-}
+
 
 function closeYaakovModal() {
   document.getElementById('yaakov-meeting-modal').classList.remove('open');
 }
 
-function saveYaakovMeeting() {
-  const date = document.getElementById('m-yak-date').value;
-  const notes = document.getElementById('m-yak-notes').value.trim();
-  const trainees = document.getElementById('m-yak-trainees').value.trim();
-  
-  if (!notes || !trainees) {
-    alert('Fill in what Yaakov said and who to work with');
-    return;
-  }
-  
-  STATE.yaakovMeetings.push({
-    id: STATE.noteId++,
-    date,
-    notes,
-    trainees,
-  });
+
+
+function removeTrainee(id) {
+  if (!confirm('Remove this trainee?')) return;
+  STATE.trainees = STATE.trainees.filter(t => t.id !== id);
   save();
-  closeYaakovModal();
-  showPage('yaakov');
+  updateNav();
+  showPage('home');
 }
 
-
+// ── DATA EXPORT/IMPORT ──
 function exportData() {
   const dataStr = JSON.stringify(STATE, null, 2);
   const dataBlob = new Blob([dataStr], {type: 'application/json'});
@@ -608,7 +589,18 @@ function importData() {
 // ── INIT ──
 load();
 
-
+const sidebar = document.getElementById('sidebar');
+sidebar.innerHTML = `
+  <div class="sidebar-section">Navigation</div>
+  ${['home','yaakov','meetings','coaching'].map(id => {
+    const labels = {home:'Home',yaakov:'Yaakov',meetings:'Meetings',coaching:'Coaching'};
+    return `<div class="sidebar-item ${currentPage === id ? 'active' : ''}" onclick="showPage('${id}')">${labels[id]}</div>`;
+  }).join('')}
+  <div class="sidebar-section" style="margin-top:16px">Trainees</div>
+  ${STATE.trainees.map(t => `
+    <div class="sidebar-item ${currentPage === 'trainee-'+t.id ? 'active' : ''}" onclick="showPage('trainee-${t.id}')">${esc(t.name)}</div>
+  `).join('')}
+`;
 
 showPage('home');
 window.addEventListener('beforeunload', save);
