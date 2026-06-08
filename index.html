@@ -24,7 +24,6 @@
   --purple:#b8a8d1;
 }
 html,body{height:100%;margin:0;padding:0;background:var(--bg-dark);color:var(--text);font-family:'Outfit',sans-serif;font-size:15px;line-height:1.6;overflow:hidden}
-
 .app{display:flex;height:100vh;flex-direction:column}
 .header{height:56px;background:linear-gradient(135deg,#1a1815 0%,#0f0e0b 100%);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;justify-content:space-between;flex-shrink:0;z-index:100}
 .logo{font-size:18px;font-weight:700;letter-spacing:1px;background:linear-gradient(135deg,var(--accent-light),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
@@ -36,56 +35,30 @@ html,body{height:100%;margin:0;padding:0;background:var(--bg-dark);color:var(--t
 .data-controls{display:flex;gap:8px}
 .data-btn{background:var(--border);border:none;color:var(--text-dim);font-size:11px;padding:6px 10px;border-radius:6px;cursor:pointer;transition:all .2s;font-family:'IBM Plex Mono',monospace}
 .data-btn:hover{background:var(--accent);color:var(--bg-dark)}
-
 .main{flex:1;display:flex;overflow:hidden}
 .sidebar{width:220px;background:var(--bg-card);border-right:1px solid var(--border);padding:16px 0;overflow-y:auto;flex-shrink:0}
 .sidebar-section{padding:12px 16px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);border-bottom:1px solid var(--border);margin-bottom:4px}
-.sidebar-item{padding:10px 16px;font-size:13px;cursor:pointer;color:var(--text-dim);transition:all .15s;border-left:3px solid transparent;display:flex;align-items:center;gap:8px;justify-content:space-between}
+.sidebar-item{padding:10px 16px;font-size:13px;cursor:pointer;color:var(--text-dim);transition:all .15s;border-left:3px solid transparent;display:flex;align-items:center;justify-content:space-between}
 .sidebar-item:hover{background:var(--bg-hover);color:var(--text)}
 .sidebar-item.active{border-left-color:var(--accent);color:var(--accent);background:rgba(212,165,116,.08)}
-
+.sidebar-add{color:var(--accent);border-left-color:var(--accent);margin-top:8px}
 .content{flex:1;overflow-y:auto;padding:32px 40px;max-width:1200px}
 .page{display:none}
 .page.active{display:block;animation:fadeIn .25s}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-
 .card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px}
 .card-title{font-size:14px;font-weight:700;color:var(--accent-light);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
-
-.section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-dim);margin:16px 0 10px;border-bottom:1px solid var(--border);padding-bottom:6px}
-.section-label:first-child{margin-top:0}
-
-.call-item{background:var(--bg-dark);border-left:4px solid var(--blue);padding:14px;border-radius:6px;margin-bottom:12px}
-.call-name{font-weight:600;color:var(--accent-light);margin-bottom:4px}
-.call-meta{font-size:11px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;margin-bottom:8px}
-.call-issue{color:var(--red);font-size:12px;margin:4px 0}
-
-.coaching-box{background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:12px;font-size:12px;line-height:1.6}
-.coaching-title{font-weight:600;color:var(--accent-light);margin-bottom:6px}
-.coaching-text{color:var(--text-dim)}
-
-input[type=text],input[type=date],textarea,select{
-  width:100%;padding:10px 12px;background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;transition:border .15s;margin-bottom:8px
-}
+.split-section{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+@media(max-width:1000px){.split-section{grid-template-columns:1fr}}
+input[type=text],input[type=date],input[type=time],textarea,select{width:100%;padding:10px 12px;background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;transition:border .15s;margin-bottom:8px}
 input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
 textarea{resize:vertical;min-height:80px}
-
 .btn-primary{padding:10px 16px;background:var(--accent);color:var(--bg-dark);border:none;border-radius:8px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;font-size:13px;transition:all .2s}
 .btn-primary:hover{background:var(--accent-light)}
 .btn-secondary{padding:10px 14px;background:var(--border);color:var(--text);border:none;border-radius:8px;font-weight:500;cursor:pointer;font-family:'Outfit',sans-serif;font-size:13px;transition:all .2s}
 .btn-secondary:hover{background:var(--bg-hover)}
-.btn-record{padding:10px 14px;background:var(--green);color:#fff;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;font-size:13px}
-.btn-record:hover{background:#5a9472}
-.btn-record.recording{background:var(--red);animation:pulse-bg .6s infinite}
-@keyframes pulse-bg{0%,100%{opacity:1}50%{opacity:.8}}
-
-.recording-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:rgba(201,112,112,.15);border:1px solid rgba(201,112,112,.3);border-radius:6px;color:var(--red);font-size:11px;font-weight:600}
-.recording-dot{width:6px;height:6px;border-radius:50%;background:var(--red);animation:pulse 1s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-
-.transcript-box{background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;padding:12px;margin:12px 0;font-size:12px;line-height:1.6;color:var(--text);max-height:250px;overflow-y:auto}
-.transcript-empty{color:var(--text-dim);font-style:italic}
-
+.btn-danger{background:var(--red);color:#fff}
+.btn-danger:hover{background:#a85656}
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;align-items:center;justify-content:center}
 .modal-overlay.open{display:flex}
 .modal-box{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:24px;width:600px;max-width:90vw;box-shadow:0 20px 60px rgba(0,0,0,.4);max-height:85vh;overflow-y:auto}
@@ -93,24 +66,29 @@ textarea{resize:vertical;min-height:80px}
 .modal-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-dim);display:block;margin-bottom:6px;margin-top:12px}
 .modal-label:first-of-type{margin-top:0}
 .modal-buttons{display:flex;gap:8px;justify-content:flex-end;margin-top:20px}
-
-.warning-box{background:rgba(201,112,112,.1);border:1px solid rgba(201,112,112,.3);border-left:4px solid var(--red);padding:12px;border-radius:6px;margin-bottom:14px;font-size:12px;color:var(--text)}
-
-.split-section{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
-@media(max-width:1000px){.split-section{grid-template-columns:1fr}}
-
+.transcript-box{background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;padding:12px;margin:12px 0;font-size:12px;line-height:1.6;color:var(--text);max-height:250px;overflow-y:auto}
+.transcript-empty{color:var(--text-dim);font-style:italic}
+.recording-status{font-size:12px;color:var(--text-dim);margin-bottom:12px}
+.btn-record{padding:10px 14px;background:var(--green);color:#fff;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;font-size:13px;margin-bottom:12px}
+.btn-record:hover{background:#5a9472}
+.btn-record.recording{background:var(--red);animation:pulse-bg .6s infinite}
+@keyframes pulse-bg{0%,100%{opacity:1}50%{opacity:.8}}
 .empty-state{text-align:center;padding:20px;color:var(--text-dim);font-size:13px}
-
+.day-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px}
+.day-date{font-size:16px;font-weight:700;color:var(--accent-light);margin-bottom:14px}
+.day-section{margin-bottom:16px}
+.day-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-dim);margin-bottom:8px}
+.day-item{background:var(--bg-dark);padding:12px;border-radius:6px;margin-bottom:8px;font-size:12px;line-height:1.5;border-left:3px solid var(--accent)}
+.day-item.meeting{border-left-color:var(--blue)}
+.day-item-meta{font-size:10px;color:var(--text-dim);margin-bottom:4px}
 ::-webkit-scrollbar{width:8px}
 ::-webkit-scrollbar-track{background:var(--bg-dark)}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
 ::-webkit-scrollbar-thumb:hover{background:var(--text-dim)}
-
 .badge{display:inline-block;font-size:10px;background:var(--red);color:#fff;padding:2px 6px;border-radius:3px;font-weight:600;margin-left:6px}
 </style>
 </head>
 <body>
-
 <div class="app">
   <div class="header">
     <div class="logo">coaching hub</div>
@@ -123,14 +101,12 @@ textarea{resize:vertical;min-height:80px}
       </div>
     </div>
   </div>
-
   <div class="main">
     <div class="sidebar" id="sidebar"></div>
     <div class="content" id="content"></div>
   </div>
 </div>
 
-<!-- RECORD MEETING MODAL -->
 <div class="modal-overlay" id="record-meeting-modal">
   <div class="modal-box">
     <div class="modal-title">🎙️ Record Meeting</div>
@@ -138,17 +114,15 @@ textarea{resize:vertical;min-height:80px}
     <input type="text" id="m-meet-trainees" placeholder="Cameron, Joshua, Astra">
     <label class="modal-label">Notes (optional)</label>
     <textarea id="m-meet-notes" placeholder="Any context about what you're working on..."></textarea>
-    
     <div style="margin:16px 0;padding:16px;background:var(--bg-dark);border-radius:8px;border:1px solid var(--border)">
       <div style="font-weight:600;color:var(--accent-light);margin-bottom:8px">🎙️ Recording</div>
-      <div id="recording-status" style="font-size:12px;color:var(--text-dim);margin-bottom:12px">Ready to record</div>
+      <div id="recording-status" class="recording-status">Ready to record</div>
       <div style="display:flex;gap:8px;margin-bottom:12px">
         <button class="btn-record" id="record-btn" onclick="startRecording()">● Record</button>
         <button class="btn-secondary" id="stop-btn" onclick="stopRecording()" style="display:none">⏹ Stop</button>
       </div>
       <div id="transcript-display" class="transcript-box"><div class="transcript-empty">Transcript will appear here...</div></div>
     </div>
-    
     <div class="modal-buttons">
       <button class="btn-secondary" onclick="closeRecordModal()">cancel</button>
       <button class="btn-primary" onclick="saveMeeting()">save meeting</button>
@@ -156,9 +130,25 @@ textarea{resize:vertical;min-height:80px}
   </div>
 </div>
 
+<div class="modal-overlay" id="yaakov-meeting-modal">
+  <div class="modal-box">
+    <div class="modal-title">🎯 Yaakov Meeting</div>
+    <p style="font-size:12px;color:var(--text-dim);margin-bottom:14px">Log direction from Yaakov anytime</p>
+    <label class="modal-label">Date</label>
+    <input type="date" id="m-yak-date">
+    <label class="modal-label">Time (optional)</label>
+    <input type="time" id="m-yak-time">
+    <label class="modal-label">What Yaakov said / direction</label>
+    <textarea id="m-yak-notes" placeholder="What does he want done? Any focus areas? Issues to address?"></textarea>
+    <label class="modal-label">Trainees mentioned (optional)</label>
+    <input type="text" id="m-yak-trainees" placeholder="Cameron, Joshua, Astra">
+    <div class="modal-buttons">
+      <button class="btn-secondary" onclick="closeYaakovModal()">cancel</button>
+      <button class="btn-primary" onclick="saveYaakovMeeting()">log it</button>
+    </div>
+  </div>
+</div>
 
-
-<!-- IMPORT MODAL -->
 <div class="modal-overlay" id="import-modal">
   <div class="modal-box">
     <div class="modal-title">📥 Import Data</div>
@@ -172,7 +162,6 @@ textarea{resize:vertical;min-height:80px}
 </div>
 
 <script>
-// ── SPEECH RECOGNITION ──
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 let recognition = null;
 let isRecording = false;
@@ -183,7 +172,6 @@ if (SpeechRecognition) {
   recognition.continuous = true;
   recognition.interimResults = true;
   recognition.lang = 'en-US';
-  
   recognition.onstart = () => {
     isRecording = true;
     document.getElementById('recording-status').textContent = '🔴 Recording...';
@@ -191,7 +179,6 @@ if (SpeechRecognition) {
     document.getElementById('record-btn').style.display = 'none';
     document.getElementById('stop-btn').style.display = 'block';
   };
-  
   recognition.onresult = (event) => {
     let interimTranscript = '';
     for (let i = event.resultIndex; i < event.results.length; i++) {
@@ -202,11 +189,9 @@ if (SpeechRecognition) {
         interimTranscript += transcript;
       }
     }
-    
     const display = currentTranscript + interimTranscript;
     document.getElementById('transcript-display').innerHTML = display ? `<div>${esc(display)}</div>` : '<div class="transcript-empty">Transcript will appear here...</div>';
   };
-  
   recognition.onend = () => {
     isRecording = false;
     document.getElementById('recording-status').textContent = 'Recording stopped';
@@ -214,7 +199,6 @@ if (SpeechRecognition) {
     document.getElementById('record-btn').style.display = 'block';
     document.getElementById('stop-btn').style.display = 'none';
   };
-  
   recognition.onerror = (event) => {
     document.getElementById('recording-status').textContent = 'Error: ' + event.error;
   };
@@ -234,7 +218,6 @@ function stopRecording() {
   if (recognition) recognition.stop();
 }
 
-// ── STATE ──
 let STATE = {
   trainees: [],
   meetings: [],
@@ -247,23 +230,20 @@ const NOW = new Date();
 const TODAY = NOW.toISOString().slice(0,10);
 const TODAY_DISPLAY = NOW.toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'});
 
-// ── LOAD/SAVE ──
 function load() {
   try {
-    const saved = localStorage.getItem('coaching_v4');
+    const saved = localStorage.getItem('coaching_v5');
     if (saved) STATE = JSON.parse(saved);
   } catch(e) {}
-  
   if (!STATE.trainees) STATE.trainees = [];
   if (!STATE.meetings) STATE.meetings = [];
   if (!STATE.yaakovMeetings) STATE.yaakovMeetings = [];
-  
   document.getElementById('save-indicator').textContent = 'loaded';
 }
 
 function save() {
   try {
-    localStorage.setItem('coaching_v4', JSON.stringify(STATE));
+    localStorage.setItem('coaching_v5', JSON.stringify(STATE));
     document.getElementById('save-indicator').textContent = 'saved';
   } catch(e) {
     document.getElementById('save-indicator').textContent = 'error';
@@ -273,7 +253,6 @@ function save() {
 function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function initials(n) { return n.trim().split(/\s+/).map(w => w[0]).join('').toUpperCase().slice(0,2); }
 
-// ── NAVIGATION ──
 let currentPage = 'home';
 
 function showPage(name) {
@@ -288,23 +267,18 @@ function updateNav() {
   const items = [
     {id:'home',label:'Home'},
     {id:'yaakov',label:'Yaakov'},
+    {id:'calendar',label:'Calendar'},
     {id:'meetings',label:'Meetings'},
-    {id:'coaching',label:'Coaching'},
   ];
   STATE.trainees.forEach(t => items.push({id:'trainee-'+t.id,label:t.name}));
-  
-  nav.innerHTML = items.map(item => `
-    <button class="nav-btn ${currentPage === item.id ? 'active' : ''}" onclick="showPage('${item.id}')">
-      ${esc(item.label)}
-    </button>
-  `).join('');
+  nav.innerHTML = items.map(item => `<button class="nav-btn ${currentPage === item.id ? 'active' : ''}" onclick="showPage('${item.id}')">${esc(item.label)}</button>`).join('');
 }
 
 function renderPage(name) {
   if (name === 'home') return renderHome();
   if (name === 'yaakov') return renderYaakovPage();
+  if (name === 'calendar') return renderCalendarPage();
   if (name === 'meetings') return renderMeetingsPage();
-  if (name === 'coaching') return renderCoachingNotes();
   if (name.startsWith('trainee-')) {
     const id = parseInt(name.split('-')[1]);
     const tr = STATE.trainees.find(t => t.id === id);
@@ -313,161 +287,44 @@ function renderPage(name) {
   return '';
 }
 
-// ── HOME PAGE ──
 function renderHome() {
   const todayYaakov = STATE.yaakovMeetings.filter(y => y.date === TODAY);
   const todayMeetings = STATE.meetings.filter(m => m.date === TODAY).length;
-  
-  return `
-    <h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">📊 Today's Workflow</h1>
-    
-
-      
-      <div class="card">
-        <div class="card-title">🎙️ Meetings Today<span class="badge">${todayMeetings}</span></div>
-        <button class="btn-primary" style="width:100%" onclick="openRecordModal()">+ record meeting</button>
-        <button class="btn-secondary" style="width:100%;margin-top:8px" onclick="showPage('meetings')">view all</button>
-      </div>
-    </div>
-    
-    <div class="card">
-      <div class="card-title">📋 Quick Reminders</div>
-      <div class="warning-box">
-        <strong>Before you meet:</strong> Check last meeting transcripts, review notes, plan focus areas
-      </div>
-      <div class="coaching-box">
-        <div class="coaching-title">Meeting Workflow:</div>
-        <div class="coaching-text">
-          1. Click "record meeting" → name trainee(s) → hit record → speak naturally<br>
-          2. Transcript appears in real-time as you talk<br>
-          3. Stop recording and save when done<br>
-          4. Everything automatically saved with timestamp
-        </div>
-      </div>
-      <div class="coaching-box">
-        <div class="coaching-title">Trainee Management:</div>
-        <div class="coaching-text">
-          All meetings with a trainee auto-appear on their page. Add names and they're tracked.
-        </div>
-      </div>
-    </div>
-  `;
+  return `<h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">📊 Today's Workflow</h1><div class="split-section"><div class="card"><div class="card-title">🎯 Yaakov${todayYaakov.length > 0 ? ` (${todayYaakov.length})` : ''}</div>${todayYaakov.length > 0 ? `<div style="font-size:12px;line-height:1.6;color:var(--text)">${todayYaakov.map(y => `<div style="margin-bottom:12px;padding:10px;background:var(--bg-dark);border-radius:6px;border-left:3px solid var(--accent)">${y.time ? `<div style="font-size:11px;color:var(--text-dim);margin-bottom:4px">⏰ ${y.time}</div>` : ''}<div>${esc(y.notes.slice(0,80))}${y.notes.length > 80 ? '...' : ''}</div></div>`).join('')}</div>` : '<div class="empty-state">Not logged yet</div>'}<button class="btn-secondary" style="width:100%;margin-top:12px" onclick="openYaakovModal()">+ log meeting</button></div><div class="card"><div class="card-title">🎙️ Meetings Today<span class="badge">${todayMeetings}</span></div><button class="btn-primary" style="width:100%" onclick="openRecordModal()">+ record meeting</button><button class="btn-secondary" style="width:100%;margin-top:8px" onclick="showPage('meetings')">view all</button></div></div>`;
 }
 
-// ── MEETINGS PAGE ──
+function renderYaakovPage() {
+  const meetings = STATE.yaakovMeetings.sort((a,b) => new Date(b.date) - new Date(a.date));
+  return `<h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">🎯 Yaakov Meetings</h1><button class="btn-primary" style="margin-bottom:20px" onclick="openYaakovModal()">+ log meeting</button>${meetings.length === 0 ? '<div class="empty-state">No meetings logged yet</div>' : ''}${meetings.map(y => `<div class="card"><div class="card-title">${y.date}${y.time ? `<span style="font-size:12px;color:var(--text-dim);font-weight:400;margin-left:12px">${y.time}</span>` : ''}</div>${y.trainees ? `<div style="font-size:12px;color:var(--text-dim);margin-bottom:8px"><strong>Trainees:</strong> ${esc(y.trainees)}</div>` : ''}<div style="background:var(--bg-dark);padding:12px;border-radius:6px;font-size:13px;line-height:1.6;color:var(--text)">${esc(y.notes)}</div></div>`).join('')}`;
+}
+
+function renderCalendarPage() {
+  const dateMap = {};
+  STATE.yaakovMeetings.forEach(y => {
+    if (!dateMap[y.date]) dateMap[y.date] = { yaakov: [], meetings: [] };
+    dateMap[y.date].yaakov.push(y);
+  });
+  STATE.meetings.forEach(m => {
+    if (!dateMap[m.date]) dateMap[m.date] = { yaakov: [], meetings: [] };
+    dateMap[m.date].meetings.push(m);
+  });
+  const sortedDates = Object.keys(dateMap).sort().reverse();
+  return `<h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">📅 Calendar & Daily Log</h1>${sortedDates.length === 0 ? '<div class="empty-state">No activity logged yet</div>' : ''}${sortedDates.map(date => {
+    const dayData = dateMap[date];
+    return `<div class="day-card"><div class="day-date">${date}</div>${dayData.yaakov.length > 0 ? `<div class="day-section"><div class="day-section-title">🎯 Yaakov (${dayData.yaakov.length})</div>${dayData.yaakov.map(y => `<div class="day-item">${y.time ? `<div class="day-item-meta">${y.time}</div>` : ''}<div>${esc(y.notes)}</div>${y.trainees ? `<div class="day-item-meta" style="margin-top:6px">Trainees: ${esc(y.trainees)}</div>` : ''}</div>`).join('')}</div>` : ''}${dayData.meetings.length > 0 ? `<div class="day-section"><div class="day-section-title">🎙️ Trainee Meetings (${dayData.meetings.length})</div>${dayData.meetings.map(m => `<div class="day-item meeting"><div style="font-weight:600;color:var(--accent-light);margin-bottom:4px">${esc(m.trainees)}</div>${m.notes ? `<div style="font-size:11px;color:var(--text-dim);margin-bottom:6px">${esc(m.notes)}</div>` : ''}${m.transcript ? `<div style="background:var(--bg-hover);padding:8px;border-radius:4px;font-size:11px;max-height:100px;overflow:hidden">${esc(m.transcript.substring(0,200))}${m.transcript.length > 200 ? '...' : ''}</div>` : ''}</div>`).join('')}</div>` : ''}</div>`;
+  }).join('')}`;
+}
+
 function renderMeetingsPage() {
   const meetings = STATE.meetings.sort((a,b) => new Date(b.date) - new Date(a.date));
-  
-  return `
-    <h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">🎙️ Meeting Transcripts</h1>
-    <button class="btn-primary" style="margin-bottom:20px" onclick="openRecordModal()">+ record meeting</button>
-    
-    ${meetings.length === 0 ? '<div class="empty-state">No meetings recorded yet</div>' : ''}
-    
-    ${meetings.map(m => `
-      <div class="card">
-        <div class="card-title">${m.trainees}</div>
-        <div style="font-size:11px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;margin-bottom:12px">${m.date}</div>
-        ${m.notes ? `<div style="background:var(--bg-dark);padding:10px;border-radius:6px;margin-bottom:12px;font-size:12px;color:var(--text-dim)"><strong>Notes:</strong> ${esc(m.notes)}</div>` : ''}
-        <div class="transcript-box">${m.transcript ? esc(m.transcript) : '<div class="transcript-empty">No transcript</div>'}</div>
-      </div>
-    `).join('')}
-  `;
+  return `<h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">🎙️ Meeting Transcripts</h1><button class="btn-primary" style="margin-bottom:20px" onclick="openRecordModal()">+ record meeting</button>${meetings.length === 0 ? '<div class="empty-state">No meetings recorded yet</div>' : ''}${meetings.map(m => `<div class="card"><div class="card-title">${m.trainees}</div><div style="font-size:11px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;margin-bottom:12px">${m.date}</div>${m.notes ? `<div style="background:var(--bg-dark);padding:10px;border-radius:6px;margin-bottom:12px;font-size:12px;color:var(--text-dim)"><strong>Notes:</strong> ${esc(m.notes)}</div>` : ''}<div class="transcript-box">${m.transcript ? esc(m.transcript) : '<div class="transcript-empty">No transcript</div>'}</div></div>`).join('')}`;
 }
 
-
-
-// ── COACHING NOTES PAGE ──
-function renderCoachingNotes() {
-  return `
-    <h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">💡 Coaching Scripts & Reminders</h1>
-    
-    <div class="card">
-      <div class="section-label">Call Technique</div>
-      <div class="coaching-box">
-        <div class="coaching-title">Start assumptively — confirm, don't ask</div>
-        <div class="coaching-text">"I have you listed as married, is that correct?"</div>
-      </div>
-      <div class="coaching-box">
-        <div class="coaching-title">Confirm in sets of 2 — explain why</div>
-        <div class="coaching-text">Always confirm more than one thing at a time. Explain what you're doing and why.</div>
-      </div>
-      <div class="coaching-box">
-        <div class="coaching-title">Acknowledge prior confirmation first</div>
-        <div class="coaching-text">"I know you already confirmed your info with my colleague, I'm going to run through it real quick to make sure I have all your discounts correct."</div>
-      </div>
-      <div class="coaching-box">
-        <div class="coaching-title">Home objection overcome</div>
-        <div class="coaching-text">"My system makes me run through it but I can take it off at the end and show you what it looks like without it if you want"</div>
-      </div>
-      <div class="coaching-box">
-        <div class="coaching-title">Overcome objections — don't accept the first one</div>
-        <div class="coaching-text">Don't be too pushy or they'll hang up. Be firm but respectful.</div>
-      </div>
-    </div>
-    
-    <div class="card">
-      <div class="section-label">Quoting</div>
-      <div class="coaching-box">
-        <div class="coaching-title">Always run in both named insureds</div>
-        <div class="coaching-text">If IS score is higher, run the quote in both names.</div>
-      </div>
-      <div class="coaching-box">
-        <div class="coaching-title">Girlfriend and boyfriend = married</div>
-        <div class="coaching-text">Treat them as married for quoting purposes.</div>
-      </div>
-      <div class="coaching-box">
-        <div class="coaching-title">Don't ask about other drivers</div>
-        <div class="coaching-text">Just ask: "Do any other drivers need to be on the policy?"</div>
-      </div>
-      <div class="coaching-box">
-        <div class="coaching-title">Waiving PIP = last resort</div>
-        <div class="coaching-text">Only use this as a final option.</div>
-      </div>
-      <div class="coaching-box">
-        <div class="coaching-title">Coverage minimums</div>
-        <div class="coaching-text">Rental car: starts at $200 | Renters: 15k not 20k</div>
-      </div>
-    </div>
-    
-    <div class="card">
-      <div class="section-label">Lead Management</div>
-      <div class="coaching-box">
-        <div class="coaching-title">Don't ask "Why are you shopping?"</div>
-        <div class="coaching-text">No question for PD. Don't say "down payment."</div>
-      </div>
-      <div class="coaching-box">
-        <div class="coaching-title">Every follow-up needs a text</div>
-        <div class="coaching-text">If you set a follow-up, you must text them.</div>
-      </div>
-    </div>
-  `;
-}
-
-// ── TRAINEE DETAIL ──
 function renderTraineeDetail(tr) {
   const trMeetings = STATE.meetings.filter(m => m.traineesArray && m.traineesArray.includes(tr.id));
-  
-  return `
-    <h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">👤 ${esc(tr.name)}</h1>
-    
-    <div class="card">
-      <div class="card-title">Recent Meetings</div>
-      ${trMeetings.length === 0 ? '<div class="empty-state">No meetings recorded for this trainee yet</div>' : ''}
-      ${trMeetings.slice(0,5).map(m => `
-        <div style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border)">
-          <div style="font-size:12px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;margin-bottom:8px">${m.date}</div>
-          ${m.notes ? `<div style="font-size:12px;color:var(--accent-light);margin-bottom:8px"><strong>Notes:</strong> ${esc(m.notes)}</div>` : ''}
-          <div class="transcript-box" style="max-height:150px">${m.transcript ? esc(m.transcript) : '<div class="transcript-empty">No transcript</div>'}</div>
-        </div>
-      `).join('')}
-    </div>
-    
-    <button class="btn-danger" style="width:100%;" onclick="removeTrainee(${tr.id})">Remove Trainee</button>
-  `;
+  return `<h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">👤 ${esc(tr.name)}</h1><div class="card"><div class="card-title">Recent Meetings</div>${trMeetings.length === 0 ? '<div class="empty-state">No meetings recorded for this trainee yet</div>' : ''}${trMeetings.slice(0,5).map(m => `<div style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border)"><div style="font-size:12px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;margin-bottom:8px">${m.date}</div>${m.notes ? `<div style="font-size:12px;color:var(--accent-light);margin-bottom:8px"><strong>Notes:</strong> ${esc(m.notes)}</div>` : ''}<div class="transcript-box" style="max-height:150px">${m.transcript ? esc(m.transcript) : '<div class="transcript-empty">No transcript</div>'}</div></div>`).join('')}</div><button class="btn-danger" style="width:100%;" onclick="removeTrainee(${tr.id})">Remove Trainee</button>`;
 }
 
-// ── MODALS ──
 function openRecordModal() {
   document.getElementById('m-meet-trainees').value = '';
   document.getElementById('m-meet-notes').value = '';
@@ -477,7 +334,6 @@ function openRecordModal() {
   document.getElementById('record-btn').style.display = 'block';
   document.getElementById('stop-btn').style.display = 'none';
   document.getElementById('record-btn').classList.remove('recording');
-  
   document.getElementById('record-meeting-modal').classList.add('open');
   document.getElementById('m-meet-trainees').focus();
 }
@@ -490,13 +346,10 @@ function closeRecordModal() {
 function saveMeeting() {
   const trainees = document.getElementById('m-meet-trainees').value.trim();
   const notes = document.getElementById('m-meet-notes').value.trim();
-  
   if (!trainees) {
     alert('Please enter trainee names');
     return;
   }
-  
-  // Parse trainee names and map to IDs
   const traineeNames = trainees.split(',').map(n => n.trim());
   const traineesArray = [];
   traineeNames.forEach(name => {
@@ -507,7 +360,6 @@ function saveMeeting() {
     }
     traineesArray.push(tr.id);
   });
-  
   STATE.meetings.push({
     id: STATE.noteId++,
     date: TODAY_DISPLAY,
@@ -516,20 +368,45 @@ function saveMeeting() {
     notes,
     transcript: currentTranscript.trim(),
   });
-  
   save();
   updateNav();
   closeRecordModal();
   showPage('meetings');
 }
 
-
+function openYaakovModal() {
+  document.getElementById('m-yak-date').value = TODAY;
+  document.getElementById('m-yak-time').value = '';
+  document.getElementById('m-yak-notes').value = '';
+  document.getElementById('m-yak-trainees').value = '';
+  document.getElementById('yaakov-meeting-modal').classList.add('open');
+  document.getElementById('m-yak-notes').focus();
+}
 
 function closeYaakovModal() {
   document.getElementById('yaakov-meeting-modal').classList.remove('open');
 }
 
-
+function saveYaakovMeeting() {
+  const date = document.getElementById('m-yak-date').value;
+  const time = document.getElementById('m-yak-time').value;
+  const notes = document.getElementById('m-yak-notes').value.trim();
+  const trainees = document.getElementById('m-yak-trainees').value.trim();
+  if (!notes) {
+    alert('What did Yaakov say?');
+    return;
+  }
+  STATE.yaakovMeetings.push({
+    id: STATE.noteId++,
+    date,
+    time: time || '',
+    notes,
+    trainees,
+  });
+  save();
+  closeYaakovModal();
+  showPage('yaakov');
+}
 
 function removeTrainee(id) {
   if (!confirm('Remove this trainee?')) return;
@@ -539,7 +416,19 @@ function removeTrainee(id) {
   showPage('home');
 }
 
-// ── DATA EXPORT/IMPORT ──
+function addTrainee() {
+  const name = prompt('Enter trainee name:');
+  if (!name || !name.trim()) return;
+  STATE.trainees.push({
+    id: STATE.traineeId++,
+    name: name.trim(),
+  });
+  save();
+  updateNav();
+  const newId = STATE.traineeId - 1;
+  showPage('trainee-' + newId);
+}
+
 function exportData() {
   const dataStr = JSON.stringify(STATE, null, 2);
   const dataBlob = new Blob([dataStr], {type: 'application/json'});
@@ -567,13 +456,12 @@ function importData() {
     alert('Please select a file');
     return;
   }
-  
   const reader = new FileReader();
   reader.onload = (e) => {
     try {
       const imported = JSON.parse(e.target.result);
       STATE = imported;
-      localStorage.setItem('coaching_v4', JSON.stringify(STATE));
+      localStorage.setItem('coaching_v5', JSON.stringify(STATE));
       document.getElementById('save-indicator').textContent = 'imported ✓';
       closeImportModal();
       updateNav();
@@ -586,22 +474,9 @@ function importData() {
   reader.readAsText(file);
 }
 
-// ── INIT ──
 load();
-
 const sidebar = document.getElementById('sidebar');
-sidebar.innerHTML = `
-  <div class="sidebar-section">Navigation</div>
-  ${['home','yaakov','meetings','coaching'].map(id => {
-    const labels = {home:'Home',yaakov:'Yaakov',meetings:'Meetings',coaching:'Coaching'};
-    return `<div class="sidebar-item ${currentPage === id ? 'active' : ''}" onclick="showPage('${id}')">${labels[id]}</div>`;
-  }).join('')}
-  <div class="sidebar-section" style="margin-top:16px">Trainees</div>
-  ${STATE.trainees.map(t => `
-    <div class="sidebar-item ${currentPage === 'trainee-'+t.id ? 'active' : ''}" onclick="showPage('trainee-${t.id}')">${esc(t.name)}</div>
-  `).join('')}
-`;
-
+sidebar.innerHTML = `<div class="sidebar-section">Navigation</div>${['home','yaakov','calendar','meetings'].map(id => {const labels = {home:'Home',yaakov:'Yaakov',calendar:'Calendar',meetings:'Meetings'};return `<div class="sidebar-item ${currentPage === id ? 'active' : ''}" onclick="showPage('${id}')">${labels[id]}</div>`;}).join('')}<div class="sidebar-section" style="margin-top:16px">Trainees</div>${STATE.trainees.map(t => `<div class="sidebar-item ${currentPage === 'trainee-'+t.id ? 'active' : ''}" onclick="showPage('trainee-${t.id}')">${esc(t.name)}</div>`).join('')}<div class="sidebar-item sidebar-add" onclick="addTrainee()">+ add trainee</div>`;
 showPage('home');
 window.addEventListener('beforeunload', save);
 </script>
