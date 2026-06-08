@@ -8,20 +8,9 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg-dark:#0f0e0b;
-  --bg-card:#1a1815;
-  --bg-hover:#242118;
-  --border:#2a261f;
-  --text:#e8e4db;
-  --text-dim:#9a9187;
-  --accent:#d4a574;
-  --accent-light:#e8c5a0;
-  --accent-dark:#8b6f47;
-  --green:#6fb583;
-  --red:#c97070;
-  --blue:#7ba8d1;
-  --amber:#d4a574;
-  --purple:#b8a8d1;
+  --bg-dark:#0f0e0b;--bg-card:#1a1815;--bg-hover:#242118;--border:#2a261f;
+  --text:#e8e4db;--text-dim:#9a9187;--accent:#d4a574;--accent-light:#e8c5a0;
+  --accent-dark:#8b6f47;--green:#6fb583;--red:#c97070;--blue:#7ba8d1;--purple:#b8a8d1;
 }
 html,body{height:100%;margin:0;padding:0;background:var(--bg-dark);color:var(--text);font-family:'Outfit',sans-serif;font-size:15px;line-height:1.6;overflow:hidden}
 .app{display:flex;height:100vh;flex-direction:column}
@@ -74,18 +63,46 @@ textarea{resize:vertical;min-height:80px}
 .btn-record.recording{background:var(--red);animation:pulse-bg .6s infinite}
 @keyframes pulse-bg{0%,100%{opacity:1}50%{opacity:.8}}
 .empty-state{text-align:center;padding:20px;color:var(--text-dim);font-size:13px}
+.del-btn{background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:14px;padding:4px 8px;border-radius:4px;transition:all .15s}
+.del-btn:hover{color:var(--red);background:rgba(201,112,112,.1)}
+/* CALENDAR GRID */
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.cal-month-label{font-size:18px;font-weight:700;color:var(--accent-light)}
+.cal-nav-btns{display:flex;gap:8px}
+.cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:6px}
+.cal-weekday{text-align:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-dim);padding:4px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cal-cell{min-height:80px;background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;padding:6px;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;gap:3px;overflow:hidden}
+.cal-cell:hover{border-color:var(--accent)}
+.cal-cell.empty{background:transparent;border:none;cursor:default}
+.cal-cell.today{border-color:var(--accent);background:rgba(212,165,116,.12)}
+.cal-cell.has-activity{background:rgba(123,168,209,.08)}
+.cal-cell.selected{border-color:var(--accent);border-width:2px}
+.cal-day-num{font-size:12px;font-weight:700;color:var(--text)}
+.cal-names{font-size:9px;color:var(--blue);line-height:1.3;word-break:break-word}
+.cal-yaakov-tag{font-size:8px;color:var(--accent);font-weight:700}
+.cal-dot{width:5px;height:5px;border-radius:50%;background:var(--blue);display:inline-block}
+.day-detail{margin-top:20px}
 .day-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px}
 .day-date{font-size:16px;font-weight:700;color:var(--accent-light);margin-bottom:14px}
 .day-section{margin-bottom:16px}
 .day-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-dim);margin-bottom:8px}
-.day-item{background:var(--bg-dark);padding:12px;border-radius:6px;margin-bottom:8px;font-size:12px;line-height:1.5;border-left:3px solid var(--accent)}
+.day-item{background:var(--bg-dark);padding:12px;border-radius:6px;margin-bottom:8px;font-size:12px;line-height:1.5;border-left:3px solid var(--accent);display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
 .day-item.meeting{border-left-color:var(--blue)}
 .day-item-meta{font-size:10px;color:var(--text-dim);margin-bottom:4px}
+.day-item-body{flex:1;min-width:0}
+.note-card{background:var(--bg-dark);border-left:3px solid var(--accent);padding:12px;border-radius:6px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.note-card-body{flex:1;min-width:0}
+.note-date{font-size:10px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;margin-bottom:4px}
+.note-assign{font-size:11px;padding:3px 8px;background:var(--border);border:none;color:var(--text-dim);border-radius:4px;cursor:pointer;margin-top:6px}
+.note-assign:hover{background:var(--accent);color:var(--bg-dark)}
+.quick-btn{position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:50%;background:var(--accent);color:var(--bg-dark);border:none;font-size:26px;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(212,165,116,.3);z-index:50}
+.quick-btn:hover{transform:scale(1.1)}
 ::-webkit-scrollbar{width:8px}
 ::-webkit-scrollbar-track{background:var(--bg-dark)}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
-::-webkit-scrollbar-thumb:hover{background:var(--text-dim)}
 .badge{display:inline-block;font-size:10px;background:var(--red);color:#fff;padding:2px 6px;border-radius:3px;font-weight:600;margin-left:6px}
+.badge-amber{background:var(--accent);color:var(--bg-dark)}
 </style>
 </head>
 <body>
@@ -107,23 +124,71 @@ textarea{resize:vertical;min-height:80px}
   </div>
 </div>
 
-
+<div class="modal-overlay" id="record-meeting-modal">
+  <div class="modal-box">
+    <div class="modal-title">🎙️ Record / Log Meeting</div>
+    <label class="modal-label">Trainee(s)</label>
+    <input type="text" id="m-meet-trainees" placeholder="Cameron, Joshua, Astra">
+    <label class="modal-label">Date</label>
+    <input type="date" id="m-meet-date">
+    <label class="modal-label">Notes (optional)</label>
+    <textarea id="m-meet-notes" placeholder="Any context — what you're working on with them today..."></textarea>
+    <div style="margin:16px 0;padding:16px;background:var(--bg-dark);border-radius:8px;border:1px solid var(--border)">
+      <div style="font-weight:600;color:var(--accent-light);margin-bottom:14px">Capture Method</div>
+      <div style="display:flex;gap:12px;margin-bottom:16px">
+        <button id="method-live-btn" class="btn-secondary" style="flex:1;background:var(--accent);color:var(--bg-dark)" onclick="switchMethod('live')">🎙️ Live Recording</button>
+        <button id="method-paste-btn" class="btn-secondary" style="flex:1" onclick="switchMethod('paste')">📋 Paste Transcript</button>
+      </div>
+      <div id="method-live" style="display:block">
+        <div style="font-size:12px;color:var(--text-dim);margin-bottom:8px">Records your mic with live transcription. Keeps going through pauses until you stop.</div>
+        <div id="recording-status" class="recording-status">Ready to record</div>
+        <div style="display:flex;gap:8px;margin-bottom:12px">
+          <button class="btn-record" id="record-btn" onclick="startRecording()">● Record</button>
+          <button class="btn-secondary" id="stop-btn" onclick="stopRecording()" style="display:none">⏹ Stop</button>
+        </div>
+        <div id="transcript-display" class="transcript-box"><div class="transcript-empty">Transcript will appear here...</div></div>
+      </div>
+      <div id="method-paste" style="display:none">
+        <div style="font-size:12px;color:var(--text-dim);margin-bottom:8px">Paste from Sell Me This Pen, Otter.ai, Audacity, or anywhere else.</div>
+        <textarea id="paste-transcript" style="width:100%;min-height:150px" placeholder="Paste your transcript here..."></textarea>
+      </div>
+    </div>
+    <div class="modal-buttons">
+      <button class="btn-secondary" onclick="closeRecordModal()">cancel</button>
+      <button class="btn-primary" onclick="saveMeeting()">save meeting</button>
+    </div>
+  </div>
+</div>
 
 <div class="modal-overlay" id="yaakov-meeting-modal">
   <div class="modal-box">
     <div class="modal-title">🎯 Yaakov Meeting</div>
-    <p style="font-size:12px;color:var(--text-dim);margin-bottom:14px">Log direction from Yaakov anytime</p>
+    <p style="font-size:12px;color:var(--text-dim);margin-bottom:14px">Log direction from Yaakov anytime during the day</p>
     <label class="modal-label">Date</label>
     <input type="date" id="m-yak-date">
     <label class="modal-label">Time (optional)</label>
     <input type="time" id="m-yak-time">
     <label class="modal-label">What Yaakov said / direction</label>
-    <textarea id="m-yak-notes" placeholder="What does he want done? Any focus areas? Issues to address?"></textarea>
+    <textarea id="m-yak-notes" placeholder="Who to focus on? What does he want done? Any issues to address?"></textarea>
     <label class="modal-label">Trainees mentioned (optional)</label>
     <input type="text" id="m-yak-trainees" placeholder="Cameron, Joshua, Astra">
     <div class="modal-buttons">
       <button class="btn-secondary" onclick="closeYaakovModal()">cancel</button>
       <button class="btn-primary" onclick="saveYaakovMeeting()">log it</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="quick-note-modal">
+  <div class="modal-box">
+    <div class="modal-title">💭 Quick Thought</div>
+    <p style="font-size:12px;color:var(--text-dim);margin-bottom:14px">Jot it down now, assign it later. Write down lead names, reminders, anything.</p>
+    <textarea id="m-note-text" style="min-height:100px" placeholder="What's on your mind?"></textarea>
+    <label class="modal-label">Assign to trainee (optional)</label>
+    <select id="m-note-trainee"><option value="">— leave unassigned —</option></select>
+    <div class="modal-buttons">
+      <button class="btn-secondary" onclick="closeQuickNote()">cancel</button>
+      <button class="btn-primary" onclick="saveQuickNote()">save</button>
     </div>
   </div>
 </div>
@@ -140,6 +205,8 @@ textarea{resize:vertical;min-height:80px}
   </div>
 </div>
 
+<button class="quick-btn" onclick="openQuickNote()" title="Quick thought">+</button>
+
 <script>
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 let recognition = null;
@@ -153,260 +220,355 @@ if (SpeechRecognition) {
   recognition.lang = 'en-US';
   recognition.onstart = () => {
     isRecording = true;
-    document.getElementById('recording-status').textContent = '🔴 Recording...';
+    document.getElementById('recording-status').textContent = '🔴 Recording... (keeps going through pauses)';
     document.getElementById('record-btn').classList.add('recording');
     document.getElementById('record-btn').style.display = 'none';
     document.getElementById('stop-btn').style.display = 'block';
   };
   recognition.onresult = (event) => {
-    let interimTranscript = '';
+    let interim = '';
     for (let i = event.resultIndex; i < event.results.length; i++) {
-      const transcript = event.results[i][0].transcript;
-      if (event.results[i].isFinal) {
-        currentTranscript += transcript + ' ';
-      } else {
-        interimTranscript += transcript;
-      }
+      const t = event.results[i][0].transcript;
+      if (event.results[i].isFinal) currentTranscript += t + ' ';
+      else interim += t;
     }
-    const display = currentTranscript + interimTranscript;
+    const display = currentTranscript + interim;
     document.getElementById('transcript-display').innerHTML = display ? `<div>${esc(display)}</div>` : '<div class="transcript-empty">Transcript will appear here...</div>';
   };
-
+  recognition.onend = () => { if (isRecording) recognition.start(); };
   recognition.onerror = (event) => {
-    document.getElementById('recording-status').textContent = 'Error: ' + event.error;
+    if (event.error !== 'no-speech') document.getElementById('recording-status').textContent = 'Error: ' + event.error;
   };
 }
 
 function startRecording() {
-  if (!recognition) {
-    alert('Speech recognition not supported in your browser. Try Chrome, Edge, or Safari.');
-    return;
-  }
+  if (!recognition) { alert('Speech recognition needs Chrome, Edge, or Safari.'); return; }
   currentTranscript = '';
   document.getElementById('transcript-display').innerHTML = '<div class="transcript-empty">Listening...</div>';
   recognition.start();
 }
+function stopRecording() {
+  if (recognition) {
+    isRecording = false;
+    recognition.stop();
+    document.getElementById('recording-status').textContent = 'Recording stopped';
+    document.getElementById('record-btn').classList.remove('recording');
+    document.getElementById('record-btn').style.display = 'block';
+    document.getElementById('stop-btn').style.display = 'none';
+  }
+}
 
-
-
-let STATE = {
-  trainees: [],
-  meetings: [],
-  yaakovMeetings: [],
-  noteId: 1,
-  traineeId: 1,
-};
-
+let STATE = { trainees: [], meetings: [], yaakovMeetings: [], notes: [], noteId: 1, traineeId: 1 };
 const NOW = new Date();
 const TODAY = NOW.toISOString().slice(0,10);
 const TODAY_DISPLAY = NOW.toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'});
+const MONTHS_FULL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const WEEKDAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+let calMonth = NOW.getMonth();
+let calYear = NOW.getFullYear();
+let selectedCalKey = null;
 
 function load() {
-  try {
-    const saved = localStorage.getItem('coaching_v5');
-    if (saved) STATE = JSON.parse(saved);
-  } catch(e) {}
+  try { const s = localStorage.getItem('coaching_v6'); if (s) STATE = JSON.parse(s); } catch(e){}
   if (!STATE.trainees) STATE.trainees = [];
   if (!STATE.meetings) STATE.meetings = [];
   if (!STATE.yaakovMeetings) STATE.yaakovMeetings = [];
+  if (!STATE.notes) STATE.notes = [];
   document.getElementById('save-indicator').textContent = 'loaded';
 }
-
 function save() {
-  try {
-    localStorage.setItem('coaching_v5', JSON.stringify(STATE));
-    document.getElementById('save-indicator').textContent = 'saved';
-  } catch(e) {
-    document.getElementById('save-indicator').textContent = 'error';
-  }
+  try { localStorage.setItem('coaching_v6', JSON.stringify(STATE)); document.getElementById('save-indicator').textContent = 'saved'; }
+  catch(e) { document.getElementById('save-indicator').textContent = 'error'; }
 }
-
-function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function initials(n) { return n.trim().split(/\s+/).map(w => w[0]).join('').toUpperCase().slice(0,2); }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function dateOf(item){
+  if (item.dateKey){ const [y,m,d]=item.dateKey.split('-').map(Number); return new Date(y,m-1,d); }
+  const parsed = new Date(item.date); return isNaN(parsed) ? null : parsed;
+}
+function keyFromDate(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
 
 let currentPage = 'home';
-
-function showPage(name) {
+function showPage(name){
   currentPage = name;
-  const content = document.getElementById('content');
-  content.innerHTML = renderPage(name);
+  document.getElementById('content').innerHTML = renderPage(name);
   updateNav();
+  buildSidebar();
 }
-
-function updateNav() {
+function updateNav(){
   const nav = document.getElementById('nav-buttons');
-  const items = [
-    {id:'home',label:'Home'},
-    {id:'yaakov',label:'Yaakov'},
-    {id:'calendar',label:'Calendar'},
-    {id:'meetings',label:'Meetings'},
-  ];
+  const items = [{id:'home',label:'Home'},{id:'calendar',label:'Calendar'},{id:'yaakov',label:'Yaakov'},{id:'meetings',label:'Meetings'}];
   STATE.trainees.forEach(t => items.push({id:'trainee-'+t.id,label:t.name}));
-  nav.innerHTML = items.map(item => `<button class="nav-btn ${currentPage === item.id ? 'active' : ''}" onclick="showPage('${item.id}')">${esc(item.label)}</button>`).join('');
+  nav.innerHTML = items.map(i => `<button class="nav-btn ${currentPage===i.id?'active':''}" onclick="showPage('${i.id}')">${esc(i.label)}</button>`).join('');
 }
-
-function renderPage(name) {
-  if (name === 'home') return renderHome();
-  if (name === 'yaakov') return renderYaakovPage();
-  if (name === 'calendar') return renderCalendarPage();
-  if (name === 'meetings') return renderMeetingsPage();
-  if (name.startsWith('trainee-')) {
-    const id = parseInt(name.split('-')[1]);
-    const tr = STATE.trainees.find(t => t.id === id);
-    return tr ? renderTraineeDetail(tr) : '<div class="empty-state">Trainee not found</div>';
-  }
+function renderPage(name){
+  if (name==='home') return renderHome();
+  if (name==='calendar') return renderCalendarPage();
+  if (name==='yaakov') return renderYaakovPage();
+  if (name==='meetings') return renderMeetingsPage();
+  if (name.startsWith('trainee-')){ const id=parseInt(name.split('-')[1]); const tr=STATE.trainees.find(t=>t.id===id); return tr?renderTraineeDetail(tr):'<div class="empty-state">Not found</div>'; }
   return '';
 }
 
-function renderHome() {
-  const todayYaakov = STATE.yaakovMeetings.filter(y => y.date === TODAY);
-  const todayMeetings = STATE.meetings.filter(m => m.date === TODAY).length;
-  return `<h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">📊 Today's Workflow</h1><div class="split-section"><div class="card"><div class="card-title">🎯 Yaakov${todayYaakov.length > 0 ? ` (${todayYaakov.length})` : ''}</div>${todayYaakov.length > 0 ? `<div style="font-size:12px;line-height:1.6;color:var(--text)">${todayYaakov.map(y => `<div style="margin-bottom:12px;padding:10px;background:var(--bg-dark);border-radius:6px;border-left:3px solid var(--accent)">${y.time ? `<div style="font-size:11px;color:var(--text-dim);margin-bottom:4px">⏰ ${y.time}</div>` : ''}<div>${esc(y.notes.slice(0,80))}${y.notes.length > 80 ? '...' : ''}</div></div>`).join('')}</div>` : '<div class="empty-state">Not logged yet</div>'}<button class="btn-secondary" style="width:100%;margin-top:12px" onclick="openYaakovModal()">+ log meeting</button></div><div class="card"><div class="card-title">🎙️ Meetings Today<span class="badge">${todayMeetings}</span></div><button class="btn-primary" style="width:100%" onclick="openRecordModal()">+ record meeting</button><button class="btn-secondary" style="width:100%;margin-top:8px" onclick="showPage('meetings')">view all</button></div></div>`;
+function renderHome(){
+  const todayYak = STATE.yaakovMeetings.filter(y => { const d=dateOf(y); return d && keyFromDate(d)===TODAY; });
+  const todayMeet = STATE.meetings.filter(m => { const d=dateOf(m); return d && keyFromDate(d)===TODAY; });
+  const unassigned = STATE.notes.filter(n => !n.traineeId);
+  return `<h1 style="font-size:24px;font-weight:700;margin-bottom:8px;color:var(--accent-light)">📊 Today's Workflow</h1>
+    <div style="font-size:13px;color:var(--text-dim);margin-bottom:24px">${TODAY_DISPLAY}</div>
+    <div class="split-section">
+      <div class="card">
+        <div class="card-title">🎯 Yaakov${todayYak.length?` (${todayYak.length})`:''}</div>
+        ${todayYak.length?todayYak.map(y=>`<div style="margin-bottom:10px;padding:10px;background:var(--bg-dark);border-radius:6px;border-left:3px solid var(--accent)">${y.time?`<div style="font-size:11px;color:var(--text-dim);margin-bottom:4px">⏰ ${y.time}</div>`:''}<div style="font-size:12px">${esc(y.notes.slice(0,90))}${y.notes.length>90?'...':''}</div></div>`).join(''):'<div class="empty-state">Not logged yet</div>'}
+        <button class="btn-secondary" style="width:100%;margin-top:10px" onclick="openYaakovModal()">+ log Yaakov meeting</button>
+      </div>
+      <div class="card">
+        <div class="card-title">🎙️ Trainee Meetings<span class="badge ${todayMeet.length?'badge-amber':''}">${todayMeet.length}</span></div>
+        ${todayMeet.length?todayMeet.map(m=>`<div style="margin-bottom:8px;padding:8px 10px;background:var(--bg-dark);border-radius:6px;border-left:3px solid var(--blue);font-size:12px;font-weight:600;color:var(--accent-light)">${esc(m.trainees)}</div>`).join(''):'<div class="empty-state">None yet today</div>'}
+        <button class="btn-primary" style="width:100%;margin-top:10px" onclick="openRecordModal()">+ record meeting</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">💭 Quick Notes${unassigned.length?`<span class="badge badge-amber">${unassigned.length}</span>`:''}</div>
+      <div style="font-size:12px;color:var(--text-dim);margin-bottom:12px">Unassigned thoughts — assign them to a trainee or clear them</div>
+      ${unassigned.length?unassigned.map(n=>`<div class="note-card"><div class="note-card-body"><div class="note-date">${n.date}</div><div>${esc(n.text)}</div>${STATE.trainees.length?`<select class="note-assign" onchange="assignNote(${n.id},this.value)"><option value="">assign to trainee...</option>${STATE.trainees.map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join('')}</select>`:''}</div><button class="del-btn" onclick="deleteNote(${n.id})">✕</button></div>`).join(''):'<div class="empty-state">No unassigned notes</div>'}
+      <button class="btn-secondary" style="width:100%;margin-top:10px" onclick="openQuickNote()">+ add a thought</button>
+    </div>`;
 }
 
-function renderYaakovPage() {
-  const meetings = STATE.yaakovMeetings.sort((a,b) => new Date(b.date) - new Date(a.date));
-  return `<h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">🎯 Yaakov Meetings</h1><button class="btn-primary" style="margin-bottom:20px" onclick="openYaakovModal()">+ log meeting</button>${meetings.length === 0 ? '<div class="empty-state">No meetings logged yet</div>' : ''}${meetings.map(y => `<div class="card"><div class="card-title">${y.date}${y.time ? `<span style="font-size:12px;color:var(--text-dim);font-weight:400;margin-left:12px">${y.time}</span>` : ''}</div>${y.trainees ? `<div style="font-size:12px;color:var(--text-dim);margin-bottom:8px"><strong>Trainees:</strong> ${esc(y.trainees)}</div>` : ''}<div style="background:var(--bg-dark);padding:12px;border-radius:6px;font-size:13px;line-height:1.6;color:var(--text)">${esc(y.notes)}</div></div>`).join('')}`;
+function renderCalendarPage(){
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
+  let cells = '';
+  for (let i=0;i<firstDay;i++) cells += '<div class="cal-cell empty"></div>';
+  for (let day=1;day<=daysInMonth;day++){
+    const key = calYear+'-'+String(calMonth+1).padStart(2,'0')+'-'+String(day).padStart(2,'0');
+    const dayMeet = STATE.meetings.filter(m=>{const d=dateOf(m);return d&&keyFromDate(d)===key;});
+    const dayYak = STATE.yaakovMeetings.filter(y=>{const d=dateOf(y);return d&&keyFromDate(d)===key;});
+    const isToday = (calYear===NOW.getFullYear()&&calMonth===NOW.getMonth()&&day===NOW.getDate());
+    const hasActivity = dayMeet.length||dayYak.length;
+    const names = dayMeet.map(m=>m.trainees).join(', ');
+    cells += `<div class="cal-cell ${isToday?'today':''} ${hasActivity?'has-activity':''} ${selectedCalKey===key?'selected':''}" onclick="selectCalDay('${key}')">
+      <div class="cal-day-num">${day}</div>
+      ${dayYak.length?`<div class="cal-yaakov-tag">🎯 Yaakov</div>`:''}
+      ${dayMeet.length?`<div class="cal-names">${esc(names.length>40?names.slice(0,40)+'...':names)}</div>`:''}
+    </div>`;
+  }
+  let detail = '';
+  if (selectedCalKey){
+    const dMeet = STATE.meetings.filter(m=>{const d=dateOf(m);return d&&keyFromDate(d)===selectedCalKey;});
+    const dYak = STATE.yaakovMeetings.filter(y=>{const d=dateOf(y);return d&&keyFromDate(d)===selectedCalKey;});
+    const [yy,mm,dd] = selectedCalKey.split('-').map(Number);
+    const label = MONTHS_FULL[mm-1]+' '+dd+', '+yy;
+    detail = `<div class="day-detail"><div class="day-card"><div class="day-date">${label}</div>
+      ${dYak.length?`<div class="day-section"><div class="day-section-title">🎯 Yaakov (${dYak.length})</div>${dYak.map(y=>`<div class="day-item"><div class="day-item-body">${y.time?`<div class="day-item-meta">⏰ ${y.time}</div>`:''}<div>${esc(y.notes)}</div>${y.trainees?`<div class="day-item-meta" style="margin-top:6px">Trainees: ${esc(y.trainees)}</div>`:''}</div><button class="del-btn" onclick="deleteYaakov(${y.id})">✕</button></div>`).join('')}</div>`:''}
+      ${dMeet.length?`<div class="day-section"><div class="day-section-title">🎙️ Trainee Meetings (${dMeet.length})</div>${dMeet.map(m=>`<div class="day-item meeting"><div class="day-item-body"><div style="font-weight:600;color:var(--accent-light);margin-bottom:4px">${esc(m.trainees)}</div>${m.notes?`<div class="day-item-meta">${esc(m.notes)}</div>`:''}${m.transcript?`<div style="background:var(--bg-hover);padding:8px;border-radius:4px;font-size:11px;margin-top:6px;max-height:120px;overflow:auto">${esc(m.transcript.substring(0,300))}${m.transcript.length>300?'...':''}</div>`:''}</div><button class="del-btn" onclick="deleteMeeting(${m.id})">✕</button></div>`).join('')}</div>`:''}
+      ${(!dYak.length&&!dMeet.length)?'<div class="empty-state">Nothing logged this day</div>':''}
+    </div></div>`;
+  }
+  return `<h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">📅 Calendar</h1>
+    <div class="card">
+      <div class="cal-head">
+        <div class="cal-month-label">${MONTHS_FULL[calMonth]} ${calYear}</div>
+        <div class="cal-nav-btns">
+          <button class="btn-secondary" onclick="calPrev()">‹ prev</button>
+          <button class="btn-secondary" onclick="calToday()">today</button>
+          <button class="btn-secondary" onclick="calNext()">next ›</button>
+        </div>
+      </div>
+      <div class="cal-weekdays">${WEEKDAYS.map(w=>`<div class="cal-weekday">${w}</div>`).join('')}</div>
+      <div class="cal-grid">${cells}</div>
+    </div>
+    ${detail}`;
+}
+function calPrev(){ calMonth--; if(calMonth<0){calMonth=11;calYear--;} selectedCalKey=null; showPage('calendar'); }
+function calNext(){ calMonth++; if(calMonth>11){calMonth=0;calYear++;} selectedCalKey=null; showPage('calendar'); }
+function calToday(){ calMonth=NOW.getMonth(); calYear=NOW.getFullYear(); selectedCalKey=TODAY; showPage('calendar'); }
+function selectCalDay(key){ selectedCalKey = (selectedCalKey===key)?null:key; showPage('calendar'); }
+
+function renderYaakovPage(){
+  const meetings = [...STATE.yaakovMeetings].sort((a,b)=>{const da=dateOf(a),db=dateOf(b);return (db?db.getTime():0)-(da?da.getTime():0);});
+  return `<h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">🎯 Yaakov Meetings</h1>
+    <button class="btn-primary" style="margin-bottom:20px" onclick="openYaakovModal()">+ log meeting</button>
+    ${meetings.length===0?'<div class="empty-state">No meetings logged yet</div>':''}
+    ${meetings.map(y=>`<div class="card"><div class="card-title"><span>${y.date}${y.time?` <span style="font-size:12px;color:var(--text-dim);font-weight:400;margin-left:8px">⏰ ${y.time}</span>`:''}</span><button class="del-btn" onclick="deleteYaakov(${y.id})">✕</button></div>${y.trainees?`<div style="font-size:12px;color:var(--text-dim);margin-bottom:8px"><strong>Trainees:</strong> ${esc(y.trainees)}</div>`:''}<div style="background:var(--bg-dark);padding:12px;border-radius:6px;font-size:13px;line-height:1.6;color:var(--text)">${esc(y.notes)}</div></div>`).join('')}`;
 }
 
-function renderCalendarPage() {
-  const dateMap = {};
-  STATE.yaakovMeetings.forEach(y => {
-    if (!dateMap[y.date]) dateMap[y.date] = { yaakov: [], meetings: [] };
-    dateMap[y.date].yaakov.push(y);
+function renderMeetingsPage(){
+  const meetings = [...STATE.meetings].sort((a,b)=>{const da=dateOf(a),db=dateOf(b);return (db?db.getTime():0)-(da?da.getTime():0);});
+  return `<h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">🎙️ Meeting Transcripts</h1>
+    <button class="btn-primary" style="margin-bottom:20px" onclick="openRecordModal()">+ record meeting</button>
+    ${meetings.length===0?'<div class="empty-state">No meetings recorded yet</div>':''}
+    ${meetings.map(m=>`<div class="card"><div class="card-title"><span>${esc(m.trainees)}</span><button class="del-btn" onclick="deleteMeeting(${m.id})">✕</button></div><div style="font-size:11px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;margin-bottom:12px">${m.date}</div>${m.notes?`<div style="background:var(--bg-dark);padding:10px;border-radius:6px;margin-bottom:12px;font-size:12px;color:var(--text-dim)"><strong>Notes:</strong> ${esc(m.notes)}</div>`:''}<div class="transcript-box">${m.transcript?esc(m.transcript):'<div class="transcript-empty">No transcript</div>'}</div></div>`).join('')}`;
+}
+
+function renderTraineeDetail(tr){
+  const trMeetings = STATE.meetings.filter(m=>m.traineesArray&&m.traineesArray.includes(tr.id)).sort((a,b)=>{const da=dateOf(a),db=dateOf(b);return (db?db.getTime():0)-(da?da.getTime():0);});
+  const trNotes = STATE.notes.filter(n=>n.traineeId===tr.id);
+  return `<h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">👤 ${esc(tr.name)}</h1>
+    <div class="card">
+      <div class="card-title">📝 Notes & Names to Review<button class="btn-secondary" onclick="openQuickNoteFor(${tr.id})">+ add</button></div>
+      ${trNotes.length?trNotes.map(n=>`<div class="note-card"><div class="note-card-body"><div class="note-date">${n.date}</div><div>${esc(n.text)}</div></div><button class="del-btn" onclick="deleteNote(${n.id})">✕</button></div>`).join(''):'<div class="empty-state">No notes yet — jot down lead names or coaching points here</div>'}
+    </div>
+    <div class="card">
+      <div class="card-title">🎙️ Meeting History</div>
+      ${trMeetings.length===0?'<div class="empty-state">No meetings recorded yet</div>':''}
+      ${trMeetings.map(m=>`<div style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border)"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div style="font-size:12px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace">${m.date}</div><button class="del-btn" onclick="deleteMeeting(${m.id})">✕</button></div>${m.notes?`<div style="font-size:12px;color:var(--accent-light);margin-bottom:8px"><strong>Notes:</strong> ${esc(m.notes)}</div>`:''}<div class="transcript-box" style="max-height:150px">${m.transcript?esc(m.transcript):'<div class="transcript-empty">No transcript</div>'}</div></div>`).join('')}
+    </div>
+    <button class="btn-danger" style="width:100%" onclick="removeTrainee(${tr.id})">Remove Trainee</button>`;
+}
+
+// MEETING MODAL
+function openRecordModal(){
+  document.getElementById('m-meet-trainees').value='';
+  document.getElementById('m-meet-date').value=TODAY;
+  document.getElementById('m-meet-notes').value='';
+  currentTranscript='';
+  document.getElementById('paste-transcript').value='';
+  document.getElementById('transcript-display').innerHTML='<div class="transcript-empty">Transcript will appear here...</div>';
+  document.getElementById('recording-status').textContent='Ready to record';
+  document.getElementById('record-btn').style.display='block';
+  document.getElementById('stop-btn').style.display='none';
+  document.getElementById('record-btn').classList.remove('recording');
+  switchMethod('live');
+  document.getElementById('record-meeting-modal').classList.add('open');
+  document.getElementById('m-meet-trainees').focus();
+}
+function closeRecordModal(){ if(isRecording)stopRecording(); document.getElementById('record-meeting-modal').classList.remove('open'); }
+function switchMethod(method){
+  const lb=document.getElementById('method-live-btn'),pb=document.getElementById('method-paste-btn');
+  const ld=document.getElementById('method-live'),pd=document.getElementById('method-paste');
+  if(method==='live'){lb.style.background='var(--accent)';lb.style.color='var(--bg-dark)';pb.style.background='var(--border)';pb.style.color='var(--text)';ld.style.display='block';pd.style.display='none';}
+  else{pb.style.background='var(--accent)';pb.style.color='var(--bg-dark)';lb.style.background='var(--border)';lb.style.color='var(--text)';ld.style.display='none';pd.style.display='block';}
+}
+function saveMeeting(){
+  const trainees=document.getElementById('m-meet-trainees').value.trim();
+  const notes=document.getElementById('m-meet-notes').value.trim();
+  const dateInput=document.getElementById('m-meet-date').value || TODAY;
+  if(!trainees){alert('Please enter trainee names');return;}
+  let transcript=currentTranscript.trim();
+  if(document.getElementById('method-live').style.display==='none') transcript=document.getElementById('paste-transcript').value.trim();
+  if(!transcript){alert('Record a meeting or paste a transcript');return;}
+  const [yy,mm,dd]=dateInput.split('-').map(Number);
+  const dispDate=new Date(yy,mm-1,dd).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  const traineesArray=[];
+  trainees.split(',').map(n=>n.trim()).forEach(name=>{
+    if(!name)return;
+    let tr=STATE.trainees.find(t=>t.name.toLowerCase()===name.toLowerCase());
+    if(!tr){tr={id:STATE.traineeId++,name};STATE.trainees.push(tr);}
+    traineesArray.push(tr.id);
   });
-  STATE.meetings.forEach(m => {
-    if (!dateMap[m.date]) dateMap[m.date] = { yaakov: [], meetings: [] };
-    dateMap[m.date].meetings.push(m);
-  });
-  const sortedDates = Object.keys(dateMap).sort().reverse();
-  return `<h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">📅 Calendar & Daily Log</h1>${sortedDates.length === 0 ? '<div class="empty-state">No activity logged yet</div>' : ''}${sortedDates.map(date => {
-    const dayData = dateMap[date];
-    return `<div class="day-card"><div class="day-date">${date}</div>${dayData.yaakov.length > 0 ? `<div class="day-section"><div class="day-section-title">🎯 Yaakov (${dayData.yaakov.length})</div>${dayData.yaakov.map(y => `<div class="day-item">${y.time ? `<div class="day-item-meta">${y.time}</div>` : ''}<div>${esc(y.notes)}</div>${y.trainees ? `<div class="day-item-meta" style="margin-top:6px">Trainees: ${esc(y.trainees)}</div>` : ''}</div>`).join('')}</div>` : ''}${dayData.meetings.length > 0 ? `<div class="day-section"><div class="day-section-title">🎙️ Trainee Meetings (${dayData.meetings.length})</div>${dayData.meetings.map(m => `<div class="day-item meeting"><div style="font-weight:600;color:var(--accent-light);margin-bottom:4px">${esc(m.trainees)}</div>${m.notes ? `<div style="font-size:11px;color:var(--text-dim);margin-bottom:6px">${esc(m.notes)}</div>` : ''}${m.transcript ? `<div style="background:var(--bg-hover);padding:8px;border-radius:4px;font-size:11px;max-height:100px;overflow:hidden">${esc(m.transcript.substring(0,200))}${m.transcript.length > 200 ? '...' : ''}</div>` : ''}</div>`).join('')}</div>` : ''}</div>`;
-  }).join('')}`;
+  STATE.meetings.push({id:STATE.noteId++,date:dispDate,dateKey:dateInput,trainees,traineesArray,notes,transcript});
+  save();updateNav();closeRecordModal();showPage('meetings');
 }
+function deleteMeeting(id){ if(!confirm('Delete this meeting?'))return; STATE.meetings=STATE.meetings.filter(m=>m.id!==id); save();updateNav();showPage(currentPage); }
 
-function renderMeetingsPage() {
-  const meetings = STATE.meetings.sort((a,b) => new Date(b.date) - new Date(a.date));
-  return `<h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">🎙️ Meeting Transcripts</h1><button class="btn-primary" style="margin-bottom:20px" onclick="openRecordModal()">+ record meeting</button>${meetings.length === 0 ? '<div class="empty-state">No meetings recorded yet</div>' : ''}${meetings.map(m => `<div class="card"><div class="card-title">${m.trainees}</div><div style="font-size:11px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;margin-bottom:12px">${m.date}</div>${m.notes ? `<div style="background:var(--bg-dark);padding:10px;border-radius:6px;margin-bottom:12px;font-size:12px;color:var(--text-dim)"><strong>Notes:</strong> ${esc(m.notes)}</div>` : ''}<div class="transcript-box">${m.transcript ? esc(m.transcript) : '<div class="transcript-empty">No transcript</div>'}</div></div>`).join('')}`;
-}
-
-function renderTraineeDetail(tr) {
-  const trMeetings = STATE.meetings.filter(m => m.traineesArray && m.traineesArray.includes(tr.id));
-  return `<h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">👤 ${esc(tr.name)}</h1><div class="card"><div class="card-title">Recent Meetings</div>${trMeetings.length === 0 ? '<div class="empty-state">No meetings recorded for this trainee yet</div>' : ''}${trMeetings.slice(0,5).map(m => `<div style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border)"><div style="font-size:12px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;margin-bottom:8px">${m.date}</div>${m.notes ? `<div style="font-size:12px;color:var(--accent-light);margin-bottom:8px"><strong>Notes:</strong> ${esc(m.notes)}</div>` : ''}<div class="transcript-box" style="max-height:150px">${m.transcript ? esc(m.transcript) : '<div class="transcript-empty">No transcript</div>'}</div></div>`).join('')}</div><button class="btn-danger" style="width:100%;" onclick="removeTrainee(${tr.id})">Remove Trainee</button>`;
-}
-
-
-
-
-
-
-
-function openYaakovModal() {
-  document.getElementById('m-yak-date').value = TODAY;
-  document.getElementById('m-yak-time').value = '';
-  document.getElementById('m-yak-notes').value = '';
-  document.getElementById('m-yak-trainees').value = '';
+// YAAKOV MODAL
+function openYaakovModal(){
+  document.getElementById('m-yak-date').value=TODAY;
+  document.getElementById('m-yak-time').value='';
+  document.getElementById('m-yak-notes').value='';
+  document.getElementById('m-yak-trainees').value='';
   document.getElementById('yaakov-meeting-modal').classList.add('open');
   document.getElementById('m-yak-notes').focus();
 }
+function closeYaakovModal(){ document.getElementById('yaakov-meeting-modal').classList.remove('open'); }
+function saveYaakovMeeting(){
+  const dateInput=document.getElementById('m-yak-date').value||TODAY;
+  const time=document.getElementById('m-yak-time').value;
+  const notes=document.getElementById('m-yak-notes').value.trim();
+  const trainees=document.getElementById('m-yak-trainees').value.trim();
+  if(!notes){alert('What did Yaakov say?');return;}
+  const [yy,mm,dd]=dateInput.split('-').map(Number);
+  const dispDate=new Date(yy,mm-1,dd).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  STATE.yaakovMeetings.push({id:STATE.noteId++,date:dispDate,dateKey:dateInput,time:time||'',notes,trainees});
+  save();closeYaakovModal();showPage('yaakov');
+}
+function deleteYaakov(id){ if(!confirm('Delete this Yaakov meeting?'))return; STATE.yaakovMeetings=STATE.yaakovMeetings.filter(y=>y.id!==id); save();showPage(currentPage); }
 
-function closeYaakovModal() {
-  document.getElementById('yaakov-meeting-modal').classList.remove('open');
+// QUICK NOTES
+let quickNoteTrainee = '';
+function openQuickNote(){
+  quickNoteTrainee='';
+  document.getElementById('m-note-text').value='';
+  const sel=document.getElementById('m-note-trainee');
+  sel.innerHTML='<option value="">— leave unassigned —</option>'+STATE.trainees.map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join('');
+  sel.value='';
+  sel.parentElement.style.display='block';
+  document.getElementById('quick-note-modal').classList.add('open');
+  document.getElementById('m-note-text').focus();
+}
+function openQuickNoteFor(traineeId){
+  openQuickNote();
+  document.getElementById('m-note-trainee').value=String(traineeId);
+}
+function closeQuickNote(){ document.getElementById('quick-note-modal').classList.remove('open'); }
+function saveQuickNote(){
+  const text=document.getElementById('m-note-text').value.trim();
+  if(!text)return;
+  const tid=document.getElementById('m-note-trainee').value;
+  STATE.notes.unshift({id:STATE.noteId++,date:TODAY_DISPLAY,dateKey:TODAY,text,traineeId:tid?parseInt(tid):null});
+  save();closeQuickNote();showPage(currentPage);
+}
+function assignNote(noteId,traineeId){
+  if(!traineeId)return;
+  const n=STATE.notes.find(x=>x.id===noteId);
+  if(n){n.traineeId=parseInt(traineeId);save();showPage(currentPage);}
+}
+function deleteNote(id){ STATE.notes=STATE.notes.filter(n=>n.id!==id); save();showPage(currentPage); }
+
+// TRAINEES
+function addTrainee(){
+  const name=prompt('Enter trainee name:');
+  if(!name||!name.trim())return;
+  STATE.trainees.push({id:STATE.traineeId++,name:name.trim()});
+  save();updateNav();showPage('trainee-'+(STATE.traineeId-1));
+}
+function removeTrainee(id){
+  if(!confirm('Remove this trainee? Their meetings stay in your records.'))return;
+  STATE.trainees=STATE.trainees.filter(t=>t.id!==id);
+  save();updateNav();showPage('home');
 }
 
-function saveYaakovMeeting() {
-  const date = document.getElementById('m-yak-date').value;
-  const time = document.getElementById('m-yak-time').value;
-  const notes = document.getElementById('m-yak-notes').value.trim();
-  const trainees = document.getElementById('m-yak-trainees').value.trim();
-  if (!notes) {
-    alert('What did Yaakov say?');
-    return;
-  }
-  STATE.yaakovMeetings.push({
-    id: STATE.noteId++,
-    date,
-    time: time || '',
-    notes,
-    trainees,
-  });
-  save();
-  closeYaakovModal();
-  showPage('yaakov');
-}
-
-function removeTrainee(id) {
-  if (!confirm('Remove this trainee?')) return;
-  STATE.trainees = STATE.trainees.filter(t => t.id !== id);
-  save();
-  updateNav();
-  showPage('home');
-}
-
-function addTrainee() {
-  const name = prompt('Enter trainee name:');
-  if (!name || !name.trim()) return;
-  STATE.trainees.push({
-    id: STATE.traineeId++,
-    name: name.trim(),
-  });
-  save();
-  updateNav();
-  const newId = STATE.traineeId - 1;
-  showPage('trainee-' + newId);
-}
-
-function exportData() {
-  const dataStr = JSON.stringify(STATE, null, 2);
-  const dataBlob = new Blob([dataStr], {type: 'application/json'});
-  const url = URL.createObjectURL(dataBlob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = `coaching-hub-${new Date().toISOString().slice(0,10)}.json`;
-  link.click();
+// DATA
+function exportData(){
+  const blob=new Blob([JSON.stringify(STATE,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=`coaching-hub-${TODAY}.json`;a.click();
   URL.revokeObjectURL(url);
 }
-
-function openImportModal() {
-  document.getElementById('import-modal').classList.add('open');
-}
-
-function closeImportModal() {
-  document.getElementById('import-modal').classList.remove('open');
-  document.getElementById('import-file').value = '';
-}
-
-function importData() {
-  const fileInput = document.getElementById('import-file');
-  const file = fileInput.files[0];
-  if (!file) {
-    alert('Please select a file');
-    return;
-  }
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    try {
-      const imported = JSON.parse(e.target.result);
-      STATE = imported;
-      localStorage.setItem('coaching_v5', JSON.stringify(STATE));
-      document.getElementById('save-indicator').textContent = 'imported ✓';
-      closeImportModal();
-      updateNav();
-      showPage('home');
-      setTimeout(() => alert('Data imported successfully!'), 200);
-    } catch (err) {
-      alert('Error importing: ' + err.message);
-    }
+function openImportModal(){ document.getElementById('import-modal').classList.add('open'); }
+function closeImportModal(){ document.getElementById('import-modal').classList.remove('open'); document.getElementById('import-file').value=''; }
+function importData(){
+  const file=document.getElementById('import-file').files[0];
+  if(!file){alert('Please select a file');return;}
+  const reader=new FileReader();
+  reader.onload=(e)=>{
+    try{
+      STATE=JSON.parse(e.target.result);
+      if(!STATE.notes)STATE.notes=[];
+      localStorage.setItem('coaching_v6',JSON.stringify(STATE));
+      document.getElementById('save-indicator').textContent='imported ✓';
+      closeImportModal();updateNav();showPage('home');
+      setTimeout(()=>alert('Data imported successfully!'),200);
+    }catch(err){alert('Error importing: '+err.message);}
   };
   reader.readAsText(file);
 }
 
+function buildSidebar(){
+  const sidebar=document.getElementById('sidebar');
+  sidebar.innerHTML=`<div class="sidebar-section">Navigation</div>
+    ${['home','calendar','yaakov','meetings'].map(id=>{const l={home:'Home',calendar:'Calendar',yaakov:'Yaakov',meetings:'Meetings'};return `<div class="sidebar-item ${currentPage===id?'active':''}" onclick="showPage('${id}')">${l[id]}</div>`;}).join('')}
+    <div class="sidebar-section" style="margin-top:16px">Trainees</div>
+    ${STATE.trainees.map(t=>`<div class="sidebar-item ${currentPage==='trainee-'+t.id?'active':''}" onclick="showPage('trainee-${t.id}')">${esc(t.name)}</div>`).join('')}
+    <div class="sidebar-item sidebar-add" onclick="addTrainee()">+ add trainee</div>`;
+}
+
 load();
-const sidebar = document.getElementById('sidebar');
-sidebar.innerHTML = `<div class="sidebar-section">Navigation</div>${['home','yaakov','calendar','meetings'].map(id => {const labels = {home:'Home',yaakov:'Yaakov',calendar:'Calendar',meetings:'Meetings'};return `<div class="sidebar-item ${currentPage === id ? 'active' : ''}" onclick="showPage('${id}')">${labels[id]}</div>`;}).join('')}<div class="sidebar-section" style="margin-top:16px">Trainees</div>${STATE.trainees.map(t => `<div class="sidebar-item ${currentPage === 'trainee-'+t.id ? 'active' : ''}" onclick="showPage('trainee-${t.id}')">${esc(t.name)}</div>`).join('')}<div class="sidebar-item sidebar-add" onclick="addTrainee()">+ add trainee</div>`;
+buildSidebar();
 showPage('home');
-window.addEventListener('beforeunload', save);
+window.addEventListener('beforeunload',save);
 </script>
 </body>
 </html>
