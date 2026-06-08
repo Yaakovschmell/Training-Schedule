@@ -3,1012 +3,768 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MyDay</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Coaching Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#f7f6f3;
-  --bg2:#f0efe9;
-  --surface:#ffffff;
-  --surface2:#faf9f7;
-  --border:#e8e5de;
-  --border2:#d8d4ca;
-  --text:#18160f;
-  --text2:#6e6a5e;
-  --text3:#aaa69a;
-  --green:#1a6b42;
-  --green-bg:#e8f5ee;
-  --green-bd:#b0d8bf;
-  --green-lt:#f0faf4;
-  --amber:#8a5800;
-  --amber-bg:#fff8e6;
-  --amber-bd:#e8c870;
-  --red:#c02828;
-  --red-bg:#fff0f0;
-  --red-bd:#f0b8b8;
-  --blue:#1840a8;
-  --blue-bg:#eef3ff;
-  --blue-bd:#a8bef8;
-  --purple:#6020b8;
-  --purple-bg:#f5eeff;
-  --mono:'JetBrains Mono',monospace;
-  --sans:'Inter',sans-serif;
-  --sh:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
-  --sh-md:0 4px 16px rgba(0,0,0,.08),0 2px 6px rgba(0,0,0,.05);
-  --r:8px;--r-lg:12px;--r-xl:16px;
+  --bg-dark:#0f0e0b;
+  --bg-card:#1a1815;
+  --bg-hover:#242118;
+  --border:#2a261f;
+  --text:#e8e4db;
+  --text-dim:#9a9187;
+  --accent:#d4a574;
+  --accent-light:#e8c5a0;
+  --accent-dark:#8b6f47;
+  --green:#6fb583;
+  --red:#c97070;
+  --blue:#7ba8d1;
+  --amber:#d4a574;
+  --purple:#b8a8d1;
 }
-html,body{height:100%;overflow:hidden}
-body{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
+html,body{height:100%;margin:0;padding:0;background:var(--bg-dark);color:var(--text);font-family:'Outfit',sans-serif;font-size:15px;line-height:1.6;overflow:hidden}
 
-/* ═══ TOPBAR ═══ */
-.topbar{height:54px;background:var(--text);flex-shrink:0;display:flex;align-items:center;padding:0 20px;gap:0;z-index:500}
-.tb-logo{font-size:16px;font-weight:700;color:#fff;letter-spacing:-.4px;margin-right:24px}
-.tb-logo em{color:#4ecb7a;font-style:normal}
-.tb-date{font-family:var(--mono);font-size:11px;color:#666258;margin-right:auto}
-.tb-nav{display:flex;height:54px}
-.tb-btn{height:54px;padding:0 20px;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:#888078;cursor:pointer;border:none;background:none;font-family:var(--sans);border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap}
-.tb-btn:hover{color:#ccc}
-.tb-btn.on{color:#fff;border-bottom-color:#4ecb7a}
-.tb-btn .badge{font-size:10px;font-weight:700;background:#e8a020;color:#fff;padding:1px 6px;border-radius:20px;font-family:var(--mono)}
-.topbar-actions{display:flex;align-items:center;gap:10px;margin-left:16px}
-.save-btn{display:flex;align-items:center;gap:6px;padding:7px 16px;background:#1a6b42;color:#fff;border:none;border-radius:var(--r);font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;transition:background .15s}
-.save-btn:hover{background:#145535}
-.save-st{font-family:var(--mono);font-size:11px;color:#555048}
+.app{display:flex;height:100vh;flex-direction:column}
+.header{height:56px;background:linear-gradient(135deg,#1a1815 0%,#0f0e0b 100%);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;justify-content:space-between;flex-shrink:0;z-index:100}
+.logo{font-size:18px;font-weight:700;letter-spacing:1px;background:linear-gradient(135deg,var(--accent-light),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nav-dots{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.nav-btn{background:none;border:none;color:var(--text-dim);font-size:12px;padding:6px 12px;cursor:pointer;border-radius:6px;transition:all .2s;font-family:'IBM Plex Mono',monospace;font-weight:500}
+.nav-btn:hover{background:var(--border);color:var(--accent)}
+.nav-btn.active{color:var(--accent);background:rgba(212,165,116,.1)}
+.save-ind{font-size:10px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace}
 
-/* ═══ LAYOUT ═══ */
-.app-body{flex:1;display:flex;overflow:hidden}
-.page{display:none;flex:1;overflow:hidden}
-.page.on{display:flex}
+.main{flex:1;display:flex;overflow:hidden}
+.sidebar{width:200px;background:var(--bg-card);border-right:1px solid var(--border);padding:16px 0;overflow-y:auto;flex-shrink:0}
+.sidebar-section{padding:12px 16px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);border-bottom:1px solid var(--border);margin-bottom:4px}
+.sidebar-item{padding:10px 16px;font-size:13px;cursor:pointer;color:var(--text-dim);transition:all .15s;border-left:3px solid transparent;display:flex;align-items:center;gap:8px;justify-content:space-between}
+.sidebar-item:hover{background:var(--bg-hover);color:var(--text)}
+.sidebar-item.active{border-left-color:var(--accent);color:var(--accent);background:rgba(212,165,116,.08)}
+.sidebar-badge{font-size:10px;background:var(--accent);color:var(--bg-dark);padding:2px 6px;border-radius:3px;font-weight:600}
 
-/* ═══ SIDEBAR (shared by checklist + trainees) ═══ */
-.sidebar{width:230px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
-.sidebar-section{padding:14px 12px 6px;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3)}
-.sidebar-link{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:var(--r);cursor:pointer;font-size:13px;font-weight:500;color:var(--text2);border:none;background:none;font-family:var(--sans);width:100%;text-align:left;transition:all .12s}
-.sidebar-link:hover{background:var(--bg);color:var(--text)}
-.sidebar-link.on{background:var(--green-bg);color:var(--green);font-weight:600}
-.sidebar-link .dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0}
-.sidebar-link .pend{margin-left:auto;font-size:10px;font-weight:700;color:var(--amber);font-family:var(--mono)}
-.sidebar-av{width:26px;height:26px;border-radius:50%;background:var(--blue-bg);color:var(--blue);font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--blue-bd)}
-.sidebar-av.ob{background:var(--purple-bg);color:var(--purple);border-color:#c8a8f0}
-.sidebar-footer{padding:12px;margin-top:auto;border-top:1px solid var(--border)}
+.content{flex:1;overflow-y:auto;padding:32px 40px;max-width:1000px}
+.page{display:none}
+.page.active{display:block;animation:fadeIn .25s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-/* ═══ MAIN CONTENT ═══ */
-.main{flex:1;overflow-y:auto;display:flex;flex-direction:column}
-.main-header{padding:22px 28px 0;display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0}
-.main-title{font-size:20px;font-weight:700;letter-spacing:-.4px}
-.main-sub{font-size:13px;color:var(--text3);margin-top:2px}
-.main-body{padding:20px 28px 40px;flex:1}
+/* ── CARDS & SECTIONS ── */
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px}
+.card-title{font-size:14px;font-weight:700;color:var(--accent-light);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.card-action{font-size:12px;color:var(--accent);cursor:pointer;background:none;border:none;font-family:'Outfit',sans-serif;font-weight:500;padding:0}
+.card-action:hover{color:var(--accent-light)}
 
-/* ═══ CHECKLIST PAGE ═══ */
-.cl-grid{display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start}
+/* ── HOME LAYOUT ── */
+.home-three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;margin-bottom:24px}
+.home-two{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px}
+@media(max-width:1200px){.home-three{grid-template-columns:1fr 1fr}.home-two{grid-template-columns:1fr}}
+@media(max-width:900px){.home-three{grid-template-columns:1fr}.home-two{grid-template-columns:1fr}}
 
-/* progress card */
-.prog-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:16px 18px;margin-bottom:18px;box-shadow:var(--sh);display:flex;align-items:center;gap:20px}
-.prog-ring-wrap{position:relative;flex-shrink:0}
-.prog-ring{transform:rotate(-90deg)}
-.prog-ring-bg{fill:none;stroke:var(--border);stroke-width:4}
-.prog-ring-fill{fill:none;stroke:var(--green);stroke-width:4;stroke-linecap:round;transition:stroke-dashoffset .5s cubic-bezier(.4,0,.2,1)}
-.prog-pct-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:600;color:var(--green)}
-.prog-stats{display:flex;gap:24px;flex:1}
-.prog-stat{text-align:center}
-.prog-stat-val{font-size:22px;font-weight:700;font-family:var(--mono);color:var(--text);letter-spacing:-1px}
-.prog-stat-lbl{font-size:11px;color:var(--text3);margin-top:1px}
+.section-box{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:18px}
+.section-title{font-size:14px;font-weight:700;margin-bottom:14px;color:var(--accent-light)}
 
-/* section */
-.sec-hd{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin:16px 0 8px;display:flex;align-items:center;justify-content:space-between}
-.sec-hd:first-child{margin-top:0}
-.sec-hd button{font-size:11px;text-transform:none;letter-spacing:0;font-weight:500;color:var(--text3);background:none;border:none;cursor:pointer;font-family:var(--sans)}
-.sec-hd button:hover{color:var(--red)}
-
-/* check item */
-.ci{display:flex;align-items:flex-start;gap:10px;padding:11px 13px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin-bottom:5px;cursor:pointer;transition:all .1s;user-select:none;box-shadow:var(--sh)}
-.ci:hover{background:var(--surface2);border-color:var(--border2)}
-.ci:hover .x-btn{opacity:1}
-.ci.done{opacity:.45;box-shadow:none}
-.cb{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--border2);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+/* ── CHECKLIST ── */
+.task-group{margin-bottom:18px}
+.task-group-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-dim);margin-bottom:8px;border-bottom:1px solid var(--border);padding-bottom:6px}
+.checklist-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;cursor:pointer;transition:opacity .15s}
+.checklist-item:hover{opacity:.8}
+.cb{width:18px;height:18px;border:1.5px solid var(--border);border-radius:5px;background:var(--bg-dark);cursor:pointer;transition:all .15s;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:2px}
+.cb:hover{border-color:var(--accent)}
 .cb.on{background:var(--green);border-color:var(--green)}
-.cb.on::after{content:'';width:9px;height:6px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translate(1px,-1px);display:block}
-.ci-text{font-size:14px;flex:1;line-height:1.4;word-break:break-word}
-.ci-text.done{text-decoration:line-through;color:var(--text3)}
-.x-btn{opacity:0;background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:2px 4px;border-radius:4px;flex-shrink:0;line-height:1;transition:all .1s}
-.x-btn:hover{color:var(--red);background:var(--red-bg)}
+.cb.on::after{content:'✓';color:#fff;font-size:9px;font-weight:700}
+.checklist-item.done .cb-text{text-decoration:line-through;color:var(--text-dim)}
+.cb-text{flex:1;font-size:13px;line-height:1.4}
 
-/* notes area */
-.notes-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--sh);overflow:hidden}
-.notes-header{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface2)}
-.notes-title{font-size:13px;font-weight:700}
-.notes-area{width:100%;min-height:120px;padding:12px 14px;border:none;outline:none;font-family:var(--sans);font-size:14px;line-height:1.65;color:var(--text);background:var(--surface);resize:none}
-.notes-area::placeholder{color:var(--text3)}
+/* ── TRAINEES ── */
+.trainee-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:rgba(212,165,116,.1);border:1px solid var(--border);border-radius:8px;margin-right:8px;margin-bottom:8px;cursor:pointer;transition:all .2s;font-size:13px}
+.trainee-pill:hover{background:rgba(212,165,116,.2);border-color:var(--accent)}
+.trainee-pill.onboard{background:rgba(184,168,209,.1);border-color:rgba(184,168,209,.3)}
+.trainee-pill.onboard:hover{background:rgba(184,168,209,.2);border-color:var(--purple)}
+.trainee-av{width:24px;height:24px;border-radius:50%;background:var(--accent);color:var(--bg-dark);font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.trainee-av.onboard{background:var(--purple)}
 
-/* one-offs */
-.oo-item{display:flex;align-items:flex-start;gap:10px;padding:10px 13px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin-bottom:5px;cursor:pointer;box-shadow:var(--sh);transition:all .1s}
-.oo-item:hover{background:var(--surface2)}
-.oo-item:hover .x-btn{opacity:1}
-.oo-item.done{opacity:.45}
+/* ── INPUTS ── */
+input[type=text],input[type=date],textarea,select{
+  width:100%;padding:10px 12px;background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;transition:border .15s;margin-bottom:8px
+}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
+textarea{resize:vertical;min-height:80px}
 
-/* remind strip */
-.remind-strip{background:var(--amber-bg);border:1px solid var(--amber-bd);border-radius:var(--r-lg);padding:13px 15px;margin-bottom:18px}
-.rs-hd{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--amber);margin-bottom:8px}
-.rs-item{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-top:1px solid var(--amber-bd)}
-.rs-cb{width:17px;height:17px;border-radius:4px;border:1.5px solid var(--amber-bd);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;background:var(--surface);transition:all .15s;margin-top:1px}
-.rs-cb.on{background:var(--green);border-color:var(--green)}
-.rs-cb.on::after{content:'';width:8px;height:5px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translate(1px,-1px);display:block}
-.rs-text{font-size:13px;color:var(--amber);flex:1}
-.rs-sub{font-size:11px;color:#b07800;font-family:var(--mono);margin-top:1px}
+/* ── BUTTONS ── */
+.btn-primary{padding:10px 16px;background:var(--accent);color:var(--bg-dark);border:none;border-radius:8px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;font-size:13px;transition:all .2s}
+.btn-primary:hover{background:var(--accent-light)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed}
+.btn-secondary{padding:10px 14px;background:var(--border);color:var(--text);border:none;border-radius:8px;font-weight:500;cursor:pointer;font-family:'Outfit',sans-serif;font-size:13px;transition:all .2s}
+.btn-secondary:hover{background:var(--bg-hover)}
+.btn-danger{background:var(--red);color:#fff}
+.btn-danger:hover{background:#a85656}
 
-/* ═══ TRAINEES PAGE ═══ */
-/* uses .sidebar and .main from above */
-.tr-detail{padding:24px 28px 40px;flex:1;overflow-y:auto}
-.no-sel{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--text3);gap:10px;font-size:15px}
+/* ── NOTES INBOX ── */
+.note-card{background:var(--bg-dark);border-left:4px solid var(--accent);padding:14px;border-radius:6px;margin-bottom:10px}
+.note-card.unassigned{border-left-color:var(--amber)}
+.note-date{font-size:10px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;margin-bottom:6px}
+.note-text{font-size:13px;line-height:1.5;margin-bottom:8px;word-break:break-word}
+.note-actions{display:flex;gap:6px;flex-wrap:wrap}
+.note-btn{font-size:11px;padding:4px 8px;background:var(--border);color:var(--text-dim);border:none;border-radius:4px;cursor:pointer;transition:all .15s}
+.note-btn:hover{background:var(--accent);color:var(--bg-dark)}
 
-.td-hdr{display:flex;align-items:flex-start;gap:16px;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--border)}
-.td-av{width:50px;height:50px;border-radius:50%;background:var(--blue-bg);color:var(--blue);font-size:17px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:2px solid var(--blue-bd)}
-.td-av.ob{background:var(--purple-bg);color:var(--purple);border-color:#c8a8f0}
-.td-name{font-size:21px;font-weight:700;letter-spacing:-.4px}
-.td-tags{display:flex;gap:6px;margin-top:5px;flex-wrap:wrap}
-.tag{font-size:11px;padding:2px 9px;border-radius:20px;font-weight:600;font-family:var(--mono)}
-.tag-ob{background:var(--purple-bg);color:var(--purple)}
-.tag-today{background:var(--green-bg);color:var(--green);border:1px solid var(--green-bd)}
-.tag-pend{background:var(--amber-bg);color:var(--amber)}
-.tag-ok{background:var(--green-bg);color:var(--green)}
+/* ── CALENDAR ── */
+.calendar-month{margin-bottom:20px}
+.cal-header{font-size:14px;font-weight:700;color:var(--accent-light);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+.cal-nav{display:flex;gap:8px}
+.cal-nav button{background:var(--border);border:none;color:var(--text-dim);padding:4px 8px;border-radius:4px;cursor:pointer;font-size:11px}
+.cal-nav button:hover{background:var(--accent);color:var(--bg-dark)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:12px}
+.cal-day{aspect-ratio:1;background:var(--bg-dark);border:1px solid var(--border);border-radius:6px;padding:6px;font-size:11px;text-align:center;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.cal-day:hover{border-color:var(--accent)}
+.cal-day.today{border-color:var(--accent);background:rgba(212,165,116,.15)}
+.cal-day.has-meetings{background:rgba(107,181,131,.15)}
+.cal-day-num{font-weight:700}
+.cal-day-count{font-size:9px;color:var(--text-dim)}
 
-/* toggle */
-.sw{display:flex;align-items:center;gap:11px;padding:11px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);cursor:pointer;margin-bottom:20px;transition:all .15s;box-shadow:var(--sh)}
-.sw:hover{border-color:var(--border2)}
-.sw.on{background:var(--green-lt);border-color:var(--green-bd)}
-.sw-pill{width:34px;height:18px;border-radius:20px;background:var(--border2);transition:background .2s;position:relative;flex-shrink:0}
-.sw-pill.on{background:var(--green)}
-.sw-pill::after{content:'';width:12px;height:12px;border-radius:50%;background:#fff;position:absolute;top:3px;left:3px;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
-.sw-pill.on::after{transform:translateX(16px)}
-.sw-lbl{font-size:14px;font-weight:600}
-.sw-hint{font-size:12px;color:var(--text3);margin-left:auto}
+/* ── MEETING LOG ── */
+.meeting-entry{background:var(--bg-dark);border-left:3px solid var(--green);padding:12px;border-radius:6px;margin-bottom:10px;font-size:13px;line-height:1.5}
+.meeting-names{font-weight:600;color:var(--accent-light);margin-bottom:4px}
+.meeting-notes{color:var(--text-dim);margin-bottom:6px;font-size:12px;font-style:italic}
+.meeting-meta{font-size:10px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace}
 
-/* prep */
-.prep-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:22px}
-.prep-item{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 8px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);cursor:pointer;transition:all .15s;box-shadow:var(--sh);text-align:center}
-.prep-item:hover{border-color:var(--border2)}
-.prep-item.on{background:var(--green-lt);border-color:var(--green-bd)}
-.prep-icon{width:28px;height:28px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s}
-.prep-item.on .prep-icon{background:var(--green-bg)}
-.prep-lbl{font-size:11px;font-weight:600;color:var(--text2);line-height:1.3}
-.prep-item.on .prep-lbl{color:var(--green)}
+/* ── TRAINEE DETAIL ── */
+.trainee-header{background:linear-gradient(135deg,rgba(212,165,116,.15),rgba(184,168,209,.1));border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:24px;display:flex;align-items:center;gap:20px}
+.tr-avatar{width:64px;height:64px;border-radius:50%;background:var(--accent);color:var(--bg-dark);font-size:24px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tr-avatar.onboard{background:var(--purple)}
+.tr-info h2{font-size:20px;font-weight:700;margin-bottom:4px}
+.tr-type{font-size:11px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.5px}
 
-/* detail panels */
-.td-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
-.td-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px}
-.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--sh)}
-.panel-hd{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface2)}
-.panel-title{font-size:13px;font-weight:700;display:flex;align-items:center;gap:7px}
-.panel-body{padding:14px}
+.split-section{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+@media(max-width:900px){.split-section{grid-template-columns:1fr}}
 
-/* todo */
-.todo-item{display:flex;align-items:flex-start;gap:9px;padding:9px 10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);margin-bottom:5px;transition:background .1s}
-.todo-item:hover{background:var(--surface2)}
-.todo-cb{width:17px;height:17px;border-radius:4px;border:1.5px solid var(--border2);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;background:var(--surface);margin-top:1px}
-.todo-cb.on{background:var(--green);border-color:var(--green)}
-.todo-cb.on::after{content:'';width:8px;height:5px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translate(1px,-1px);display:block}
-.todo-body{flex:1;min-width:0}
-.todo-text{font-size:13px;line-height:1.4;word-break:break-word}
-.todo-text.done{text-decoration:line-through;color:var(--text3)}
-.todo-meta{display:flex;gap:5px;margin-top:3px;flex-wrap:wrap;align-items:center}
-.rf{font-size:10px;padding:1px 7px;border-radius:20px;font-weight:600;background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-bd)}
-.df{font-size:10px;color:var(--green);font-family:var(--mono)}
-.i-btn{background:none;border:none;color:var(--text3);cursor:pointer;padding:2px 4px;border-radius:4px;font-size:12px;flex-shrink:0;line-height:1;transition:all .1s}
-.i-btn:hover{color:var(--red);background:var(--red-bg)}
-.remind-i-btn{font-size:13px}
+.note-item{background:var(--bg-dark);border-left:3px solid var(--accent);padding:12px;border-radius:6px;margin-bottom:10px;font-size:13px;line-height:1.5}
+.note-item.call{border-left-color:var(--blue)}
+.note-item.todo{border-left-color:var(--green)}
+.note-date-small{font-size:10px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;margin-bottom:4px}
 
-/* call review */
-.call-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px;margin-bottom:6px}
-.call-hdr{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:5px}
-.call-name{font-size:13px;font-weight:600}
-.call-metas{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:2px}
-.ctag{font-size:10px;padding:1px 7px;border-radius:20px;font-weight:600;font-family:var(--mono)}
-.ct-goal{background:var(--blue-bg);color:var(--blue)}
-.ct-neglect{background:var(--red-bg);color:var(--red)}
-.ct-transfer{background:var(--purple-bg);color:var(--purple)}
-.ct-other{background:var(--bg2);color:var(--text2)}
-.call-dur{font-size:10px;color:var(--text3);font-family:var(--mono)}
-.call-notes{font-size:12px;color:var(--text2);line-height:1.55;white-space:pre-wrap;margin-top:4px}
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:24px;width:500px;max-width:90vw;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:16px;color:var(--accent-light)}
+.modal-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-dim);display:block;margin-bottom:6px;margin-top:12px}
+.modal-label:first-of-type{margin-top:0}
+.modal-buttons{display:flex;gap:8px;justify-content:flex-end;margin-top:20px}
 
-/* tip */
-.tip-card{display:flex;align-items:flex-start;gap:8px;padding:9px 11px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);margin-bottom:5px;transition:background .1s}
-.tip-card:hover{background:var(--surface2)}
-.tip-card:hover .i-btn{opacity:1}
-.tip-dot{width:6px;height:6px;border-radius:50%;background:var(--blue);flex-shrink:0;margin-top:6px}
-.tip-text{font-size:13px;color:var(--text2);flex:1;line-height:1.5}
-.tip-card .i-btn{opacity:0}
+/* ── QUICK ADD ── */
+.quick-add-btn{position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:50%;background:var(--accent);color:var(--bg-dark);border:none;font-size:24px;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(212,165,116,.3);z-index:50}
+.quick-add-btn:hover{transform:scale(1.1);box-shadow:0 6px 24px rgba(212,165,116,.4)}
 
-/* meeting */
-.meeting-entry{border:1px solid var(--border);border-radius:var(--r-lg);padding:12px 14px;margin-bottom:8px;background:var(--bg)}
-.me-date{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
-.me-date-lbl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);font-family:var(--mono)}
-.me-notes{font-size:13px;line-height:1.65;white-space:pre-wrap;color:var(--text);margin-bottom:7px}
-.me-acts{border-top:1px solid var(--border);padding-top:8px}
-.me-acts-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:6px}
-.ma-row{display:flex;align-items:flex-start;gap:8px;padding:4px 0}
-.ma-cb{width:16px;height:16px;border-radius:3px;border:1.5px solid var(--border2);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;background:var(--surface);margin-top:2px}
-.ma-cb.on{background:var(--green);border-color:var(--green)}
-.ma-cb.on::after{content:'';width:8px;height:5px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translate(1px,-1px);display:block}
-.ma-text{font-size:13px;flex:1;line-height:1.4}
-.ma-text.done{text-decoration:line-through;color:var(--text3)}
-.pend-hint{font-size:10px;color:var(--amber);font-family:var(--mono);margin-top:1px}
+.empty-state{text-align:center;padding:20px;color:var(--text-dim);font-size:13px}
 
-/* log form */
-.log-toggle{width:100%;padding:9px;background:var(--bg);border:1.5px dashed var(--border2);border-radius:var(--r);font-family:var(--sans);font-size:13px;color:var(--text3);cursor:pointer;margin-bottom:10px;text-align:center;transition:all .15s}
-.log-toggle:hover{border-color:var(--green);color:var(--green)}
-.log-form{background:var(--bg2);border-radius:var(--r-lg);padding:14px;margin-bottom:12px;display:none;border:1px solid var(--border)}
-.log-form.open{display:block}
-.lf-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);display:block;margin-bottom:5px}
-.lf-row{display:flex;gap:7px;margin-top:10px}
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:var(--bg-dark)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:var(--text-dim)}
 
-/* ═══ ALL TODOS PAGE ═══ */
-.all-todos-page{flex:1;overflow-y:auto;padding:24px 28px 40px}
-.at-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
-.at-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--sh)}
-.at-card-hd{padding:11px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;background:var(--surface2)}
-.at-av{width:28px;height:28px;border-radius:50%;background:var(--blue-bg);color:var(--blue);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--blue-bd)}
-.at-av.ob{background:var(--purple-bg);color:var(--purple);border-color:#c8a8f0}
-.at-name{font-size:13px;font-weight:700;flex:1}
-.at-pend{font-size:10px;font-weight:700;color:var(--amber);font-family:var(--mono)}
-.at-card-body{padding:10px 12px}
-.at-item{display:flex;align-items:flex-start;gap:8px;padding:7px 8px;border-radius:var(--r);cursor:pointer;transition:background .1s}
-.at-item:hover{background:var(--bg)}
-.at-cb{width:16px;height:16px;border-radius:3px;border:1.5px solid var(--border2);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;background:var(--surface);margin-top:1px}
-.at-cb.on{background:var(--green);border-color:var(--green)}
-.at-cb.on::after{content:'';width:7px;height:5px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translate(1px,-1px);display:block}
-.at-text{font-size:13px;flex:1;line-height:1.35;word-break:break-word}
-.at-text.done{text-decoration:line-through;color:var(--text3)}
-
-/* ═══ HISTORY PAGE ═══ */
-.hist-page{flex:1;overflow-y:auto;padding:24px 28px 40px}
-.hist-day{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);margin-bottom:14px;overflow:hidden;box-shadow:var(--sh)}
-.hist-day-hd{padding:13px 18px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background .1s}
-.hist-day-hd:hover{background:var(--surface2)}
-.hist-day-date{font-size:14px;font-weight:700}
-.hist-day-stats{display:flex;gap:12px;align-items:center}
-.hist-stat{font-size:12px;color:var(--text3)}
-.hist-stat strong{color:var(--text);font-weight:600}
-.hist-chevron{color:var(--text3);font-size:12px;transition:transform .2s}
-.hist-chevron.open{transform:rotate(180deg)}
-.hist-body{display:none;border-top:1px solid var(--border);padding:14px 18px}
-.hist-body.open{display:block}
-.hist-task{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)}
-.hist-task:last-child{border-bottom:none}
-.hist-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.hist-dot.done{background:var(--green)}
-.hist-dot.undone{background:var(--border2)}
-.hist-task-text{font-size:13px;color:var(--text2);flex:1}
-.hist-task-text.done{color:var(--text)}
-.hist-cat{font-size:10px;padding:1px 7px;border-radius:20px;background:var(--bg2);color:var(--text3);font-family:var(--mono)}
-.hist-notes-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);margin:12px 0 6px}
-.hist-notes-text{font-size:13px;color:var(--text2);line-height:1.65;white-space:pre-wrap;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px}
-
-/* ═══ COACHING LIBRARY PAGE ═══ */
-.lib-page{flex:1;overflow-y:auto;padding:24px 28px 40px;max-width:960px}
-.lib-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-
-/* ═══ SHARED INPUT STYLES ═══ */
-input,select,textarea{font-family:var(--sans);font-size:14px;padding:9px 12px;border:1px solid var(--border2);border-radius:var(--r);background:var(--surface);color:var(--text);outline:none;transition:border-color .15s}
-input:focus,select:focus,textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(26,107,66,.1)}
-input.flex1,textarea.flex1{flex:1}
-select{color:var(--text2);cursor:pointer;font-size:13px}
-textarea{width:100%;resize:vertical;line-height:1.6}
-.add-row{display:flex;gap:7px}
-
-.btn{padding:8px 14px;border:1px solid var(--border);border-radius:var(--r);background:var(--surface);color:var(--text);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--sans);white-space:nowrap;transition:all .12s;display:inline-flex;align-items:center;gap:6px;box-shadow:var(--sh)}
-.btn:hover{background:var(--surface2)}
-.btn-green{background:var(--green);color:#fff;border-color:var(--green);box-shadow:var(--sh)}
-.btn-green:hover{background:#145535}
-.btn-sm{padding:5px 11px;font-size:12px}
-.btn-ghost{background:transparent;border-color:transparent;color:var(--text2);box-shadow:none}
-.btn-ghost:hover{background:var(--bg);border-color:var(--border)}
-.btn-red{background:transparent;border-color:transparent;color:var(--red);box-shadow:none}
-.btn-red:hover{background:var(--red-bg);border-color:var(--red-bd)}
-
-.empty{font-size:13px;color:var(--text3);padding:14px 0;text-align:center}
-.divider{height:1px;background:var(--border);margin:16px 0}
-
-/* ═══ MODAL ═══ */
-.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:900;align-items:center;justify-content:center}
-.modal-bg.open{display:flex}
-.modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:24px;width:440px;max-width:94vw;box-shadow:var(--sh-md)}
-.modal-title{font-size:16px;font-weight:700;margin-bottom:16px}
-.m-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);display:block;margin-bottom:5px;margin-top:12px}
-.m-lbl:first-of-type{margin-top:0}
-.m-input{width:100%;font-size:14px;padding:9px 12px;border:1px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--text);font-family:var(--sans);outline:none}
-.m-input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(26,107,66,.1)}
-.m-row{display:flex;gap:8px;margin-top:16px}
-.m-btn{flex:1;padding:10px;border-radius:var(--r);font-family:var(--sans);font-size:14px;font-weight:600;cursor:pointer;border:1.5px solid transparent}
-.m-save{background:var(--green);color:#fff;border-color:var(--green)}
-.m-save:hover{background:#145535}
-.m-cancel{background:var(--bg);color:var(--text2);border-color:var(--border)}
-.m-cancel:hover{background:var(--bg2)}
-.m-2col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.badge{display:inline-block;font-size:10px;background:var(--accent);color:var(--bg-dark);padding:2px 6px;border-radius:3px;font-weight:600;margin-left:6px}
 </style>
 </head>
 <body>
 
-<!-- TOPBAR -->
-<div class="topbar">
-  <div class="tb-logo">My<em>Day</em></div>
-  <div class="tb-date" id="tb-date"></div>
-  <div class="tb-nav">
-    <button class="tb-btn on" id="tab-cl" onclick="showTab('cl')">Checklist</button>
-    <button class="tb-btn" id="tab-tr" onclick="showTab('tr')">Trainees <span class="badge" id="tr-badge" style="display:none"></span></button>
-    <button class="tb-btn" id="tab-at" onclick="showTab('at')">All To-Dos <span class="badge" id="at-badge" style="display:none"></span></button>
-    <button class="tb-btn" id="tab-hist" onclick="showTab('hist')">History</button>
-    <button class="tb-btn" id="tab-lib" onclick="showTab('lib')">Coaching Library</button>
-  </div>
-  <div class="topbar-actions">
-    <div class="save-st" id="save-st"></div>
-    <button class="save-btn" onclick="saveData()">
-      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-      Save
-    </button>
-  </div>
-</div>
-
-<div class="app-body">
-
-<!-- ═══ CHECKLIST PAGE ═══ -->
-<div class="page on" id="page-cl">
-  <div class="sidebar">
-    <div class="sidebar-section">Categories</div>
-    <button class="sidebar-link on" id="cl-filter-all" onclick="setClFilter('all')">All tasks</button>
-    <button class="sidebar-link" id="cl-filter-review" onclick="setClFilter('review')">📋 Review</button>
-    <button class="sidebar-link" id="cl-filter-agency" onclick="setClFilter('agency')">🏢 Agency</button>
-    <button class="sidebar-link" id="cl-filter-onboard" onclick="setClFilter('onboard')">🆕 Onboarding</button>
-    <button class="sidebar-link" id="cl-filter-other" onclick="setClFilter('other')">📌 Other</button>
-    <div class="sidebar-section" style="margin-top:8px">Actions</div>
-    <button class="sidebar-link" onclick="openAddTask()">＋ Add task</button>
-    <button class="sidebar-link" onclick="resetChecklist()">↺ Reset checklist</button>
-    <div class="sidebar-footer">
-      <div style="font-size:11px;color:var(--text3);line-height:1.5">Resetting moves today's checklist to History and starts fresh.</div>
+<div class="app">
+  <div class="header">
+    <div class="logo">coaching hub</div>
+    <div style="display:flex;align-items:center;gap:16px">
+      <div class="nav-dots" id="nav-buttons"></div>
+      <div class="save-ind" id="save-indicator">saved</div>
     </div>
   </div>
+
   <div class="main">
-    <div class="main-header">
-      <div><div class="main-title">Daily Checklist</div><div class="main-sub" id="cl-date-sub"></div></div>
-    </div>
-    <div class="main-body">
-      <div id="remind-wrap"></div>
-      <div class="cl-grid">
-        <div>
-          <div class="prog-card">
-            <div class="prog-ring-wrap">
-              <svg class="prog-ring" width="60" height="60" viewBox="0 0 60 60">
-                <circle class="prog-ring-bg" cx="30" cy="30" r="26"/>
-                <circle class="prog-ring-fill" id="prog-ring-fill" cx="30" cy="30" r="26" stroke-dasharray="163.4" stroke-dashoffset="163.4"/>
-              </svg>
-              <div class="prog-pct-label" id="prog-pct">0%</div>
-            </div>
-            <div class="prog-stats">
-              <div class="prog-stat"><div class="prog-stat-val" id="stat-done">0</div><div class="prog-stat-lbl">Done</div></div>
-              <div class="prog-stat"><div class="prog-stat-val" id="stat-left">0</div><div class="prog-stat-lbl">Left</div></div>
-              <div class="prog-stat"><div class="prog-stat-val" id="stat-total">0</div><div class="prog-stat-lbl">Total</div></div>
-            </div>
-          </div>
-          <div id="cl-body"></div>
-        </div>
-        <div>
-          <div class="notes-card" style="margin-bottom:16px">
-            <div class="notes-header">
-              <div class="notes-title">📝 Notes for today</div>
-            </div>
-            <textarea class="notes-area" id="daily-notes" placeholder="Jot anything down here — things to remember, observations, follow-ups…" oninput="S.todayNotes=this.value"></textarea>
-          </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-            <div style="font-size:14px;font-weight:700">One-offs &amp; To-Dos</div>
-            <button class="btn btn-sm btn-green" onclick="openAddOO()">+ Add</button>
-          </div>
-          <div id="oo-body"></div>
-        </div>
-      </div>
+    <div class="sidebar" id="sidebar"></div>
+    <div class="content" id="content"></div>
+  </div>
+</div>
+
+<!-- ADD NOTE MODAL -->
+<div class="modal-overlay" id="add-note-modal">
+  <div class="modal-box">
+    <div class="modal-title">➕ Add Note</div>
+    <label class="modal-label">Your note</label>
+    <textarea id="m-note-text" style="width:100%;min-height:100px"></textarea>
+    <label class="modal-label">Category</label>
+    <select id="m-note-cat" style="width:100%">
+      <option value="">--unassigned--</option>
+      <option value="trainee">Trainee coaching</option>
+      <option value="system">System / daily process</option>
+      <option value="agency">Agency business</option>
+      <option value="other">Other</option>
+    </select>
+    <div class="modal-buttons">
+      <button class="btn-secondary" onclick="closeAddNoteModal()">cancel</button>
+      <button class="btn-primary" onclick="saveNewNote()">save</button>
     </div>
   </div>
 </div>
 
-<!-- ═══ TRAINEES PAGE ═══ -->
-<div class="page" id="page-tr">
-  <div class="sidebar">
-    <div class="sidebar-section">Today's meetings</div>
-    <div id="tr-today-nav"></div>
-    <div class="sidebar-section" style="margin-top:6px">All trainees</div>
-    <div id="tr-all-nav"></div>
-    <div style="padding:10px 12px">
-      <button class="btn btn-sm btn-green" style="width:100%;justify-content:center" onclick="openAddTrainee()">+ Add trainee</button>
-    </div>
-  </div>
-  <div class="tr-detail" id="tr-detail">
-    <div class="no-sel">
-      <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--border2)"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
-      Select a trainee
+<!-- LOG MEETING MODAL -->
+<div class="modal-overlay" id="log-meeting-modal">
+  <div class="modal-box">
+    <div class="modal-title">📅 Log Meeting</div>
+    <label class="modal-label">Date</label>
+    <input type="date" id="m-meet-date">
+    <label class="modal-label">Who you met with (names)</label>
+    <input type="text" id="m-meet-names" placeholder="Cameron, Joshua, Astra">
+    <label class="modal-label">What you covered</label>
+    <textarea id="m-meet-notes" style="width:100%;min-height:80px" placeholder="Key points from the meeting..."></textarea>
+    <div class="modal-buttons">
+      <button class="btn-secondary" onclick="closeLogMeetingModal()">cancel</button>
+      <button class="btn-primary" onclick="saveLogMeeting()">log it</button>
     </div>
   </div>
 </div>
 
-<!-- ═══ ALL TO-DOS PAGE ═══ -->
-<div class="page" id="page-at">
-  <div class="all-todos-page">
-    <div class="main-header" style="padding:0 0 20px">
-      <div><div class="main-title">All Trainee To-Dos</div><div class="main-sub">Every open task across all trainees at a glance</div></div>
-      <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text2);cursor:pointer">
-        <input type="checkbox" id="at-show-done" onchange="renderAllTodos()"> Show completed
-      </label>
-    </div>
-    <div class="at-grid" id="at-grid"></div>
-  </div>
-</div>
-
-<!-- ═══ HISTORY PAGE ═══ -->
-<div class="page" id="page-hist">
-  <div class="hist-page">
-    <div class="main-header" style="padding:0 0 20px">
-      <div><div class="main-title">Past Days</div><div class="main-sub">Checklist snapshots saved when you reset</div></div>
-      <button class="btn btn-sm btn-red" onclick="clearHistory()">Clear history</button>
-    </div>
-    <div id="hist-body"></div>
-  </div>
-</div>
-
-<!-- ═══ COACHING LIBRARY PAGE ═══ -->
-<div class="page" id="page-lib">
-  <div class="lib-page">
-    <div class="main-header" style="padding:0 0 20px">
-      <div><div class="main-title">Coaching Library</div><div class="main-sub">Global rules &amp; reminders for all trainees</div></div>
-    </div>
-    <div class="add-row" style="margin-bottom:20px">
-      <input class="flex1" type="text" id="gtip-input" placeholder="Add a rule or reminder…" onkeydown="if(event.key==='Enter')addGTip()">
-      <select id="gtip-cat">
-        <option value="call">Call technique</option>
-        <option value="quote">Quoting</option>
-        <option value="lead">Lead management</option>
-        <option value="general">General</option>
-      </select>
-      <button class="btn btn-green" onclick="addGTip()">Add</button>
-    </div>
-    <div class="lib-grid" id="gtips-body"></div>
-  </div>
-</div>
-
-</div><!-- end app-body -->
-
-<!-- MODAL -->
-<div class="modal-bg" id="modal-bg" onclick="if(event.target===this)hideModal()">
-  <div class="modal" id="modal-box"></div>
-</div>
+<button class="quick-add-btn" onclick="openAddNoteModal()">+</button>
 
 <script>
-/* ─── DATE ─── */
-const DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
-const NOW=new Date();
-const TODAY=NOW.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-const TODAY_KEY=NOW.toISOString().slice(0,10);
-document.getElementById('tb-date').textContent=DAYS[NOW.getDay()]+' · '+MONTHS[NOW.getMonth()]+' '+NOW.getDate()+', '+NOW.getFullYear();
-document.getElementById('cl-date-sub').textContent=TODAY;
+// ── STATE ──
+let STATE = {
+  trainees: [],
+  notes: [],
+  meetings: [],
+  dailyTasks: { trainees: [], system: [], agency: [] },
+  noteId: 1,
+  traineeId: 1,
+};
 
-/* ─── DEFAULTS ─── */
-const DEF_TASKS=[
-  {cat:'review',text:'Aaron Loves Me folder — Cameron, Joshua, Astra'},
-  {cat:'review',text:'Call transcripts for today\'s trainees'},
-  {cat:'review',text:'Texts for today\'s trainees'},
-  {cat:'review',text:'Quotes — make sure everything done correctly'},
-  {cat:'review',text:'Talk time, transfers & call counts for everyone'},
-  {cat:'review',text:'Neglected quotes'},
-  {cat:'agency',text:'Ricochet — cross-reference & mark sold policies'},
-  {cat:'agency',text:'DASH reports — verify subproducer codes'},
-  {cat:'agency',text:'Should Have Closed folder — clear non-closable leads, ensure everyone has a follow-up task'},
-  {cat:'onboard',text:'Check in with new hires / onboarding progress'},
-  {cat:'other',text:'Tech issues / anything that came up'},
-];
-const DEF_GTIPS=[
-  {cat:'call',text:'Start assumptively — confirm, don\'t ask. "I have you listed as married, is that correct?"'},
-  {cat:'call',text:'Confirm in sets of 2 — always confirm more than one thing at a time and explain why'},
-  {cat:'call',text:'Acknowledge prior confirmation: "I know you already confirmed your info, I\'m going to run through it real quick to make sure I have all your discounts correct"'},
-  {cat:'call',text:'Overcome objections — don\'t accept the first one. Don\'t be too pushy or they hang up'},
-  {cat:'call',text:'Home objection: "My system makes me run through it but I can take it off at the end and show you what it looks like without it if you want"'},
-  {cat:'call',text:'Don\'t ask why they\'re shopping. No question for PD. Don\'t say "down payment"'},
-  {cat:'quote',text:'Always run auto quote in both named insured names if it\'s a higher IS score'},
-  {cat:'quote',text:'Girlfriend and boyfriend are considered married'},
-  {cat:'quote',text:'Not required to ask about other drivers listed — just ask if any other drivers need to be on the policy'},
-  {cat:'quote',text:'Waiving PIP is a last resort option'},
-  {cat:'quote',text:'Rental car coverage starts at 200'},
-  {cat:'quote',text:'Renters gets 15k not 20k'},
-  {cat:'lead',text:'All quoted leads go into the Aaron Loves Me folder'},
-  {cat:'lead',text:'All quoted hot leads go into the Should Have Closed folder'},
-  {cat:'lead',text:'Every follow-up needs a text'},
-  {cat:'lead',text:'Go through Should Have Closed — get rid of non-closable/cold leads, make sure everyone has a follow-up task'},
-];
+const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const NOW = new Date();
+const TODAY = NOW.toISOString().slice(0,10);
+const TODAY_DISPLAY = `${MONTHS[NOW.getMonth()]} ${NOW.getDate()}, ${NOW.getFullYear()}`;
 
-/* ─── STATE ─── */
-let S={tasks:[],oneoffs:[],trainees:[],gtips:[],history:[],todayNotes:'',nid:1,init:false};
-let activeTr=null,clFilter='all';
+// ── LOAD/SAVE ──
+function load() {
+  try {
+    const saved = localStorage.getItem('coaching_v2');
+    if (saved) STATE = JSON.parse(saved);
+  } catch(e) {}
+  
+  if (!STATE.trainees) STATE.trainees = [];
+  if (!STATE.notes) STATE.notes = [];
+  if (!STATE.meetings) STATE.meetings = [];
+  if (!STATE.dailyTasks) STATE.dailyTasks = { trainees: [], system: [], agency: [] };
+  
+  document.getElementById('save-indicator').textContent = 'loaded';
+}
 
-/* ─── PERSIST ─── */
-function load(){
-  try{
-    const d=localStorage.getItem('myday_v7');
-    if(d){S=JSON.parse(d);document.getElementById('save-st').textContent='Loaded ✓';}
-  }catch(e){}
-  if(!S.init){
-    DEF_TASKS.forEach(t=>S.tasks.push({id:S.nid++,text:t.text,cat:t.cat,done:false}));
-    DEF_GTIPS.forEach(t=>S.gtips.push({id:S.nid++,text:t.text,cat:t.cat}));
-    S.history=S.history||[];
-    S.todayNotes=S.todayNotes||'';
-    S.init=true;
+function save() {
+  try {
+    localStorage.setItem('coaching_v2', JSON.stringify(STATE));
+    document.getElementById('save-indicator').textContent = 'saved';
+  } catch(e) {
+    document.getElementById('save-indicator').textContent = 'error';
   }
-  if(!S.history) S.history=[];
-  if(!S.todayNotes) S.todayNotes='';
-  document.getElementById('daily-notes').value=S.todayNotes||'';
-}
-function saveData(){
-  S.todayNotes=document.getElementById('daily-notes').value;
-  try{
-    localStorage.setItem('myday_v7',JSON.stringify(S));
-    document.getElementById('save-st').textContent='Saved '+NOW.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-  }catch(e){document.getElementById('save-st').textContent='Save failed';}
 }
 
-/* ─── UTILS ─── */
-function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function initials(n){return n.trim().split(/\s+/).map(w=>w[0]).join('').toUpperCase().slice(0,2);}
-function showTab(t){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('.tb-btn').forEach(b=>b.classList.remove('on'));
-  document.getElementById('page-'+t).classList.add('on');
-  document.getElementById('tab-'+t).classList.add('on');
-  if(t==='at') renderAllTodos();
-  if(t==='hist') renderHistory();
-  if(t==='lib') renderGTips();
-}
-function showModal(html){document.getElementById('modal-box').innerHTML=html;document.getElementById('modal-bg').classList.add('open');}
-function hideModal(){document.getElementById('modal-bg').classList.remove('open');}
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function initials(n) { return n.trim().split(/\s+/).map(w => w[0]).join('').toUpperCase().slice(0,2); }
 
-/* ─── CHECKLIST ─── */
-const CATS={review:'Review',agency:'Agency',onboard:'Onboarding',other:'Other'};
-const CATS_EMOJI={review:'📋',agency:'🏢',onboard:'🆕',other:'📌'};
-const CAT_ORD=['review','agency','onboard','other'];
+// ── NAVIGATION ──
+let currentPage = 'home';
 
-function setClFilter(f){
-  clFilter=f;
-  CAT_ORD.concat(['all']).forEach(c=>{const el=document.getElementById('cl-filter-'+c);if(el)el.classList.toggle('on',c===f);});
-  renderCL();
+function showPage(name) {
+  currentPage = name;
+  const content = document.getElementById('content');
+  content.innerHTML = renderPage(name);
+  updateNav();
 }
 
-function openAddTask(){
-  showModal(`<div class="modal-title">Add checklist task</div>
-    <label class="m-lbl">Task</label>
-    <input class="m-input" id="m-t-text" placeholder="What needs to be done?" onkeydown="if(event.key==='Enter')doAddTask()">
-    <label class="m-lbl">Category</label>
-    <select class="m-input" id="m-t-cat">
-      <option value="review">Review</option><option value="agency">Agency</option>
-      <option value="onboard">Onboarding</option><option value="other">Other</option>
-    </select>
-    <div class="m-row"><button class="m-btn m-save" onclick="doAddTask()">Add</button><button class="m-btn m-cancel" onclick="hideModal()">Cancel</button></div>`);
-  setTimeout(()=>document.getElementById('m-t-text').focus(),60);
-}
-function doAddTask(){
-  const txt=document.getElementById('m-t-text').value.trim();if(!txt)return;
-  S.tasks.push({id:S.nid++,text:txt,cat:document.getElementById('m-t-cat').value,done:false});
-  hideModal();renderCL();
-}
-function toggleTask(id){const t=S.tasks.find(x=>x.id===id);if(t)t.done=!t.done;renderCL();}
-function delTask(id){S.tasks=S.tasks.filter(x=>x.id!==id);renderCL();}
-
-function resetChecklist(){
-  if(!confirm('Save today\'s checklist to History and reset?')) return;
-  S.history=S.history||[];
-  S.history.unshift({
-    date:TODAY,key:TODAY_KEY,
-    tasks:S.tasks.map(t=>({...t})),
-    notes:document.getElementById('daily-notes').value
-  });
-  S.tasks.forEach(t=>t.done=false);
-  document.getElementById('daily-notes').value='';
-  S.todayNotes='';
-  renderCL();
-  alert('Saved to History. Checklist reset!');
+function updateNav() {
+  const nav = document.getElementById('nav-buttons');
+  const items = [
+    {id:'home',label:'Home'},
+    {id:'notes',label:'Notes',count:STATE.notes.filter(n=>!n.traineeId).length},
+    {id:'calendar',label:'Calendar'},
+    {id:'yaakov',label:'Yaakov'},
+  ];
+  STATE.trainees.forEach(t => items.push({id:'trainee-'+t.id,label:t.name}));
+  
+  nav.innerHTML = items.map(item => `
+    <button class="nav-btn ${currentPage === item.id ? 'active' : ''}" onclick="showPage('${item.id}')">
+      ${esc(item.label)}
+      ${item.count ? `<span style="font-size:10px;color:var(--accent)">${item.count}</span>` : ''}
+    </button>
+  `).join('');
 }
 
-function renderCL(){
-  const all=S.tasks;
-  const visible=clFilter==='all'?all:all.filter(t=>t.cat===clFilter);
-  const tot=all.length,dn=all.filter(t=>t.done).length;
-  const pct=tot?Math.round(dn/tot*100):0;
-  const circ=163.4;
-  document.getElementById('prog-pct').textContent=pct+'%';
-  document.getElementById('prog-ring-fill').style.strokeDashoffset=circ-(circ*pct/100);
-  document.getElementById('stat-done').textContent=dn;
-  document.getElementById('stat-left').textContent=tot-dn;
-  document.getElementById('stat-total').textContent=tot;
-
-  const todo=visible.filter(t=>!t.done),done=visible.filter(t=>t.done);
-  let html='';
-  if(clFilter==='all'){
-    CAT_ORD.forEach(cat=>{
-      const items=todo.filter(t=>t.cat===cat);if(!items.length)return;
-      html+=`<div class="sec-hd">${CATS_EMOJI[cat]} ${CATS[cat]}</div>`;
-      html+=items.map(t=>ciHTML(t)).join('');
-    });
-  } else {
-    html+=todo.map(t=>ciHTML(t)).join('');
+function renderPage(name) {
+  if (name === 'home') return renderHome();
+  if (name === 'notes') return renderNotesInbox();
+  if (name === 'calendar') return renderCalendar();
+  if (name === 'yaakov') return renderYaakov();
+  if (name.startsWith('trainee-')) {
+    const id = parseInt(name.split('-')[1]);
+    const tr = STATE.trainees.find(t => t.id === id);
+    return tr ? renderTraineeDetail(tr) : '<div class="empty-state">Trainee not found</div>';
   }
-  if(done.length){
-    html+=`<div class="sec-hd" style="margin-top:18px">Done <button onclick="clearDoneTasks()">Clear</button></div>`;
-    html+=done.map(t=>ciHTML(t)).join('');
-  }
-  if(!visible.length) html='<div class="empty">No tasks</div>';
-  document.getElementById('cl-body').innerHTML=html;
-  renderRemind();
+  return '';
 }
 
-function ciHTML(t){
-  return`<div class="ci${t.done?' done':''}" onclick="toggleTask(${t.id})">
-    <div class="cb${t.done?' on':''}"></div>
-    <div class="ci-text${t.done?' done':''}">${esc(t.text)}</div>
-    <button class="x-btn" onclick="event.stopPropagation();delTask(${t.id})">✕</button>
-  </div>`;
-}
-function clearDoneTasks(){S.tasks=S.tasks.filter(t=>!t.done);renderCL();}
-
-/* ─── ONE-OFFS ─── */
-function openAddOO(){
-  showModal(`<div class="modal-title">Add one-off task</div>
-    <label class="m-lbl">Task</label>
-    <input class="m-input" id="m-oo" placeholder="e.g. Call Vincent at 11 re: Slack" onkeydown="if(event.key==='Enter')doAddOO()">
-    <div class="m-row"><button class="m-btn m-save" onclick="doAddOO()">Add</button><button class="m-btn m-cancel" onclick="hideModal()">Cancel</button></div>`);
-  setTimeout(()=>document.getElementById('m-oo').focus(),60);
-}
-function doAddOO(){const txt=document.getElementById('m-oo').value.trim();if(!txt)return;S.oneoffs.push({id:S.nid++,text:txt,done:false});hideModal();renderOO();}
-function toggleOO(id){const t=S.oneoffs.find(x=>x.id===id);if(t)t.done=!t.done;renderOO();}
-function delOO(id){S.oneoffs=S.oneoffs.filter(x=>x.id!==id);renderOO();}
-function clearDoneOO(){S.oneoffs=S.oneoffs.filter(x=>!x.done);renderOO();}
-function renderOO(){
-  const todo=S.oneoffs.filter(t=>!t.done),dn=S.oneoffs.filter(t=>t.done);
-  let html='';
-  if(!S.oneoffs.length) html='<div class="empty" style="text-align:left">Nothing yet</div>';
-  html+=todo.map(t=>`<div class="oo-item" onclick="toggleOO(${t.id})"><div class="cb"></div><div class="ci-text">${esc(t.text)}</div><button class="x-btn" onclick="event.stopPropagation();delOO(${t.id})">✕</button></div>`).join('');
-  if(dn.length){
-    html+=`<div class="sec-hd">Done <button onclick="clearDoneOO()">Clear</button></div>`;
-    html+=dn.map(t=>`<div class="oo-item done" onclick="toggleOO(${t.id})"><div class="cb on"></div><div class="ci-text done">${esc(t.text)}</div><button class="x-btn" onclick="event.stopPropagation();delOO(${t.id})">✕</button></div>`).join('');
-  }
-  document.getElementById('oo-body').innerHTML=html;
-}
-
-/* ─── REMIND STRIP ─── */
-function renderRemind(){
-  const pending=[];
-  S.trainees.forEach(tr=>(tr.todos||[]).filter(td=>td.remind&&!td.done).forEach(td=>pending.push({tr,td})));
-  const el=document.getElementById('remind-wrap');
-  if(!pending.length){el.innerHTML='';return;}
-  el.innerHTML=`<div class="remind-strip">
-    <div class="rs-hd"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-    ${pending.length} trainee follow-up${pending.length!==1?'s':''} — check if they did it</div>
-    ${pending.map(({tr,td})=>`<div class="rs-item">
-      <div class="rs-cb${td.done?' on':''}" onclick="toggleTodoGlobal(${tr.id},${td.id})"></div>
-      <div style="flex:1"><div class="rs-text">${esc(td.text)}</div><div class="rs-sub">${esc(tr.name)}</div></div>
-    </div>`).join('')}
-  </div>`;
-}
-function toggleTodoGlobal(tid,tdid){
-  const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;
-  const td=tr.todos.find(x=>x.id===tdid);if(td)td.done=!td.done;
-  renderCL();renderAllTodosIfVisible();if(activeTr===tid)renderDetail(tid);renderTrNav();
-}
-
-/* ─── TRAINEES ─── */
-const PREP=[
-  {key:'calls',label:'Calls & transcripts',icon:'📞'},
-  {key:'texts',label:'Texts',icon:'💬'},
-  {key:'quotes',label:'Quotes',icon:'📄'},
-  {key:'leadmgr',label:'Lead manager',icon:'🎯'},
-  {key:'talktime',label:'Talk time',icon:'⏱'},
-];
-function pendCount(tr){return(tr.todos||[]).filter(t=>t.remind&&!t.done).length;}
-
-function openAddTrainee(){
-  showModal(`<div class="modal-title">Add trainee</div>
-    <label class="m-lbl">Name</label>
-    <input class="m-input" id="m-tr-name" placeholder="e.g. Cameron" onkeydown="if(event.key==='Enter')doAddTrainee()">
-    <label class="m-lbl">Type</label>
-    <select class="m-input" id="m-tr-type"><option value="trainee">Trainee</option><option value="onboard">New hire / onboarding</option></select>
-    <div class="m-row"><button class="m-btn m-save" onclick="doAddTrainee()">Add</button><button class="m-btn m-cancel" onclick="hideModal()">Cancel</button></div>`);
-  setTimeout(()=>document.getElementById('m-tr-name').focus(),60);
-}
-function doAddTrainee(){
-  const name=document.getElementById('m-tr-name').value.trim();if(!name)return;
-  S.trainees.push({id:S.nid++,name,type:document.getElementById('m-tr-type').value,todayMeeting:false,prep:{},calls:[],todos:[],meetings:[],tips:[]});
-  hideModal();renderTrNav();
-}
-
-function renderTrNav(){
-  const today=S.trainees.filter(t=>t.todayMeeting),others=S.trainees.filter(t=>!t.todayMeeting);
-  const totalPend=S.trainees.reduce((s,t)=>s+pendCount(t),0);
-  const b=document.getElementById('tr-badge');b.style.display=totalPend?'':'none';b.textContent=totalPend;
-  const b2=document.getElementById('at-badge');
-  const allTodos=S.trainees.reduce((s,t)=>s+(t.todos||[]).filter(td=>!td.done).length,0);
-  b2.style.display=allTodos?'':'none';b2.textContent=allTodos;
-  const mkBtn=t=>{const pc=pendCount(t);return`<button class="sidebar-link${activeTr===t.id?' on':''}" onclick="selectTr(${t.id})">
-    <div class="sidebar-av${t.type==='onboard'?' ob':''}">${initials(t.name)}</div>
-    <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px">${esc(t.name)}</span>
-    ${t.todayMeeting?'<span class="dot"></span>':''}
-    ${pc?`<span class="pend">${pc}</span>`:''}
-  </button>`;};
-  document.getElementById('tr-today-nav').innerHTML=today.length?today.map(mkBtn).join(''):'<div style="font-size:11px;color:var(--text3);padding:4px 12px">None flagged</div>';
-  document.getElementById('tr-all-nav').innerHTML=S.trainees.length?others.map(mkBtn).join(''):'<div style="font-size:11px;color:var(--text3);padding:4px 12px">No trainees yet</div>';
-}
-
-function selectTr(id){activeTr=id;renderTrNav();renderDetail(id);}
-
-function renderDetail(id){
-  const tr=S.trainees.find(x=>x.id===id);
-  const el=document.getElementById('tr-detail');
-  if(!tr){el.innerHTML='<div class="no-sel"><svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--border2)"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Select a trainee</div>';return;}
-  const pc=pendCount(tr);
-  const tags=[];
-  if(tr.type==='onboard') tags.push(`<span class="tag tag-ob">Onboarding</span>`);
-  if(tr.todayMeeting) tags.push(`<span class="tag tag-today">Meeting today</span>`);
-  tags.push(pc?`<span class="tag tag-pend">${pc} follow-up${pc!==1?'s':''}</span>`:`<span class="tag tag-ok">All clear</span>`);
-  const prepDone=PREP.filter(p=>(tr.prep||{})[p.key]).length;
-
-  /* todos */
-  const todos=tr.todos||[];
-  const todoHTML=`<div class="panel">
-    <div class="panel-hd"><div class="panel-title">📋 Their To-Do List</div><button class="btn btn-sm btn-green" onclick="openAddTodo(${tr.id})">+ Add</button></div>
-    <div class="panel-body">
-      ${todos.length?todos.map(td=>`<div class="todo-item">
-        <div class="todo-cb${td.done?' on':''}" onclick="toggleTodo(${tr.id},${td.id})"></div>
-        <div class="todo-body">
-          <div class="todo-text${td.done?' done':''}">${esc(td.text)}</div>
-          <div class="todo-meta">
-            ${td.remind&&!td.done?'<span class="rf">⚑ Follow-up</span>':''}
-            ${td.done?'<span class="df">✓ Done</span>':''}
+// ── HOME PAGE ──
+function renderHome() {
+  const todayTrainees = STATE.trainees.filter(t => t.todayMeeting);
+  const unassignedNotes = STATE.notes.filter(n => !n.traineeId).length;
+  const pendingTodos = STATE.dailyTasks.trainees.filter(t => !t.done).length +
+                       STATE.dailyTasks.system.filter(t => !t.done).length +
+                       STATE.dailyTasks.agency.filter(t => !t.done).length;
+  
+  return `
+    <h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">Today's View</h1>
+    
+    <div class="home-three">
+      <div class="section-box">
+        <div class="section-title">👥 Meeting Today</div>
+        ${todayTrainees.length > 0 ? todayTrainees.map(t => `
+          <div class="trainee-pill ${t.type === 'onboard' ? 'onboard' : ''}" onclick="showPage('trainee-${t.id}')">
+            <div class="trainee-av ${t.type === 'onboard' ? 'onboard' : ''}">${initials(t.name)}</div>
+            ${esc(t.name)}
           </div>
+        `).join('') : '<div style="color:var(--text-dim);font-size:13px">No meetings scheduled</div>'}
+        <button class="btn-secondary" style="width:100%;margin-top:12px" onclick="editTodayMeetings()">edit schedule</button>
+      </div>
+      
+      <div class="section-box">
+        <div class="section-title">📝 Quick Notes<span class="badge">${unassignedNotes}</span></div>
+        <div style="font-size:12px;color:var(--text-dim);margin-bottom:12px">Unassigned notes waiting</div>
+        ${unassignedNotes > 0 ? `<button class="btn-primary" style="width:100%" onclick="showPage('notes')">assign them</button>` : '<div class="empty-state" style="padding:12px 0">All caught up!</div>'}
+      </div>
+      
+      <div class="section-box">
+        <div class="section-title">✅ To-Do's<span class="badge">${pendingTodos}</span></div>
+        <div style="font-size:12px;color:var(--text-dim);margin-bottom:12px">Tasks pending today</div>
+        <button class="btn-primary" style="width:100%" onclick="showPage('home');document.getElementById('tasks-anchor').scrollIntoView()">view tasks</button>
+      </div>
+    </div>
+
+    <div id="tasks-anchor"></div>
+    <h2 style="font-size:18px;font-weight:700;margin-bottom:16px;margin-top:32px;color:var(--accent-light)">Today's Tasks</h2>
+    
+    <div class="home-two">
+      <div class="card">
+        <div class="card-title">With Trainees</div>
+        ${renderTaskGroup(STATE.dailyTasks.trainees, 'trainee')}
+        <input type="text" placeholder="Add task..." onkeydown="if(event.key==='Enter'){addTask('trainees',this.value);this.value='';}">
+      </div>
+      
+      <div class="card">
+        <div class="card-title">System / Process</div>
+        ${renderTaskGroup(STATE.dailyTasks.system, 'system')}
+        <input type="text" placeholder="Add task..." onkeydown="if(event.key==='Enter'){addTask('system',this.value);this.value='';}">
+      </div>
+      
+      <div class="card">
+        <div class="card-title">Agency Business</div>
+        ${renderTaskGroup(STATE.dailyTasks.agency, 'agency')}
+        <input type="text" placeholder="Add task..." onkeydown="if(event.key==='Enter'){addTask('agency',this.value);this.value='';}">
+      </div>
+      
+      <div class="card">
+        <div class="card-title">Expectations / Results</div>
+        <p style="font-size:12px;color:var(--text-dim);margin-bottom:10px">What do you want to see happen today?</p>
+        <textarea id="expect-notes" style="width:100%;min-height:100px" placeholder="Who needs to close what? What metrics matter? Any constraints?"></textarea>
+        <button class="btn-primary" style="width:100%;margin-top:8px" onclick="saveExpectations()">save expectations</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderTaskGroup(tasks, type) {
+  const todo = tasks.filter(t => !t.done);
+  const done = tasks.filter(t => t.done);
+  let html = '';
+  
+  if (todo.length > 0) {
+    html += todo.map(t => `
+      <div class="checklist-item" onclick="toggleTask('${type}',${t.id})">
+        <div class="cb"></div>
+        <div class="cb-text">${esc(t.text)}</div>
+      </div>
+    `).join('');
+  }
+  
+  if (done.length > 0) {
+    html += done.map(t => `
+      <div class="checklist-item done" onclick="toggleTask('${type}',${t.id})">
+        <div class="cb on"></div>
+        <div class="cb-text">${esc(t.text)}</div>
+      </div>
+    `).join('');
+  }
+  
+  if (tasks.length === 0) {
+    html = '<div class="empty-state" style="padding:8px 0">No tasks yet</div>';
+  }
+  
+  return html;
+}
+
+function toggleTask(category, id) {
+  const tasks = STATE.dailyTasks[category];
+  const task = tasks.find(t => t.id === id);
+  if (task) task.done = !task.done;
+  save();
+  showPage('home');
+}
+
+function addTask(category, text) {
+  if (!text.trim()) return;
+  STATE.dailyTasks[category].push({ id: STATE.noteId++, text, done: false });
+  save();
+  showPage('home');
+}
+
+function saveExpectations() {
+  const text = document.getElementById('expect-notes').value;
+  // Could save this somewhere, for now just acknowledge
+  if (text.trim()) {
+    alert('Expectations saved in your notes');
+    document.getElementById('expect-notes').value = '';
+  }
+}
+
+function editTodayMeetings() {
+  let html = '<div class="modal-box"><div class="modal-title">Who are you meeting today?</div>';
+  html += STATE.trainees.map(t => `
+    <label style="display:flex;align-items:center;gap:8px;padding:8px 0;cursor:pointer;font-size:13px">
+      <input type="checkbox" ${t.todayMeeting ? 'checked' : ''} onchange="toggleTodayMeeting(${t.id})">
+      ${esc(t.name)}
+    </label>
+  `).join('');
+  html += '<div class="modal-buttons"><button class="btn-secondary" onclick="closeEditModal()">done</button></div>';
+  html += '</div>';
+  document.getElementById('add-note-modal').innerHTML = html;
+  document.getElementById('add-note-modal').classList.add('open');
+}
+
+function closeEditModal() {
+  document.getElementById('add-note-modal').classList.remove('open');
+  save();
+  showPage('home');
+}
+
+function toggleTodayMeeting(id) {
+  const tr = STATE.trainees.find(t => t.id === id);
+  if (tr) tr.todayMeeting = !tr.todayMeeting;
+  save();
+}
+
+// ── NOTES INBOX ──
+function renderNotesInbox() {
+  const unassigned = STATE.notes.filter(n => !n.traineeId);
+  
+  return `
+    <h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">Unassigned Notes</h1>
+    
+    ${unassigned.length === 0 ? '<div class="empty-state">All notes assigned!</div>' : ''}
+    
+    ${unassigned.map(n => `
+      <div class="note-card unassigned">
+        <div class="note-date">${n.date} • ${n.category || 'unassigned'}</div>
+        <div class="note-text">${esc(n.text)}</div>
+        <div class="note-actions">
+          ${STATE.trainees.length > 0 ? `
+            <select style="font-size:11px;padding:4px 8px;background:var(--border);border:none;color:var(--text-dim);border-radius:4px;cursor:pointer" onchange="assignNoteToTrainee(${n.id},this.value);this.value='';">
+              <option value="">assign to...</option>
+              ${STATE.trainees.map(t => `<option value="${t.id}">${esc(t.name)}</option>`).join('')}
+            </select>
+          ` : ''}
+          <button class="note-btn" onclick="deleteNote(${n.id})">delete</button>
         </div>
-        <button class="i-btn remind-i-btn" onclick="toggleTodoRemind(${tr.id},${td.id})" title="${td.remind?'Remove reminder':'Set reminder'}" style="color:${td.remind?'var(--amber)':'var(--text3)'}">⚑</button>
-        <button class="i-btn" onclick="delTodo(${tr.id},${td.id})">✕</button>
-      </div>`).join(''):'<div class="empty">No items yet</div>'}
-    </div>
-  </div>`;
-
-  /* calls */
-  const callTypeMap={goal:'Goal lead',neglect:'Neglected',transfer:'Transfer',other:'Other'};
-  const callHTML=`<div class="panel">
-    <div class="panel-hd"><div class="panel-title">📞 Call Reviews</div><button class="btn btn-sm btn-green" onclick="openAddCall(${tr.id})">+ Add</button></div>
-    <div class="panel-body">
-      ${(tr.calls||[]).length?(tr.calls).map(c=>`<div class="call-card">
-        <div class="call-hdr"><div>
-          <div class="call-name">${esc(c.name)}</div>
-          <div class="call-metas">${c.type?`<span class="ctag ct-${c.type}">${callTypeMap[c.type]||c.type}</span>`:''}${c.dur?`<span class="call-dur">${esc(c.dur)}</span>`:''}</div>
-        </div><button class="i-btn" onclick="delCall(${tr.id},${c.id})">✕</button></div>
-        ${c.notes?`<div class="call-notes">${esc(c.notes)}</div>`:''}
-      </div>`).join(''):'<div class="empty">No calls yet</div>'}
-    </div>
-  </div>`;
-
-  /* coaching */
-  const tips=tr.tips||[];
-  const tco=['call','quote','lead','general'];
-  const tcm={call:'Call technique',quote:'Quoting',lead:'Lead management',general:'General'};
-  let tipsInner='';
-  tco.forEach(cat=>{const items=tips.filter(t=>t.cat===cat);if(!items.length)return;tipsInner+=`<div class="sec-hd" style="margin-top:${cat==='call'?0:10}px">${tcm[cat]}</div>`;tipsInner+=items.map(t=>`<div class="tip-card"><div class="tip-dot"></div><div class="tip-text">${esc(t.text)}</div><button class="i-btn" onclick="delTraineeTip(${tr.id},${t.id})">✕</button></div>`).join('');});
-  const coachHTML=`<div class="panel">
-    <div class="panel-hd"><div class="panel-title">💡 Coaching Notes</div><button class="btn btn-sm btn-green" onclick="openAddTraineeTip(${tr.id})">+ Add</button></div>
-    <div class="panel-body">${tipsInner||'<div class="empty">No notes yet</div>'}</div>
-  </div>`;
-
-  /* meetings */
-  const meetHTML=`<div class="panel" style="margin-top:16px">
-    <div class="panel-hd"><div class="panel-title">📅 Meeting Log</div></div>
-    <div class="panel-body">
-      <button class="log-toggle" onclick="toggleLogForm(${tr.id})">+ Log a meeting</button>
-      <div class="log-form" id="lf-${tr.id}">
-        <label class="lf-label">What you covered</label>
-        <textarea id="ln-${tr.id}" rows="3" placeholder="Notes from the meeting…" style="margin-bottom:10px"></textarea>
-        <label class="lf-label">Action items — one per line (added to their to-do list)</label>
-        <textarea id="la-${tr.id}" rows="3" placeholder="Go through neglected quotes&#10;Review TM script"></textarea>
-        <label style="display:flex;align-items:center;gap:8px;margin-top:10px;cursor:pointer;font-size:13px;color:var(--text2)">
-          <input type="checkbox" id="la-r-${tr.id}" style="width:auto;padding:0;margin:0"> Set follow-up reminders on all action items
-        </label>
-        <div class="lf-row">
-          <button class="btn btn-sm btn-green" onclick="saveLog(${tr.id})">Save</button>
-          <button class="btn btn-sm btn-ghost" onclick="toggleLogForm(${tr.id})">Cancel</button>
-        </div>
       </div>
-      ${(tr.meetings||[]).length?(tr.meetings).map(m=>{
-        const aHTML=(m.actions||[]).length?`<div class="me-acts"><div class="me-acts-lbl">Action items — check when YOU confirm they did it</div>${m.actions.map(a=>`<div class="ma-row"><div class="ma-cb${a.done?' on':''}" onclick="toggleMeetingAct(${tr.id},${m.id},${a.id})"></div><div style="flex:1"><div class="ma-text${a.done?' done':''}">${esc(a.text)}</div>${!a.done?'<div class="pend-hint">Not confirmed yet</div>':''}</div></div>`).join('')}</div>`:'';
-        return`<div class="meeting-entry"><div class="me-date"><span class="me-date-lbl">${esc(m.date)}</span><button class="btn btn-sm btn-red" onclick="delMeeting(${tr.id},${m.id})">Remove</button></div><div class="me-notes">${esc(m.notes)}</div>${aHTML}</div>`;
-      }).join(''):'<div class="empty">No meetings yet</div>'}
-    </div>
-  </div>`;
-
-  el.innerHTML=`
-    <div class="td-hdr">
-      <div class="td-av${tr.type==='onboard'?' ob':''}">${initials(tr.name)}</div>
-      <div style="flex:1"><div class="td-name">${esc(tr.name)}</div><div class="td-tags">${tags.join('')}</div></div>
-      <button class="btn btn-sm btn-red" onclick="removeTr(${tr.id})">Remove</button>
-    </div>
-    <div class="sw${tr.todayMeeting?' on':''}" onclick="toggleTodayMeeting(${tr.id})">
-      <div class="sw-pill${tr.todayMeeting?' on':''}"></div>
-      <span class="sw-lbl">Meeting today</span>
-      <span class="sw-hint">${tr.todayMeeting?'Flagged ✓':'Toggle if meeting today'}</span>
-    </div>
-    ${tr.todayMeeting?`<div class="sec-hd" style="margin-top:0">Pre-meeting prep (${prepDone}/${PREP.length})</div>
-    <div class="prep-grid">${PREP.map(p=>{const d=(tr.prep||{})[p.key];return`<div class="prep-item${d?' on':''}" onclick="togglePrep(${tr.id},'${p.key}')"><div class="prep-icon">${p.icon}</div><span class="prep-lbl${d?' on':''}">${p.label}</span></div>`;}).join('')}</div>`:''}
-    <div class="td-grid">${todoHTML}${callHTML}</div>
-    ${coachHTML}
-    ${meetHTML}`;
+    `).join('')}
+  `;
 }
 
-function toggleTodayMeeting(id){const t=S.trainees.find(x=>x.id===id);if(t)t.todayMeeting=!t.todayMeeting;renderTrNav();renderDetail(id);}
-function togglePrep(tid,key){const t=S.trainees.find(x=>x.id===tid);if(t){t.prep=t.prep||{};t.prep[key]=!t.prep[key];}renderDetail(tid);}
-function removeTr(id){if(!confirm('Remove this trainee?'))return;S.trainees=S.trainees.filter(x=>x.id!==id);activeTr=null;renderTrNav();document.getElementById('tr-detail').innerHTML='<div class="no-sel">Select a trainee</div>';}
-
-function openAddTodo(tid){
-  showModal(`<div class="modal-title">Add to-do item</div>
-    <label class="m-lbl">Task for them</label>
-    <input class="m-input" id="m-td" placeholder="e.g. Go through neglected quotes" onkeydown="if(event.key==='Enter')doAddTodo(${tid})">
-    <label style="display:flex;align-items:center;gap:9px;margin-top:12px;cursor:pointer;font-size:13px;color:var(--text2)"><input type="checkbox" id="m-td-r" style="width:auto;padding:0;margin:0"> Remind me to follow up</label>
-    <div class="m-row"><button class="m-btn m-save" onclick="doAddTodo(${tid})">Add</button><button class="m-btn m-cancel" onclick="hideModal()">Cancel</button></div>`);
-  setTimeout(()=>document.getElementById('m-td').focus(),60);
-}
-function doAddTodo(tid){
-  const txt=document.getElementById('m-td').value.trim();if(!txt)return;
-  const remind=document.getElementById('m-td-r').checked;
-  const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;
-  tr.todos=tr.todos||[];tr.todos.push({id:S.nid++,text:txt,done:false,remind});
-  hideModal();renderDetail(tid);renderTrNav();renderCL();renderAllTodosIfVisible();
-}
-function toggleTodo(tid,tdid){const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;const td=tr.todos.find(x=>x.id===tdid);if(td)td.done=!td.done;renderDetail(tid);renderTrNav();renderCL();renderAllTodosIfVisible();}
-function toggleTodoRemind(tid,tdid){const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;const td=tr.todos.find(x=>x.id===tdid);if(td)td.remind=!td.remind;renderDetail(tid);renderTrNav();renderCL();renderAllTodosIfVisible();}
-function delTodo(tid,tdid){const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;tr.todos=tr.todos.filter(x=>x.id!==tdid);renderDetail(tid);renderTrNav();renderCL();renderAllTodosIfVisible();}
-
-function openAddCall(tid){
-  showModal(`<div class="modal-title">Add call review</div>
-    <label class="m-lbl">Lead name</label><input class="m-input" id="m-c-name" placeholder="e.g. Paul Parker">
-    <div class="m-2col" style="margin-top:10px">
-      <div><label class="m-lbl" style="margin-top:0">Type</label><select class="m-input" id="m-c-type"><option value="goal">Goal lead</option><option value="neglect">Neglected</option><option value="transfer">Transfer</option><option value="other">Other</option></select></div>
-      <div><label class="m-lbl" style="margin-top:0">Duration</label><input class="m-input" id="m-c-dur" placeholder="e.g. 9 min"></div>
-    </div>
-    <label class="m-lbl">Notes — what they did wrong</label>
-    <textarea class="m-input" id="m-c-notes" rows="3" style="resize:vertical" placeholder="e.g. No rapport, guy said not interested in auto — should have noticed both bundled with Hartford"></textarea>
-    <div class="m-row"><button class="m-btn m-save" onclick="doAddCall(${tid})">Save</button><button class="m-btn m-cancel" onclick="hideModal()">Cancel</button></div>`);
-  setTimeout(()=>document.getElementById('m-c-name').focus(),60);
-}
-function doAddCall(tid){
-  const name=document.getElementById('m-c-name').value.trim();if(!name)return;
-  const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;
-  tr.calls=tr.calls||[];tr.calls.push({id:S.nid++,name,type:document.getElementById('m-c-type').value,dur:document.getElementById('m-c-dur').value.trim(),notes:document.getElementById('m-c-notes').value.trim()});
-  hideModal();renderDetail(tid);
-}
-function delCall(tid,cid){const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;tr.calls=tr.calls.filter(x=>x.id!==cid);renderDetail(tid);}
-
-function openAddTraineeTip(tid){
-  showModal(`<div class="modal-title">Add coaching note</div>
-    <label class="m-lbl">Note</label><input class="m-input" id="m-tip" placeholder="e.g. Needs to work on assumptive close" onkeydown="if(event.key==='Enter')doAddTraineeTip(${tid})">
-    <label class="m-lbl">Category</label><select class="m-input" id="m-tip-cat"><option value="call">Call technique</option><option value="quote">Quoting</option><option value="lead">Lead management</option><option value="general">General</option></select>
-    <div class="m-row"><button class="m-btn m-save" onclick="doAddTraineeTip(${tid})">Add</button><button class="m-btn m-cancel" onclick="hideModal()">Cancel</button></div>`);
-  setTimeout(()=>document.getElementById('m-tip').focus(),60);
-}
-function doAddTraineeTip(tid){
-  const txt=document.getElementById('m-tip').value.trim();if(!txt)return;
-  const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;
-  tr.tips=tr.tips||[];tr.tips.push({id:S.nid++,text:txt,cat:document.getElementById('m-tip-cat').value});
-  hideModal();renderDetail(tid);
-}
-function delTraineeTip(tid,tipid){const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;tr.tips=tr.tips.filter(x=>x.id!==tipid);renderDetail(tid);}
-
-function toggleLogForm(tid){const el=document.getElementById('lf-'+tid);if(el)el.classList.toggle('open');}
-function saveLog(tid){
-  const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;
-  const notes=document.getElementById('ln-'+tid).value.trim();if(!notes){alert('Add notes first.');return;}
-  const raw=document.getElementById('la-'+tid).value.trim();
-  const remind=document.getElementById('la-r-'+tid).checked;
-  const actions=raw?raw.split('\n').filter(x=>x.trim()).map(t=>({id:S.nid++,text:t.trim(),done:false})):[];
-  actions.forEach(a=>{tr.todos=tr.todos||[];tr.todos.push({id:S.nid++,text:a.text,done:false,remind});});
-  tr.meetings=tr.meetings||[];tr.meetings.unshift({id:S.nid++,date:TODAY,notes,actions});
-  tr.prep={};
-  document.getElementById('ln-'+tid).value='';document.getElementById('la-'+tid).value='';
-  document.getElementById('lf-'+tid).classList.remove('open');
-  renderDetail(tid);renderTrNav();renderCL();renderAllTodosIfVisible();
-}
-function delMeeting(tid,mid){const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;tr.meetings=tr.meetings.filter(x=>x.id!==mid);renderDetail(tid);}
-function toggleMeetingAct(tid,mid,aid){
-  const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;
-  const m=tr.meetings.find(x=>x.id===mid);if(!m)return;
-  const a=m.actions.find(x=>x.id===aid);if(a)a.done=!a.done;renderDetail(tid);
+function assignNoteToTrainee(noteId, traineeId) {
+  if (!traineeId) return;
+  const note = STATE.notes.find(n => n.id === noteId);
+  const tr = STATE.trainees.find(t => t.id === parseInt(traineeId));
+  if (note && tr) {
+    note.traineeId = tr.id;
+    tr.notes = tr.notes || [];
+    tr.notes.push({...note});
+    STATE.notes = STATE.notes.filter(n => n.id !== noteId);
+    save();
+    showPage('notes');
+  }
 }
 
-/* ─── ALL TO-DOS ─── */
-function renderAllTodosIfVisible(){if(document.getElementById('page-at').classList.contains('on'))renderAllTodos();}
-function renderAllTodos(){
-  const showDone=document.getElementById('at-show-done').checked;
-  const el=document.getElementById('at-grid');
-  if(!S.trainees.length){el.innerHTML='<div class="empty" style="grid-column:1/-1">No trainees yet</div>';return;}
-  el.innerHTML=S.trainees.map(tr=>{
-    const todos=(tr.todos||[]).filter(td=>showDone||!td.done);
-    const pend=(tr.todos||[]).filter(td=>!td.done).length;
-    return`<div class="at-card">
-      <div class="at-card-hd">
-        <div class="at-av${tr.type==='onboard'?' ob':''}">${initials(tr.name)}</div>
-        <div class="at-name">${esc(tr.name)}</div>
-        ${pend?`<span class="at-pend">${pend} left</span>`:'<span style="font-size:10px;color:var(--green);font-family:var(--mono)">all done</span>'}
-      </div>
-      <div class="at-card-body">
-        ${todos.length?todos.map(td=>`<div class="at-item" onclick="toggleTodoFromAt(${tr.id},${td.id})">
-          <div class="at-cb${td.done?' on':''}"></div>
-          <div class="at-text${td.done?' done':''}">${esc(td.text)}</div>
-          ${td.remind&&!td.done?'<span style="font-size:10px;color:var(--amber)">⚑</span>':''}
-        </div>`).join(''):'<div class="empty" style="text-align:left;padding:8px 0">Nothing here</div>'}
-      </div>
-    </div>`;
-  }).join('');
-}
-function toggleTodoFromAt(tid,tdid){
-  const tr=S.trainees.find(x=>x.id===tid);if(!tr)return;
-  const td=tr.todos.find(x=>x.id===tdid);if(td)td.done=!td.done;
-  renderAllTodos();renderCL();renderTrNav();if(activeTr===tid)renderDetail(tid);
+function deleteNote(id) {
+  STATE.notes = STATE.notes.filter(n => n.id !== id);
+  save();
+  showPage('notes');
 }
 
-/* ─── HISTORY ─── */
-function renderHistory(){
-  const el=document.getElementById('hist-body');
-  if(!S.history||!S.history.length){el.innerHTML='<div class="empty" style="padding:40px 0">No history yet — reset your checklist to save a day</div>';return;}
-  el.innerHTML=S.history.map((day,i)=>{
-    const tot=day.tasks.length,dn=day.tasks.filter(t=>t.done).length;
-    return`<div class="hist-day">
-      <div class="hist-day-hd" onclick="toggleHistDay(${i})">
-        <div class="hist-day-date">${esc(day.date)}</div>
-        <div class="hist-day-stats">
-          <span class="hist-stat"><strong>${dn}</strong>/${tot} done</span>
-          <span class="hist-stat" style="color:${dn===tot?'var(--green)':'var(--amber)'}">${dn===tot?'✓ Complete':'Partial'}</span>
-        </div>
-        <span class="hist-chevron" id="hist-chev-${i}">▼</span>
-      </div>
-      <div class="hist-body" id="hist-body-${i}">
-        ${day.tasks.map(t=>`<div class="hist-task">
-          <div class="hist-dot ${t.done?'done':'undone'}"></div>
-          <div class="hist-task-text ${t.done?'done':''}">${esc(t.text)}</div>
-          <span class="hist-cat">${t.cat}</span>
-        </div>`).join('')}
-        ${day.notes?`<div class="hist-notes-lbl">Notes</div><div class="hist-notes-text">${esc(day.notes)}</div>`:''}
-      </div>
-    </div>`;
-  }).join('');
-}
-function toggleHistDay(i){
-  const body=document.getElementById('hist-body-'+i),chev=document.getElementById('hist-chev-'+i);
-  if(body){body.classList.toggle('open');chev.classList.toggle('open');}
-}
-function clearHistory(){if(!confirm('Clear all history?'))return;S.history=[];renderHistory();}
-
-/* ─── COACHING LIBRARY ─── */
-const GCAT_ORD=['call','quote','lead','general'];
-const GCAT_MAP={call:'📞 Call Technique',quote:'📄 Quoting',lead:'🎯 Lead Management',general:'💡 General'};
-function addGTip(){
-  const txt=document.getElementById('gtip-input').value.trim();if(!txt)return;
-  S.gtips.push({id:S.nid++,text:txt,cat:document.getElementById('gtip-cat').value});
-  document.getElementById('gtip-input').value='';renderGTips();
-}
-function delGTip(id){S.gtips=S.gtips.filter(x=>x.id!==id);renderGTips();}
-function renderGTips(){
-  const el=document.getElementById('gtips-body');
-  let html='';
-  GCAT_ORD.forEach(cat=>{
-    const items=S.gtips.filter(t=>t.cat===cat);if(!items.length)return;
-    html+=`<div class="panel" style="margin-bottom:0"><div class="panel-hd"><div class="panel-title">${GCAT_MAP[cat]}</div></div><div class="panel-body">`;
-    html+=items.map(t=>`<div class="tip-card"><div class="tip-dot"></div><div class="tip-text">${esc(t.text)}</div><button class="i-btn" onclick="delGTip(${t.id})">✕</button></div>`).join('');
-    html+=`</div></div>`;
+// ── CALENDAR ──
+function renderCalendar() {
+  const meetings = STATE.meetings;
+  let html = '<h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">Meeting History</h1>';
+  
+  // Group by date
+  const byDate = {};
+  meetings.forEach(m => {
+    if (!byDate[m.date]) byDate[m.date] = [];
+    byDate[m.date].push(m);
   });
-  el.innerHTML=html||'<div class="empty" style="grid-column:1/-1">No notes yet</div>';
+  
+  const sortedDates = Object.keys(byDate).sort().reverse();
+  
+  if (sortedDates.length === 0) {
+    html += '<div class="empty-state">No meetings logged yet</div><button class="btn-primary" onclick="openLogMeetingModal()">Log a meeting</button>';
+  } else {
+    html += '<button class="btn-primary" style="margin-bottom:20px" onclick="openLogMeetingModal()">+ Log meeting</button>';
+    sortedDates.forEach(date => {
+      html += `<div class="card">
+        <div class="card-title" style="font-size:14px">${date}</div>
+        ${byDate[date].map(m => `
+          <div class="meeting-entry">
+            <div class="meeting-names">Met with: ${esc(m.names)}</div>
+            ${m.notes ? `<div class="meeting-notes">${esc(m.notes)}</div>` : ''}
+            <div class="meeting-meta">logged</div>
+          </div>
+        `).join('')}
+      </div>`;
+    });
+  }
+  
+  return html;
 }
 
-/* ─── INIT ─── */
-load();renderCL();renderOO();renderTrNav();
-window.addEventListener('beforeunload',saveData);
+// ── YAAKOV ──
+function renderYaakov() {
+  return `
+    <h1 style="font-size:24px;font-weight:700;margin-bottom:24px;color:var(--accent-light)">Yaakov Notes & Direction</h1>
+    <div class="card">
+      <div class="card-title">Latest direction from your boss</div>
+      ${STATE.notes.filter(n => n.yaakov).length === 0 ? '<div class="empty-state">No notes yet</div>' : ''}
+      ${STATE.notes.filter(n => n.yaakov).map(n => `
+        <div class="note-card" style="border-left-color:var(--amber)">
+          <div class="note-date">${n.date}</div>
+          <div class="note-text">${esc(n.text)}</div>
+          <button class="note-btn" onclick="deleteNote(${n.id})">delete</button>
+        </div>
+      `).join('')}
+    </div>
+    <div class="card">
+      <div class="card-title">Add direction</div>
+      <textarea id="yaakov-input" style="width:100%;min-height:100px" placeholder="What did Yaakov tell you? What's he expecting?"></textarea>
+      <button class="btn-primary" style="width:100%" onclick="saveYaakovNote()">save</button>
+    </div>
+  `;
+}
+
+function saveYaakovNote() {
+  const text = document.getElementById('yaakov-input').value.trim();
+  if (!text) return;
+  STATE.notes.push({
+    id: STATE.noteId++,
+    date: TODAY_DISPLAY,
+    text,
+    yaakov: true,
+    traineeId: null,
+  });
+  save();
+  document.getElementById('yaakov-input').value = '';
+  showPage('yaakov');
+}
+
+// ── TRAINEE DETAIL ──
+function renderTraineeDetail(tr) {
+  const trainerNotes = tr.notes || [];
+  
+  return `
+    <div class="trainee-header">
+      <div class="tr-avatar ${tr.type === 'onboard' ? 'onboard' : ''}">${initials(tr.name)}</div>
+      <div class="tr-info">
+        <h2>${esc(tr.name)}</h2>
+        <div class="tr-type">${tr.type === 'onboard' ? 'New Hire / Onboarding' : 'Trainee'}</div>
+      </div>
+    </div>
+    
+    <div class="split-section">
+      <div class="card">
+        <div class="card-title">📝 Coaching Notes</div>
+        ${trainerNotes.length === 0 ? '<div class="empty-state">No notes yet</div>' : ''}
+        ${trainerNotes.map(n => `
+          <div class="note-item">
+            <div class="note-date-small">${n.date}</div>
+            ${esc(n.text)}
+          </div>
+        `).join('')}
+      </div>
+      
+      <div class="card">
+        <div class="card-title">💬 Call Reviews</div>
+        ${tr.calls && tr.calls.length > 0 ? tr.calls.map(c => `
+          <div class="note-item call">
+            <div class="note-date-small">${c.date} • ${esc(c.name)}</div>
+            ${esc(c.notes)}
+          </div>
+        `).join('') : '<div class="empty-state">No call reviews yet</div>'}
+        <button class="btn-secondary" style="width:100%;margin-top:12px" onclick="addCallReview(${tr.id})">+ add call review</button>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="card-title">✅ To-Do List for ${esc(tr.name)}</div>
+      ${renderTaskGroup(tr.todos || [], 'trainee-' + tr.id)}
+      <input type="text" placeholder="Add task for them..." onkeydown="if(event.key==='Enter'){addTraineeTodo(${tr.id},this.value);this.value='';}">
+    </div>
+    
+    <button class="btn-danger" style="width:100%;margin-top:20px" onclick="removeTrainee(${tr.id})">Remove Trainee</button>
+  `;
+}
+
+// ── ACTIONS ──
+function openAddNoteModal() {
+  document.getElementById('m-note-text').value = '';
+  document.getElementById('m-note-cat').value = '';
+  document.getElementById('add-note-modal').classList.add('open');
+  document.getElementById('m-note-text').focus();
+}
+
+function closeAddNoteModal() {
+  document.getElementById('add-note-modal').classList.remove('open');
+}
+
+function saveNewNote() {
+  const text = document.getElementById('m-note-text').value.trim();
+  const cat = document.getElementById('m-note-cat').value;
+  if (!text) return;
+  STATE.notes.push({
+    id: STATE.noteId++,
+    date: TODAY_DISPLAY,
+    text,
+    category: cat,
+    traineeId: null,
+  });
+  save();
+  closeAddNoteModal();
+  showPage('notes');
+}
+
+function openLogMeetingModal() {
+  const today = NOW.toISOString().slice(0,10);
+  document.getElementById('m-meet-date').value = today;
+  document.getElementById('m-meet-names').value = '';
+  document.getElementById('m-meet-notes').value = '';
+  document.getElementById('log-meeting-modal').classList.add('open');
+}
+
+function closeLogMeetingModal() {
+  document.getElementById('log-meeting-modal').classList.remove('open');
+}
+
+function saveLogMeeting() {
+  const date = document.getElementById('m-meet-date').value;
+  const names = document.getElementById('m-meet-names').value.trim();
+  const notes = document.getElementById('m-meet-notes').value.trim();
+  
+  if (!date || !names) {
+    alert('Fill in date and who you met with');
+    return;
+  }
+  
+  STATE.meetings.push({
+    id: STATE.noteId++,
+    date,
+    names,
+    notes,
+  });
+  save();
+  closeLogMeetingModal();
+  showPage('calendar');
+}
+
+function addTrainee() {
+  const name = prompt('Trainee name:');
+  if (!name) return;
+  const type = confirm('New hire/onboarding? (OK=yes, Cancel=regular trainee)') ? 'onboard' : 'trainee';
+  STATE.trainees.push({
+    id: STATE.traineeId++,
+    name,
+    type,
+    todayMeeting: false,
+    notes: [],
+    calls: [],
+    todos: [],
+  });
+  save();
+  updateNav();
+  showPage('trainee-' + (STATE.traineeId - 1));
+}
+
+function removeTrainee(id) {
+  if (!confirm('Remove this trainee?')) return;
+  STATE.trainees = STATE.trainees.filter(t => t.id !== id);
+  save();
+  showPage('home');
+}
+
+function addCallReview(traineeId) {
+  const name = prompt('Lead name:');
+  if (!name) return;
+  const notes = prompt('Review notes:');
+  const tr = STATE.trainees.find(t => t.id === traineeId);
+  if (tr) {
+    tr.calls = tr.calls || [];
+    tr.calls.push({
+      id: STATE.noteId++,
+      date: TODAY_DISPLAY,
+      name,
+      notes,
+    });
+    save();
+    showPage('trainee-' + traineeId);
+  }
+}
+
+function addTraineeTodo(traineeId, text) {
+  if (!text.trim()) return;
+  const tr = STATE.trainees.find(t => t.id === traineeId);
+  if (tr) {
+    tr.todos = tr.todos || [];
+    tr.todos.push({ id: STATE.noteId++, text, done: false });
+    save();
+    showPage('trainee-' + traineeId);
+  }
+}
+
+function toggleTraineeTodo(id, taskId) {
+  const tasks = STATE.dailyTasks['trainee-' + id];
+  if (!tasks) return;
+  const task = tasks.find(t => t.id === taskId);
+  if (task) task.done = !task.done;
+  save();
+  showPage('trainee-' + id);
+}
+
+// ── INIT ──
+load();
+const sidebar = document.getElementById('sidebar');
+sidebar.innerHTML = `
+  <div class="sidebar-section">Navigation</div>
+  ${['home','notes','calendar','yaakov'].map(id => {
+    const labels = {home:'Home',notes:'Notes',calendar:'Calendar',yaakov:'Yaakov'};
+    return `<div class="sidebar-item ${currentPage === id ? 'active' : ''}" onclick="showPage('${id}')">${labels[id]}</div>`;
+  }).join('')}
+  <div class="sidebar-section" style="margin-top:16px">Trainees</div>
+  ${STATE.trainees.map(t => `
+    <div class="sidebar-item ${currentPage === 'trainee-'+t.id ? 'active' : ''}" onclick="showPage('trainee-${t.id}')">${esc(t.name)}</div>
+  `).join('')}
+  <div class="sidebar-item" onclick="addTrainee()" style="color:var(--accent);border-left-color:var(--accent);">+ add trainee</div>
+`;
+
+showPage('home');
+window.addEventListener('beforeunload', save);
 </script>
 </body>
 </html>
