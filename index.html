@@ -14,7 +14,7 @@
   --accent:#5b8def;--accent-light:#7fa8f5;--accent-dark:#3d6fd6;
   --teal:#2dd4bf;--green:#34d399;--red:#f87171;--blue:#60a5fa;
   --purple:#a78bfa;--amber:#fbbf24;--pink:#f472b6;
-}
+}h
 html,body{height:100%;margin:0;padding:0;background:var(--bg-dark);color:var(--text);font-family:'Outfit',sans-serif;font-size:15px;line-height:1.6;overflow:hidden}
 body{background:radial-gradient(circle at 15% 0%,rgba(91,141,239,.10),transparent 45%),radial-gradient(circle at 85% 100%,rgba(45,212,191,.08),transparent 45%),var(--bg-dark)}
 .app{display:flex;height:100vh;flex-direction:column}
@@ -129,7 +129,7 @@ h1.page-title{font-size:27px;font-weight:700;margin-bottom:24px;background:linea
         <button class="data-btn" onclick="exportData()" title="Download your data">⬇ export</button>
         <button class="data-btn" onclick="openImportModal()" title="Load data from file">⬆ import</button>
       </div>
-    </div>
+    </div>h
   </div>
   <div class="main">
     <div class="sidebar" id="sidebar"></div>
@@ -259,7 +259,7 @@ function load(){
   STATE.trainees=STATE.trainees||[];STATE.meetings=STATE.meetings||[];STATE.yaakovMeetings=STATE.yaakovMeetings||[];STATE.notes=STATE.notes||[];STATE.followups=STATE.followups||[];STATE.dayNotes=STATE.dayNotes||[];if(!STATE.dayNoteId)STATE.dayNoteId=1;
   if(!STATE.noteId)STATE.noteId=1; if(!STATE.traineeId)STATE.traineeId=1;
   document.getElementById('save-indicator').textContent='loaded';
-}
+}function buildSidebar
 function save(){ try{localStorage.setItem('coaching_v7',JSON.stringify(STATE));document.getElementById('save-indicator').textContent='saved';}catch(e){document.getElementById('save-indicator').textContent='error';} }
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function dateOf(item){ if(item.dateKey){const[y,m,d]=item.dateKey.split('-').map(Number);return new Date(y,m-1,d);} const p=new Date(item.date); return isNaN(p)?null:p; }
@@ -273,14 +273,14 @@ function updateNav(){
   const nav=document.getElementById('nav-buttons');
   const openFu=STATE.followups.filter(f=>!f.done).length;
   const items=[{id:'home',label:'Home'},{id:'calendar',label:'Calendar'},{id:'followups',label:'Follow-ups'+(openFu?' ('+openFu+')':'')},{id:'yaakov',label:'Yaakov'}];
-  STATE.trainees.forEach(t=>items.push({id:'trainee-'+t.id,label:t.name}));
+  items.push({id:'trainees',label:'Trainees'});
   nav.innerHTML=items.map(i=>`<button class="nav-btn ${currentPage===i.id?'active':''}" onclick="showPage('${i.id}')">${esc(i.label)}</button>`).join('');
 }
 function renderPage(name){
   if(name==='home')return renderHome();
   if(name==='calendar')return renderCalendar();
   if(name==='followups')return renderFollowups();
-  if(name==='yaakov')return renderYaakov();
+  if(name==='yaakov')return renderYaakov();  if(name==='trainees')return renderTrainees();
   if(name.startsWith('trainee-')){const id=parseInt(name.split('-')[1]);const tr=STATE.trainees.find(t=>t.id===id);return tr?renderTrainee(tr):'<div class="empty-state">Not found</div>';}
   return '';
 }
@@ -335,7 +335,7 @@ function noteRow(n,showAssign){
   return `<div class="item-row"><div class="item-body"><div class="note-date">${n.date}</div><div>${esc(n.text)}</div>${showAssign&&STATE.trainees.length?`<select class="mini-select" onchange="assignNote(${n.id},this.value)"><option value="">assign to trainee...</option>${STATE.trainees.map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join('')}</select>`:''}</div><button class="del-btn" onclick="deleteNote(${n.id})">✕</button></div>`;
 }
 
-// CALENDAR
+// TRAINEES PAGEfunction renderTrainees(){h
 function renderCalendar(){
   const firstDay=new Date(calYear,calMonth,1).getDay();
   const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
@@ -543,7 +543,7 @@ function exportData(){const blob=new Blob([JSON.stringify(STATE,null,2)],{type:'
 function openImportModal(){document.getElementById('import-modal').classList.add('open');}
 function closeImportModal(){document.getElementById('import-modal').classList.remove('open');document.getElementById('import-file').value='';}
 function importData(){
-  const file=document.getElementById('import-file').files[0];
+  const file=document.getElementById('import-file').files[0];h
   if(!file){alert('Please select a file');return;}
   const reader=new FileReader();
   reader.onload=(e)=>{try{STATE=JSON.parse(e.target.result);STATE.followups=STATE.followups||[];STATE.notes=STATE.notes||[];localStorage.setItem('coaching_v7',JSON.stringify(STATE));document.getElementById('save-indicator').textContent='imported ✓';closeImportModal();updateNav();showPage('home');setTimeout(()=>alert('Data imported successfully!'),200);}catch(err){alert('Error importing: '+err.message);}};
@@ -557,7 +557,7 @@ function buildSidebar(){
     <div class="sidebar-item ${currentPage==='home'?'active':''}" onclick="showPage('home')">Home</div>
     <div class="sidebar-item ${currentPage==='calendar'?'active':''}" onclick="showPage('calendar')">Calendar</div>
     <div class="sidebar-item ${currentPage==='followups'?'active':''}" onclick="showPage('followups')"><span>Follow-ups</span>${openFu?`<span class="sidebar-count">${openFu}</span>`:''}</div>
-    <div class="sidebar-item ${currentPage==='yaakov'?'active':''}" onclick="showPage('yaakov')">Yaakov</div>
+    <div class="sidebar-item ${currentPage==='yaakov'?'active':''}" onclick="showPage('yaakov')">Yaakov</div>    <div class="sidebar-item ${currentPage==='trainees'?'active':''}" onclick="showPage('trainees')">Trainees</div>
     <div class="sidebar-section" style="margin-top:16px">Trainees</div>
     ${STATE.trainees.map(t=>`<div class="sidebar-item ${currentPage==='trainee-'+t.id?'active':''}" onclick="showPage('trainee-${t.id}')">${esc(t.name)}</div>`).join('')}
     <div class="sidebar-item sidebar-add" onclick="addTrainee()">+ add trainee</div>`;
