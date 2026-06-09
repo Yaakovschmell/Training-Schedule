@@ -330,7 +330,22 @@ function fuRow(f){
   </div>`;
 }
 function noteRow(n,showAssign){
-  return `<div class="item-row"><div class="item-body"><div class="note-date">${n.date}</div><div>${esc(n.text)}</div>${showAssign&&STATE.trainees.length?`<select class="mini-select" onchange="assignNote(${n.id},this.value)"><option value="">assign to trainee...</option>${STATE.trainees.map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join('')}</select>`:''}</div><button class="del-btn" onclick="deleteNote(${n.id})">✕</button></div>`;
+  return `<div class="item-row">
+    <div class="item-body">
+      <div class="note-date">${n.date}</div>
+      <div>${esc(n.text)}</div>
+      ${showAssign&&STATE.trainees.length?`
+        <select class="mini-select" onchange="assignNote(${n.id},this.value)">
+          <option value="">assign to trainee...</option>
+          ${STATE.trainees.map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join('')}
+        </select>
+      `:''}
+    </div>
+    <div style="display:flex;gap:4px">
+      <button class="del-btn" onclick="editNote(${n.id})">✎</button>
+      <button class="del-btn" onclick="deleteNote(${n.id})">✕</button>
+    </div>
+  </div>`;
 }
 
 // CALENDAR
@@ -439,7 +454,23 @@ function renderTrainee(tr){
     </div>
     <div class="card" style="margin-bottom:20px">
       <div class="card-title">Day Notes<button class="btn-secondary btn-sm" onclick="openDayNoteFor(${tr.id})">+ add</button></div>
-      ${trDayNotes.length?trDayNotes.map(n=>`<div class="item-row blue"><div class="item-body"><div class="note-date" style="color:var(--accent-light);font-weight:600">${n.date}</div><div style="white-space:pre-wrap">${esc(n.text)}</div></div><button class="del-btn" onclick="deleteDayNote(${n.id})">x</button></div>`).join(''):'<div class="empty-state">No day notes yet - add notes tied to specific dates</div>'}
+      ${trDayNotes.length?trDayNotes.map(n=>`<div class="item-row blue"><div class="item-body"><div class="note-date" style="color:var(--accent-light);font-weight:600">${n.date}</div><div style="white-space:pre-wrap">${esc(n.text)}</div></div><<div style="display:flex;gap:4px">
+  <button class="del-btn" onclick="editDayNote(${n.id})">✎</button>
+  <button class="del-btn" onclick="deleteDayNote(${n.id})">x</button>
+</div>`).join(''):'<div class="empty-state">No day notes yet - add notes tied to specific dates</div>'}
+function editDayNote(id){
+  const note = STATE.dayNotes.find(n => n.id === id);
+  if(!note) return;
+
+  const updated = prompt('Edit day note:', note.text);
+
+  if(updated === null) return;
+
+  note.text = updated.trim();
+
+  save();
+  showPage(currentPage);
+}
     </div>
     <div class="card" style="margin-bottom:20px">
       <div class="card-title">Meeting History<button class="btn-secondary btn-sm" onclick="openMeetingFor(${tr.id})">+ log meeting</button></div>
@@ -526,7 +557,19 @@ function saveNote(){
 }
 function assignNote(noteId,tid){if(!tid)return;const n=STATE.notes.find(x=>x.id===noteId);if(n){n.traineeId=parseInt(tid);save();showPage(currentPage);}}
 function deleteNote(id){STATE.notes=STATE.notes.filter(n=>n.id!==id);save();showPage(currentPage);}
+function editNote(id){
+  const note = STATE.notes.find(n => n.id === id);
+  if(!note) return;
 
+  const updated = prompt('Edit note:', note.text);
+
+  if(updated === null) return;
+
+  note.text = updated.trim();
+
+  save();
+  showPage(currentPage);
+}
 // TRAINEES
 function addTrainee(){const name=prompt('Enter trainee name:');if(!name||!name.trim())return;STATE.trainees.push({id:STATE.traineeId++,name:name.trim()});save();updateNav();showPage('trainee-'+(STATE.traineeId-1));}
 function renameTrainee(id){const tr=STATE.trainees.find(t=>t.id===id);if(!tr)return;const name=prompt('Rename trainee:',tr.name);if(!name||!name.trim())return;tr.name=name.trim();save();updateNav();showPage('trainee-'+id);}
