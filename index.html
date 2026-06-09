@@ -272,9 +272,7 @@ function showPage(name){ currentPage=name; document.getElementById('content').in
 function updateNav(){
   const nav=document.getElementById('nav-buttons');
   const openFu=STATE.followups.filter(f=>!f.done).length;
-  const items=[{id:'home',label:'Home'},{id:'calendar',label:'Calendar'},{id:'followups',label:'Follow-ups'+(openFu?' ('+openFu+')':'')},{id:'yaakov',label:'Yaakov'}];
-  STATE.trainees.forEach(t=>items.push({id:'trainee-'+t.id,label:t.name}));
-  nav.innerHTML=items.map(i=>`<button class="nav-btn ${currentPage===i.id?'active':''}" onclick="showPage('${i.id}')">${esc(i.label)}</button>`).join('');
+  const items=[{id:'home',label:'Home'},{id:'calendar',label:'Calendar'},{id:'followups',label:'Follow-ups'+(openFu?' ('+openFu+')':'')},{id:'yaakov',label:'Yaakov'}];  nav.innerHTML=items.map(i=>`<button class="nav-btn ${currentPage===i.id?'active':''}" onclick="showPage('${i.id}')">${esc(i.label)}</button>`).join('');
 }
 function renderPage(name){
   if(name==='home')return renderHome();
