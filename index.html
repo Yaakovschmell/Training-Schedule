@@ -454,23 +454,10 @@ function renderTrainee(tr){
     </div>
     <div class="card" style="margin-bottom:20px">
       <div class="card-title">Day Notes<button class="btn-secondary btn-sm" onclick="openDayNoteFor(${tr.id})">+ add</button></div>
-      ${trDayNotes.length?trDayNotes.map(n=>`<div class="item-row blue"><div class="item-body"><div class="note-date" style="color:var(--accent-light);font-weight:600">${n.date}</div><div style="white-space:pre-wrap">${esc(n.text)}</div></div><<div style="display:flex;gap:4px">
+      ${trDayNotes.length?trDayNotes.map(n=>`<div class="item-row blue"><div class="item-body"><div class="note-date" style="color:var(--accent-light);font-weight:600">${n.date}</div><div style="white-space:pre-wrap">${esc(n.text)}</div></div><div style="display:flex;gap:4px">
   <button class="del-btn" onclick="editDayNote(${n.id})">✎</button>
   <button class="del-btn" onclick="deleteDayNote(${n.id})">x</button>
 </div>`).join(''):'<div class="empty-state">No day notes yet - add notes tied to specific dates</div>'}
-function editDayNote(id){
-  const note = STATE.dayNotes.find(n => n.id === id);
-  if(!note) return;
-
-  const updated = prompt('Edit day note:', note.text);
-
-  if(updated === null) return;
-
-  note.text = updated.trim();
-
-  save();
-  showPage(currentPage);
-}
     </div>
     <div class="card" style="margin-bottom:20px">
       <div class="card-title">Meeting History<button class="btn-secondary btn-sm" onclick="openMeetingFor(${tr.id})">+ log meeting</button></div>
@@ -576,6 +563,17 @@ function renameTrainee(id){const tr=STATE.trainees.find(t=>t.id===id);if(!tr)ret
 function openDayNoteFor(traineeId){document.getElementById('m-daynote-text').value='';document.getElementById('m-daynote-date').value=TODAY;document.getElementById('m-daynote-trainee-id').value=traineeId;document.getElementById('daynote-modal').classList.add('open');document.getElementById('m-daynote-text').focus();}
 function closeDayNoteModal(){document.getElementById('daynote-modal').classList.remove('open');}
 function saveDayNote(){const text=document.getElementById('m-daynote-text').value.trim();if(!text)return;const dateKey=document.getElementById('m-daynote-date').value;const traineeId=parseInt(document.getElementById('m-daynote-trainee-id').value);const dateObj=dateKey?new Date(dateKey+'T12:00:00'):new Date();const date=dateObj.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});STATE.dayNotes.unshift({id:STATE.dayNoteId++,date,dateKey:dateKey||TODAY,text,traineeId});save();closeDayNoteModal();showPage(currentPage);}
+function editDayNote(id){
+  const note=STATE.dayNotes.find(n=>n.id===id);
+  if(!note)return;
+  const updatedText=prompt('Edit note:',note.text);
+  if(updatedText===null)return;
+  const updatedDate=prompt('Edit date:',note.date);
+  if(updatedDate===null)return;
+  note.text=updatedText.trim();
+  note.date=updatedDate.trim();
+  save();showPage(currentPage);
+}
 function deleteDayNote(id){STATE.dayNotes=STATE.dayNotes.filter(n=>n.id!==id);save();showPage(currentPage);}
 function removeTrainee(id){if(!confirm('Remove this trainee? Their meetings stay in your records.'))return;STATE.trainees=STATE.trainees.filter(t=>t.id!==id);save();updateNav();showPage('home');}
 
