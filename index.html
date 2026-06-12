@@ -51,19 +51,19 @@ body{background:var(--cream)}
 .edit-note-area{width:100%;min-height:80px;padding:8px 10px;background:#fffdf7;border:1.5px solid var(--accent);border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;line-height:1.6;resize:vertical}
 .edit-btn{background:none;border:1px solid var(--border);color:var(--text-dim);font-size:11px;padding:3px 9px;border-radius:6px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s}
 .edit-btn:hover{border-color:var(--accent);color:var(--accent)}
-.save-edit-btn{background:linear-gradient(120deg,var(--accent),var(--accent-dark));color:#fff;border:none;font-size:11px;padding:4px 12px;border-radius:6px;cursor:pointer;font-family:'IBM Plex Mono',monospace}
+.save-edit-btn{background:linear-gradient(120deg,var(--accent),var(--accent-dark));color:#fff;border:none;font-size:11px;padding:4px 12px;border-radius:6px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s;margin-right:6px}
 .cancel-edit-btn{background:var(--bg-hover);color:var(--text-dim);border:1px solid var(--border);font-size:11px;padding:4px 10px;border-radius:6px;cursor:pointer;font-family:'IBM Plex Mono',monospace}
 .card-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding-left:11px;position:relative}
 .card-title::before{content:"";position:absolute;left:0;top:2px;bottom:2px;width:3px;border-radius:3px;background:linear-gradient(180deg,var(--accent),var(--teal));}
 .split-section{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
 @media(max-width:1000px){.split-section{grid-template-columns:1fr}}
-input[type=text],input[type=date],input[type=time],textarea,select{width:100%;padding:10px 12px;background:#fdfaf5;border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif}
+input[type=text],input[type=date],input[type=time],textarea,select{width:100%;padding:10px 12px;background:#fdfaf5;border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:13px}
 input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
 textarea{resize:vertical;min-height:80px}
-.btn-primary{padding:10px 16px;background:linear-gradient(120deg,var(--accent),var(--accent-dark));color:#fff;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;font-size:14px;transition:all .2s}
-.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(91,141,239,.45)}
-.btn-secondary{padding:9px 14px;background:var(--bg-hover);color:var(--text);border:1px solid var(--border);border-radius:10px;font-weight:500;cursor:pointer;font-family:'Outfit',sans-serif;font-size:13px;transition:all .15s}
-.btn-secondary:hover{background:var(--border);border-color:rgba(91,141,239,.4)}
+.btn-primary{padding:10px 16px;background:linear-gradient(120deg,var(--accent),var(--accent-dark));color:#fff;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;font-size:13px;transition:all .2s}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(201,147,58,.35)}
+.btn-secondary{padding:9px 14px;background:var(--bg-hover);color:var(--text);border:1px solid var(--border);border-radius:10px;font-weight:500;cursor:pointer;font-family:'Outfit',sans-serif;font-size:12px;transition:all .15s}
+.btn-secondary:hover{background:var(--border);border-color:rgba(201,147,58,.3)}
 .btn-sm{padding:5px 11px;font-size:12px}
 .btn-danger{background:var(--red);color:#fff}
 .btn-danger:hover{background:#a85656}
@@ -74,7 +74,7 @@ textarea{resize:vertical;min-height:80px}
 .modal-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-dim);display:block;margin-bottom:6px;margin-top:12px}
 .modal-label:first-of-type{margin-top:0}
 .modal-buttons{display:flex;gap:8px;justify-content:flex-end;margin-top:20px}
-.transcript-box{background:#f5efe3;border:1px solid var(--border);border-radius:8px;padding:12px;margin:8px 0;font-size:12px;line-height:1.6;color:var(--text);max-height:250px;overflow-y:auto;white-space:pre-wrap}
+.transcript-box{background:#f5efe3;border:1px solid var(--border);border-radius:8px;padding:12px;margin:8px 0;font-size:12px;line-height:1.6;color:var(--text);max-height:250px;overflow-y:auto;white-space:pre-wrap;word-wrap:break-word}
 .transcript-empty{color:var(--text-dim);font-style:italic}
 .empty-state{text-align:center;padding:20px;color:var(--text-dim);font-size:13px}
 .del-btn{background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:14px;padding:4px 8px;border-radius:4px;transition:all .15s;flex-shrink:0}
@@ -100,7 +100,7 @@ textarea{resize:vertical;min-height:80px}
 .day-date{font-size:17px;font-weight:700;color:var(--accent-light);margin-bottom:14px}
 .day-section{margin-bottom:16px}
 .day-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-dim);margin-bottom:8px}
-.item-row{background:rgba(245,239,227,.8);padding:13px;border-radius:10px;margin-bottom:8px;font-size:12px;line-height:1.5;border-left:3px solid var(--accent);display:flex;justify-content:space-between;align-items:flex-start}
+.item-row{background:rgba(245,239,227,.8);padding:13px;border-radius:10px;margin-bottom:8px;font-size:12px;line-height:1.5;border-left:3px solid var(--accent);display:flex;justify-content:space-between;gap:8px}
 .item-row:hover{background:rgba(237,228,211,.9)}
 .item-row.blue{border-left-color:var(--blue)}
 .item-row.green{border-left-color:var(--green)}
@@ -121,10 +121,12 @@ textarea{resize:vertical;min-height:80px}
 .fu-text.done{text-decoration:line-through;color:var(--text-dim)}
 .fu-meta{font-size:10px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;margin-top:3px}
 .fu-meta.overdue{color:var(--red)}
-.fu-tag{display:inline-block;font-size:10px;padding:1px 8px;border-radius:10px;background:rgba(123,168,209,.15);color:var(--blue);margin-left:6px}
-.quick-btn{position:fixed;bottom:24px;right:24px;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--teal));color:#fff;border:none;font-size:28px;cursor:pointer;transition:all .3s;box-shadow:0 4px 20px rgba(0,0,0,.2)}
-.quick-btn:hover{transform:scale(1.12) rotate(90deg);box-shadow:0 8px 30px rgba(45,212,191,.5)}
-::-webkit-scrollbar{width:8px}::-webkit-scrollbar-track{background:var(--bg-dark)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+.fu-tag{display:inline-block;font-size:10px;padding:1px 8px;border-radius:10px;background:rgba(45,106,138,.15);color:var(--blue);margin-left:6px}
+.quick-btn{position:fixed;bottom:24px;right:24px;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--teal));color:#fff;border:none;font-size:28px;cursor:pointer;transition:all .2s;box-shadow:0 4px 15px rgba(201,147,58,.3)}
+.quick-btn:hover{transform:scale(1.12) rotate(90deg);box-shadow:0 8px 30px rgba(90,138,106,.5)}
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:var(--bg-dark)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
 .badge{display:inline-block;font-size:10px;background:var(--border);color:var(--text-dim);padding:2px 7px;border-radius:10px;font-weight:600;margin-left:6px}
 .badge.amber{background:linear-gradient(120deg,var(--accent),var(--accent-dark));color:#fff}
 .badge.red{background:var(--red);color:#fff}
@@ -281,7 +283,7 @@ function cleanupNotes(text){
     return s;
   }).join('\n');
 }
-function save(){ try{localStorage.setItem('coaching_v7',JSON.stringify(STATE));document.getElementById('save-indicator').textContent='saved';}catch(e){document.getElementById('save-indicator').textContent='error';}; }
+function save(){ try{localStorage.setItem('coaching_v7',JSON.stringify(STATE));document.getElementById('save-indicator').textContent='saved';}catch(e){document.getElementById('save-indicator').textContent='error';}}
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function dateOf(item){ if(item.dateKey){const[y,m,d]=item.dateKey.split('-').map(Number);return new Date(y,m-1,d);} const p=new Date(item.date); return isNaN(p)?null:p; }
 function keyFromDate(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
@@ -317,12 +319,12 @@ function renderHome(){
     <div class="split-section">
       <div class="card">
         <div class="card-title">🎯 Yaakov${todayYak.length?`<span class="badge amber">${todayYak.length}</span>`:''}</div>
-        ${todayYak.length?todayYak.map(y=>`<div style="margin-bottom:10px;padding:10px;background:var(--bg-dark);border-radius:6px;border-left:3px solid var(--accent)">${y.time?`<div class="item-meta">⏰ ${y.time}</div>`:''}${y.notes?`<div style="font-size:12px;line-height:1.5">${esc(y.notes.split('\n')[0])}</div>`:''}</div>`).join(''):'<div class="empty-state">No Yaakov meetings today</div>'}
+        ${todayYak.length?todayYak.map(y=>`<div style="margin-bottom:10px;padding:10px;background:var(--bg-dark);border-radius:6px;border-left:3px solid var(--accent)">${y.time?`<div class="item-meta">${y.time}</div>`:''}${y.notes?`<div>${esc(y.notes)}</div>`:''}</div>`).join(''):' <div class="empty-state">No Yaakov meetings today</div>'}
         <button class="btn-secondary" style="width:100%;margin-top:10px" onclick="openYaakovModal()">+ log Yaakov</button>
       </div>
       <div class="card">
         <div class="card-title">🎙️ Meetings Today${todayMeet.length?`<span class="badge amber">${todayMeet.length}</span>`:''}</div>
-        ${todayMeet.length?todayMeet.map(m=>`<div style="margin-bottom:8px;padding:8px 10px;background:var(--bg-dark);border-radius:6px;border-left:3px solid var(--blue);font-size:12px;font-weight:600">${esc(m.trainees||'Unnamed')}</div>`).join(''):'<div class="empty-state">No meetings logged yet</div>'}
+        ${todayMeet.length?todayMeet.map(m=>`<div style="margin-bottom:8px;padding:8px 10px;background:var(--bg-dark);border-radius:6px;border-left:3px solid var(--blue);font-size:12px;font-weight:600">${esc(m.trainees)}</div>`).join(''):'<div class="empty-state">No meetings today</div>'}
         <button class="btn-primary" style="width:100%;margin-top:10px" onclick="openMeetingModal()">+ log meeting</button>
       </div>
     </div>
@@ -347,7 +349,8 @@ function fuRow(f){
   const tag=f.traineeId?`<span class="fu-tag">${esc(traineeName(f.traineeId))}</span>`:'';
   return `<div class="fu-item ${overdue?'overdue':''}">
     <div class="fu-cb ${f.done?'on':''}" onclick="toggleFu(${f.id})"></div>
-    <div class="fu-body"><div class="fu-text ${f.done?'done':''}">${esc(f.text)}${tag}</div>${f.dueDate?`<div class="fu-meta ${overdue?'overdue':''}">${overdue?'overdue · ':'by '}${fmtDate(f.dueDate)}</div>`:''}</div>
+    <div class="fu-body"><div class="fu-text ${f.done?'done':''}">${esc(f.text)}${tag}</div>${f.dueDate?`<div class="fu-meta ${overdue?'overdue':''}">${overdue?'overdue · ':'by '}${fmtDate(f.dueDate)}</div>`:''}
+    </div>
     <button class="del-btn" onclick="deleteFu(${f.id})">✕</button>
   </div>`;
 }
@@ -383,7 +386,7 @@ function renderCalendar(){
     const isToday=(calYear===NOW.getFullYear()&&calMonth===NOW.getMonth()&&day===NOW.getDate());
     const has=dMeet.length||dYak.length;
     const names=dMeet.map(m=>m.trainees).join(', ');
-    cells+=`<div class="cal-cell ${isToday?'today':''} ${has?'has-activity':''} ${selectedCalKey===key?'selected':''}" onclick="selectCalDay('${key}')"><div class="cal-day-num">${day}</div>${dYak.length?`<div class="cal-yaakov-tag">Y</div>`:''}${names?`<div class="cal-names">${esc(names)}</div>`:''}</div>`;
+    cells+=`<div class="cal-cell ${isToday?'today':''} ${has?'has-activity':''} ${selectedCalKey===key?'selected':''}" onclick="selectCalDay('${key}')"><div class="cal-day-num">${day}</div>${dYak.length?`<div class="cal-yaakov-tag">YAK</div>`:''}${names?`<div class="cal-names">${esc(names)}</div>`:''}</div>`;
   }
   let detail='';
   if(selectedCalKey){
@@ -391,8 +394,8 @@ function renderCalendar(){
     const dYak=STATE.yaakovMeetings.filter(y=>{const d=dateOf(y);return d&&keyFromDate(d)===selectedCalKey;});
     const[yy,mm,dd]=selectedCalKey.split('-').map(Number);
     detail=`<div class="day-detail"><div class="day-card"><div class="day-date">${MONTHS_FULL[mm-1]} ${dd}, ${yy}</div>
-      ${dYak.length?`<div class="day-section"><div class="day-section-title">🎯 Yaakov (${dYak.length})</div>${dYak.map(y=>`<div class="item-row"><div class="item-body">${y.time?`<div class="item-meta">⏰ ${y.time}</div>`:''}<div>${esc(y.notes||'')}</div></div></div>`).join('')}</div>`:''} 
-      ${dMeet.length?`<div class="day-section"><div class="day-section-title">🎙️ Trainee Meetings (${dMeet.length})</div>${dMeet.map(m=>`<div class="item-row blue"><div class="item-body"><div class="item-meta">${esc(m.trainees||'')}</div><div>${esc(m.notes||'')}</div></div></div>`).join('')}</div>`:''} 
+      ${dYak.length?`<div class="day-section"><div class="day-section-title">🎯 Yaakov (${dYak.length})</div>${dYak.map(y=>`<div class="item-row"><div class="item-body">${y.time?`<div class="item-meta">${y.time}</div>`:''}${y.notes?`<div>${esc(y.notes)}</div>`:''}</div></div>`).join('')}</div>`:''}
+      ${dMeet.length?`<div class="day-section"><div class="day-section-title">🎙️ Trainee Meetings (${dMeet.length})</div>${dMeet.map(m=>`<div class="item-row blue"><div class="item-body"><div class="item-meta">${esc(m.trainees)}</div>${m.notes?`<div>${esc(m.notes)}</div>`:''}</div></div>`).join('')}</div>`:''}
       ${(!dYak.length&&!dMeet.length)?'<div class="empty-state">Nothing logged this day</div>':''}
     </div></div>`;
   }
@@ -464,14 +467,14 @@ function renderYaakov(){
       const noteLines=y.notes?y.notes.split('\n').filter(Boolean):[];
       return `<div class="card" style="border-left:3px solid var(--accent);padding:18px 20px;margin-bottom:12px">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-          <span style="font-size:13px;font-weight:700;color:var(--accent-dark)">${y.time?`<span style="font-size:11px;color:var(--text-dim);font-weight:400;margin-right:6px">⏰ ${y.time}</span>`:''}Note</span>
+          <span style="font-size:13px;font-weight:700;color:var(--accent-dark)">${y.time?`<span style="font-size:11px;color:var(--text-dim);font-weight:400;margin-right:6px">⏰ ${y.time}</span>`:''}Notes</span>
           <div style="display:flex;align-items:center;gap:4px">
             <button class="edit-btn" onclick="editYaakov(${y.id})">✏ edit</button>
             <button class="del-btn" onclick="deleteYaakov(${y.id})">✕</button>
           </div>
         </div>
         ${y.trainees?`<div style="font-size:11px;color:var(--text-dim);margin-bottom:10px"><strong>Trainees:</strong> ${esc(y.trainees)}</div>`:''}
-        <div id="notes-view-${y.id}"><ul style="list-style:none;padding:0;margin:0">${noteLines.length?noteLines.map(line=>`<li style="display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.04)"><span style="color:var(--accent);margin-top:2px">•</span><span>${esc(line)}</span></li>`).join(''):'<li style="color:var(--text-dim);font-style:italic">No notes</li>'}</ul></div>
+        <div id="notes-view-${y.id}"><ul style="list-style:none;padding:0;margin:0">${noteLines.length?noteLines.map(line=>`<li style="display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="color:var(--accent);margin-top:2px">•</span><span>${esc(line)}</span></li>`).join(''):'<li style="color:var(--text-dim);font-style:italic">No notes</li>'}</ul></div>
         <div id="notes-edit-${y.id}" style="display:none">
           <textarea class="edit-note-area" id="notes-textarea-${y.id}">${esc(y.notes||'')}</textarea>
           <div><button class="save-edit-btn" onclick="saveYaakovEdit(${y.id})">save</button><button class="cancel-edit-btn" onclick="cancelYaakovEdit(${y.id})">cancel</button></div>
@@ -514,7 +517,7 @@ function renderTrainee(tr){
     </div>
     <div class="card" style="margin-bottom:20px">
       <div class="card-title">Day Notes<button class="btn-secondary btn-sm" onclick="openDayNoteFor(${tr.id})">+ add</button></div>
-      ${trDayNotes.length?trDayNotes.map(n=>`<div class="item-row blue"><div class="item-body"><div class="note-date" style="color:var(--accent-light);font-weight:600">${n.date}</div><div style="white-space:pre-wrap">${esc(n.text)}</div></div><div style="display:flex;gap:4px"><button class="del-btn" onclick="editDayNote(${n.id})">✎</button><button class="del-btn" onclick="deleteDayNote(${n.id})">✕</button></div></div>`).join(''):'<div class="empty-state">No day notes yet - add notes tied to specific dates</div>'}
+      ${trDayNotes.length?trDayNotes.map(n=>`<div class="item-row blue"><div class="item-body"><div class="note-date" style="color:var(--accent-light);font-weight:600">${n.date}</div><div style="white-space:pre-wrap">${esc(n.text)}</div></div><button class="del-btn" onclick="deleteDayNote(${n.id})">✕</button></div>`).join(''):'<div class="empty-state">No day notes yet</div>'}
     </div>
     <div class="card" style="margin-bottom:20px">
       <div class="card-title">Meeting History<button class="btn-secondary btn-sm" onclick="openMeetingFor(${tr.id})">+ log meeting</button></div>
@@ -540,7 +543,7 @@ function renderTrainee(tr){
                     <button class="del-btn" onclick="deleteMeeting(${m.id})">✕</button>
                   </div>
                 </div>
-                <div id="meet-view-${m.id}"><ul style="list-style:none;padding:0;margin:0">${noteLines.length?noteLines.map(line=>`<li style="display:flex;gap:8px;align-items:flex-start;padding:4px 0;border-bottom:1px solid rgba(0,0,0,.04)"><span style="color:var(--blue);margin-top:1px">•</span><span>${esc(line)}</span></li>`).join(''):'<li style="color:var(--text-dim);font-style:italic">No notes</li>'}</ul></div>
+                <div id="meet-view-${m.id}"><ul style="list-style:none;padding:0;margin:0">${noteLines.length?noteLines.map(line=>`<li style="display:flex;gap:8px;align-items:flex-start;padding:4px 0"><span style="color:var(--blue);margin-top:1px">•</span><span>${esc(line)}</span></li>`).join(''):'<li style="color:var(--text-dim);font-style:italic">No notes</li>'}</ul></div>
                 <div id="meet-edit-${m.id}" style="display:none">
                   <textarea class="edit-note-area" id="meet-textarea-${m.id}">${esc(m.notes||'')}</textarea>
                   <div><button class="save-edit-btn" onclick="saveMeetingEdit(${m.id})">save</button><button class="cancel-edit-btn" onclick="cancelMeetingEdit(${m.id})">cancel</button></div>
@@ -723,7 +726,7 @@ function editNote(id){
 }
 
 // TRAINEES
-function addTrainee(){const name=prompt('Enter trainee name:');if(!name||!name.trim())return;STATE.trainees.push({id:STATE.traineeId++,name:name.trim()});save();updateNav();showPage('trainee-'+(STATE.trainees[STATE.trainees.length-1].id));}
+function addTrainee(){const name=prompt('Enter trainee name:');if(!name||!name.trim())return;STATE.trainees.push({id:STATE.traineeId++,name:name.trim()});save();updateNav();showPage('trainee-'+(STATE.traineeId-1));}
 function renameTrainee(id){const tr=STATE.trainees.find(t=>t.id===id);if(!tr)return;const name=prompt('Rename trainee:',tr.name);if(!name||!name.trim())return;tr.name=name.trim();save();updateNav();showPage(currentPage);}
 function removeTrainee(id){if(!confirm('Remove this trainee? Their meetings stay in your records.'))return;STATE.trainees=STATE.trainees.filter(t=>t.id!==id);save();updateNav();showPage('home');}
 function openDayNoteFor(traineeId){document.getElementById('m-daynote-text').value='';document.getElementById('m-daynote-date').value=TODAY;document.getElementById('m-daynote-trainee-id').value=traineeId;document.getElementById('daynote-modal').classList.add('open');document.getElementById('m-daynote-text').focus();}
@@ -743,14 +746,14 @@ function editDayNote(id){
 function deleteDayNote(id){STATE.dayNotes=STATE.dayNotes.filter(n=>n.id!==id);save();showPage(currentPage);}
 
 // DATA
-function exportData(){const blob=new Blob([JSON.stringify(STATE,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='coaching-data-'+TODAY+'.json';a.click();URL.revokeObjectURL(url);}
+function exportData(){const blob=new Blob([JSON.stringify(STATE,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='coaching_hub_'+TODAY+'.json';a.click();URL.revokeObjectURL(url);}
 function openImportModal(){document.getElementById('import-modal').classList.add('open');}
 function closeImportModal(){document.getElementById('import-modal').classList.remove('open');document.getElementById('import-file').value='';}
 function importData(){
   const file=document.getElementById('import-file').files[0];
   if(!file){alert('Please select a file');return;}
   const reader=new FileReader();
-  reader.onload=(e)=>{try{STATE=JSON.parse(e.target.result);STATE.followups=STATE.followups||[];STATE.notes=STATE.notes||[];STATE.dayNotes=STATE.dayNotes||[];localStorage.setItem('coaching_v7',JSON.stringify(STATE));document.getElementById('save-indicator').textContent='imported';closeImportModal();showPage(currentPage);}catch(e){alert('Invalid data file');}};
+  reader.onload=(e)=>{try{STATE=JSON.parse(e.target.result);STATE.followups=STATE.followups||[];STATE.notes=STATE.notes||[];STATE.dayNotes=STATE.dayNotes||[];localStorage.setItem('coaching_v7',JSON.stringify(STATE));closeImportModal();showPage('home');updateNav();buildSidebar();}catch(err){alert('Error importing file: '+err.message);}};
   reader.readAsText(file);
 }
 
