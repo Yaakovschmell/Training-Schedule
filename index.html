@@ -1133,11 +1133,114 @@ function deleteScheduleItem(id){
 }
 function openSchedDayModal(ds){openScheduleAddModal(null);document.getElementById('sched-date').value=ds;}
 let scheduleWeekStart=getWeekStart(new Date());
-function getWeekStart(date){const d=new Date(date);d.setDate(d.getDate()-d.getDay());d.setHours(0,0,0,0);return d;}
-function schedulePrevWeek(){scheduleWeekStart=new Date(scheduleWeekStart);scheduleWeekStart.setDate(scheduleWeekStart.getDate()-7);renderSchedule();}
-function scheduleNextWeek(){scheduleWeekStart=new Date(scheduleWeekStart);scheduleWeekStart.setDate(scheduleWeekStart.getDate()+7);renderSchedule();}
-function scheduleThisWeek(){scheduleWeekStart=getWeekStart(new Date());renderSchedule();}
+function getWeekStart(date){
+  const d=new Date(date);
+  d.setDate(d.getDate()-d.getDay());
+  d.setHours(0,0,0,0);
+  return d;
+}
+let scheduleWeekStart=getWeekStart(new Date());
 let scheduleEditingId=null;
+
+function renderSchedule(){
+  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const fullDays=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const monthNames=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const weekDates=[];
+  for(let i=0;i<7;i++){
+    const d=new Date(scheduleWeekStart);
+    d.setDate(d.getDate()+i);
+    weekDates.push(d);
+  }
+  const todayStr=TODAY;
+  const wS=weekDates[0], wE=weekDates[6];
+  const weekLabel=(wS.getMonth()===wE.getMonth())
+    ? monthNames[wS.getMonth()]+' '+wS.getDate()+'-'+wE.getDate()+', '+wS.getFullYear()
+    : monthNames[wS.getMonth()]+' '+wS.getDate()+' - '+monthNames[wE.getMonth()]+' '+wE.getDate()+', '+wE.getFullYear();
+
+  let html=`<h1 class="page-title">My Schedule</h1><div class="card">`;
+  html+=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">`;
+  html+=`<div style="display:flex;gap:8px"><button class="btn-secondary btn-sm" onclick="schedulePrevWeek()">‹ prev</button><button class="btn-secondary btn-sm" onclick="scheduleThisWeek()">this week</button><button class="btn-secondary btn-sm" onclick="scheduleNextWeek()">next ›</button></div>`;
+  html+=`<div style="font-size:15px;font-weight:700;color:var(--accent-dark)">${weekLabel}</div>`;
+  html+=`<button class="btn-primary btn-sm" onclick="openScheduleAddModal(null)">+ add item</button>`;
+  html+=`</div><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:10px">`;
+
+  weekDates.forEach(function(date,i){
+    const ds=date.toISOString().slice(0,10);
+    const isToday=ds===todayStr;
+    const dayItems=(STATE.schedule||[]).filter(function(s){ return s.date===ds; });
+    const traineeItems=dayItems.filter(function(s){ return s.type==='trainee'; });
+    const otherItems=dayItems.filter(function(s){ return s.type!=='trainee'; });
+    const bdr=isToday?'var(--accent)':'var(--border)';
+    const bg=isToday?'linear-gradient(160deg,rgba(201,147,58,.1),transparent)':'var(--bg-card)';
+
+    html+=`<div style="border:1px solid ${bdr};border-radius:10px;padding:10px;min-height:140px;background:${bg}">`;
+    html+=`<div style="text-align:center;margin-bottom:8px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:${isToday?'var(--accent-dark)':'var(--text-dim)'}">${days[i]}</div><div style="font-size:18px;font-weight:700;color:${isToday?'var(--accent)':'var(--text)'}">${date.getDate()}</div></div>`;
+
+    traineeItems.forEach(function(item){
+      html+=`<div style="background:rgba(90,138,106,.12);border:1px solid rgba(90,138,106,.3);border-radius:6px;padding:5px 7px;margin-bottom:4px;font-size:11px">`;
+      html+=`<div style="font-weight:600;color:var(--teal)">Trainee: ${esc(item.name)}</div>`;
+      if(item.time) html+=`<div style="color:var(--text-dim);font-size:10px">${esc(item.time)}</div>`;
+      if(item.notes) html+=`<div style="color:var(--text-dim);font-size:10px;margin-top:2px">${esc(item.notes)}</div>`;
+      html+=`<div style="display:flex;gap:4px;margin-top:4px"><button class="edit-btn" style="font-size:9px;padding:1px 5px" onclick="openScheduleEditModal(${item.id})">edit</button><button class="del-btn" style="font-size:10px;padding:1px 4px" onclick="deleteScheduleItem(${item.id})">×</button></div></div>`;
+    });
+
+    otherItems.forEach(function(item){
+      html+=`<div style="background:rgba(45,106,138,.1);border:1px solid rgba(45,106,138,.25);border-radius:6px;padding:5px 7px;margin-bottom:4px;font-size:11px">`;
+      html+=`<div style="font-weight:600;color:var(--blue)">${esc(item.name)}</div>`;
+      if(item.time) html+=`<div style="color:var(--text-dim);font-size:10px">${esc(item.time)}</div>`;
+      if(item.notes) html+=`<div style="color:var(--text-dim);font-size:10px;margin-top:2px">${esc(item.notes)}</div>`;
+      html+=`<div style="display:flex;gap:4px;margin-top:4px"><button class="edit-btn" style="font-size:9px;padding:1px 5px" onclick="openScheduleEditModal(${item.id})">edit</button><button class="del-btn" style="font-size:10px;padding:1px 4px" onclick="deleteScheduleItem(${item.id})">×</button></div></div>`;
+    });
+
+    if(dayItems.length===0) html+=`<div style="text-align:center;color:var(--text-dim);font-size:10px;margin-top:12px;opacity:.6">free</div>`;
+    html+=`<button onclick="openSchedDayModal('${ds}')" style="width:100%;margin-top:6px;background:none;border:1px dashed var(--border);color:var(--text-dim);font-size:10px;padding:3px;border-radius:5px;cursor:pointer">+ add</button>`;
+    html+=`</div>`;
+  });
+
+  html+=`</div></div><div class="card"><div class="card-title" onclick="toggleSection('sched-list')">All Schedule Items<span class="card-title-toggle" id="toggle-sched-list">▼</span></div><div class="card-content" id="content-sched-list">`;
+
+  const allSched=(STATE.schedule||[]).slice().sort(function(a,b){return a.date.localeCompare(b.date);});
+  if(allSched.length===0){
+    html+=`<div class="empty-state">No schedule items yet. Click "+ add item" to plan your days.</div>`;
+  }else{
+    const byDate={};
+    allSched.forEach(function(s){ if(!byDate[s.date])byDate[s.date]=[]; byDate[s.date].push(s); });
+    Object.keys(byDate).sort().forEach(function(ds2){
+      const d=new Date(ds2+'T00:00:00');
+      const lbl=fullDays[d.getDay()]+', '+monthNames[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();
+      const isPast=ds2<todayStr, isToday2=ds2===todayStr;
+      html+=`<div style="margin-bottom:12px"><div style="font-size:11px;font-weight:700;color:${isToday2?'var(--accent-dark)':isPast?'var(--text-dim)':'var(--text)'};text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;padding:4px 8px;background:${isToday2?'rgba(201,147,58,.1)':'transparent'};border-radius:6px">${lbl}</div>`;
+      byDate[ds2].forEach(function(item){
+        html+=`<div class="item-row ${item.type==='trainee'?'green':'blue'}" style="margin-left:8px"><div class="item-body"><div style="font-weight:600;font-size:12px">${item.type==='trainee'?'Trainee: ':''}${esc(item.name)}</div>${item.time?`<div class="item-meta">${esc(item.time)}</div>`:''}${item.notes?`<div class="item-meta">${esc(item.notes)}</div>`:''}</div><div style="display:flex;gap:4px;flex-shrink:0"><button class="edit-btn" onclick="openScheduleEditModal(${item.id})">edit</button><button class="del-btn" onclick="deleteScheduleItem(${item.id})">×</button></div></div>`;
+      });
+      html+=`</div>`;
+    });
+  }
+
+  html+=`</div></div>`;
+  setTimeout(()=>updateSectionUI('sched-list'),10);
+  return html;
+}
+
+function openSchedDayModal(ds){
+  openScheduleAddModal(null);
+  document.getElementById('sched-date').value=ds;
+}
+function schedulePrevWeek(){
+  scheduleWeekStart=new Date(scheduleWeekStart);
+  scheduleWeekStart.setDate(scheduleWeekStart.getDate()-7);
+  showPage('schedule');
+}
+function scheduleNextWeek(){
+  scheduleWeekStart=new Date(scheduleWeekStart);
+  scheduleWeekStart.setDate(scheduleWeekStart.getDate()+7);
+  showPage('schedule');
+}
+function scheduleThisWeek(){
+  scheduleWeekStart=getWeekStart(new Date());
+  showPage('schedule');
+}
 function openScheduleAddModal(dateStr){
   scheduleEditingId=null;
   document.getElementById('sched-modal-title').textContent='Add Schedule Item';
@@ -1162,13 +1265,21 @@ function openScheduleEditModal(id){
   updateSchedNamePlaceholder();
   document.getElementById('sched-modal').classList.add('open');
 }
-function closeScheduleModal(){document.getElementById('sched-modal').classList.remove('open');scheduleEditingId=null;}
+function closeScheduleModal(){
+  document.getElementById('sched-modal').classList.remove('open');
+  scheduleEditingId=null;
+}
 function updateSchedNamePlaceholder(){
   const type=document.getElementById('sched-type').value;
   const nameInput=document.getElementById('sched-name');
   const nameLabel=document.getElementById('sched-name-label');
-  if(type==='trainee'){nameInput.placeholder='e.g. Cameron, Joshua...';nameLabel.textContent='Trainee Name';}
-  else{nameInput.placeholder='e.g. Team meeting, call...';nameLabel.textContent='Event / Item';}
+  if(type==='trainee'){
+    nameInput.placeholder='e.g. Cameron, Joshua...';
+    nameLabel.textContent='Trainee Name';
+  }else{
+    nameInput.placeholder='e.g. Team meeting, call...';
+    nameLabel.textContent='Event / Item';
+  }
 }
 function saveScheduleItem(){
   const date=document.getElementById('sched-date').value;
@@ -1181,21 +1292,20 @@ function saveScheduleItem(){
   if(!STATE.scheduleId)STATE.scheduleId=1;
   if(scheduleEditingId!==null){
     const idx=STATE.schedule.findIndex(function(s){return s.id===scheduleEditingId;});
-    if(idx!==-1)STATE.schedule[idx]=Object.assign({},STATE.schedule[idx],{date:date,type:type,name:name,time:time,notes:notes});
+    if(idx!==-1)STATE.schedule[idx]=Object.assign({},STATE.schedule[idx],{date,type,name,time,notes});
   }else{
-    STATE.schedule.push({id:STATE.scheduleId++,date:date,type:type,name:name,time:time,notes:notes});
+    STATE.schedule.push({id:STATE.scheduleId++,date,type,name,time,notes});
   }
-  save();closeScheduleModal();
-  if(currentPage==='schedule')renderSchedule();
+  save();
+  closeScheduleModal();
+  showPage('schedule');
 }
 function deleteScheduleItem(id){
   if(!confirm('Delete this schedule item?'))return;
   STATE.schedule=(STATE.schedule||[]).filter(function(s){return s.id!==id;});
   save();
-  if(currentPage==='schedule')renderSchedule();
+  showPage('schedule');
 }
-
-</script>
 
 <!-- SCHEDULE MODAL -->
 <div class="modal-overlay" id="sched-modal">
