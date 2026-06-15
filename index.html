@@ -823,8 +823,14 @@ function buildSidebar(){
 
 load();buildSidebar();showPage('home');
 window.addEventListener('beforeunload',save);
-
+function getWeekStart(date){
+  const d = new Date(date);
+  d.setDate(d.getDate() - d.getDay());
+  d.setHours(0,0,0,0);
+  return d;
+}
 /* ==================== MY SCHEDULE ==================== */
+
 function renderSchedule(){
   const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   const fullDays=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
@@ -903,6 +909,50 @@ function renderSchedule(){
   
   html += `</div></div>`;
 
+  // All schedule items list
+  html += `<div class="card">`;
+  html += `<div class="card-title" onclick="toggleSection('sched-list')">All Schedule Items<span class="card-title-toggle" id="toggle-sched-list">▼</span></div>`;
+  html += `<div class="card-content" id="content-sched-list">`;
+  
+  const allSched = (STATE.schedule || []).slice().sort((a,b) => a.date.localeCompare(b.date));
+  if(allSched.length === 0){
+    html += `<div class="empty-state">No schedule items yet. Click "+ add item" to plan your days.</div>`;
+  } else {
+    const byDate = {};
+    allSched.forEach(function(s){
+      if(!byDate[s.date]) byDate[s.date] = [];
+      byDate[s.date].push(s);
+    });
+    
+    Object.keys(byDate).sort().forEach(function(ds2){
+      const d = new Date(ds2 + 'T00:00:00');
+      const lbl = fullDays[d.getDay()] + ', ' + monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+      const isToday2 = ds2 === todayStr;
+      const isPast = ds2 < todayStr;
+      
+      html += `<div style="margin-bottom:12px">`;
+      html += `<div style="font-size:11px;font-weight:700;color:${isToday2?'var(--accent-dark)':isPast?'var(--text-dim)':'var(--text)'};text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;padding:4px 8px;background:${isToday2?'rgba(201,147,58,.1)':'transparent'};border-radius:6px">${lbl}</div>`;
+      
+      byDate[ds2].forEach(function(item){
+        html += `<div class="item-row ${item.type==='trainee'?'green':'blue'}" style="margin-left:8px">`;
+        html += `<div class="item-body">`;
+        html += `<div style="font-weight:600;font-size:12px">${item.type==='trainee'?'Trainee: ':''}${esc(item.name)}</div>`;
+        if(item.time) html += `<div class="item-meta">${esc(item.time)}</div>`;
+        if(item.notes) html += `<div class="item-meta">${esc(item.notes)}</div>`;
+        html += `</div><div style="display:flex;gap:4px;flex-shrink:0">`;
+        html += `<button class="edit-btn" onclick="openScheduleEditModal(${item.id})">edit</button>`;
+        html += `<button class="del-btn" onclick="deleteScheduleItem(${item.id})">×</button>`;
+        html += `</div></div>`;
+      });
+      html += `</div>`;
+    });
+  }
+  html += `</div></div>`;
+  
+  setTimeout(() => updateSectionUI('sched-list'), 10);
+  
+  return html;   // Important: must return the HTML
+}
   // All schedule items list
   html += `<div class="card">`;
   html += `<div class="card-title" onclick="toggleSection('sched-list')">All Schedule Items<span class="card-title-toggle" id="toggle-sched-list">▼</span></div>`;
