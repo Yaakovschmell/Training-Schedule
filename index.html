@@ -262,7 +262,7 @@ h1.page-title{font-size:27px;font-weight:700;margin-bottom:24px;color:var(--fore
 <button class="quick-btn" onclick="openNoteModal()" title="Quick thought">+</button>
 
 <script>
-let STATE = { trainees:[], meetings:[], yaakovMeetings:[], notes:[], followups:[], dayNotes:[], noteId:1, traineeId:1, dayNoteId:1, scheduleId:1, schedule:[] };
+let STATE = { trainees:[], meetings:[], yaakovMeetings:[], notes:[], followups:[], dayNotes:[], noteId:1, traineeId:1, dayNoteId:1 };
 const NOW = new Date();
 const TODAY = NOW.toISOString().slice(0,10);
 const TODAY_DISPLAY = NOW.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
@@ -320,7 +320,7 @@ function showPage(name){ currentPage=name; document.getElementById('content').in
 function updateNav(){
   const nav=document.getElementById('nav-buttons');
   const openFu=STATE.followups.filter(f=>!f.done).length;
-  const items=[{id:'home',label:'Home'},{id:'calendar',label:'Calendar'},{id:'followups',label:'Follow-ups'+(openFu?' ('+openFu+')':'')},{id:'yaakov',label:'Yaakov'},{id:'schedule',label:'My Schedule'}];
+  const items=[{id:'home',label:'Home'},{id:'calendar',label:'Calendar'},{id:'followups',label:'Follow-ups'+(openFu?' ('+openFu+')':'')},{id:'yaakov',label:'Yaakov'}];
   nav.innerHTML=items.map(i=>`<button class="nav-btn ${currentPage===i.id?'active':''}" onclick="showPage('${i.id}')">${i.label}</button>`).join('');
 }
 function renderPage(name){
@@ -328,7 +328,6 @@ function renderPage(name){
   if(name==='calendar')return renderCalendar();
   if(name==='followups')return renderFollowups();
   if(name==='yaakov')return renderYaakov();
-  if(name==='schedule')return renderSchedule();
   if(name.startsWith('trainee-')){const id=parseInt(name.split('-')[1]);const tr=STATE.trainees.find(t=>t.id===id);return tr?renderTrainee(tr):'<div class="empty-state">Not found</div>';}
   return '';
 }
@@ -815,7 +814,6 @@ function buildSidebar(){
     <div class="sidebar-item ${currentPage==='calendar'?'active':''}" onclick="showPage('calendar')">Calendar</div>
     <div class="sidebar-item ${currentPage==='followups'?'active':''}" onclick="showPage('followups')"><span>Follow-ups</span>${openFu?`<span class="sidebar-count">${openFu}</span>`:''}</div>
     <div class="sidebar-item ${currentPage==='yaakov'?'active':''}" onclick="showPage('yaakov')">Yaakov</div>
-    <div class="sidebar-item ${currentPage==='schedule'?'active':''}" onclick="showPage('schedule')">My Schedule</div>
     <div class="sidebar-section" style="margin-top:16px">Trainees</div>
     ${STATE.trainees.map(t=>`<div class="sidebar-item ${currentPage==='trainee-'+t.id?'active':''}" onclick="showPage('trainee-${t.id}')">${esc(t.name)}</div>`).join('')}
     <div class="sidebar-item sidebar-add" onclick="addTrainee()">+ add trainee</div>`;
@@ -823,315 +821,6 @@ function buildSidebar(){
 
 load();buildSidebar();showPage('home');
 window.addEventListener('beforeunload',save);
-function getWeekStart(date){
-  const d = new Date(date);
-  d.setDate(d.getDate() - d.getDay());
-  d.setHours(0,0,0,0);
-  return d;
-}
-/* ==================== MY SCHEDULE ==================== */
-
-function renderSchedule(){
-  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  const fullDays=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  const monthNames=['January','February','March','April','May','June','July','August','September','October','November','December'];
-  
-  const weekDates=[];
-  for(let i=0;i<7;i++){
-    const d=new Date(scheduleWeekStart);
-    d.setDate(d.getDate()+i);
-    weekDates.push(d);
-  }
-  
-  const todayStr=TODAY;
-  const wS=weekDates[0], wE=weekDates[6];
-  const weekLabel=(wS.getMonth()===wE.getMonth())
-    ? monthNames[wS.getMonth()]+' '+wS.getDate()+'-'+wE.getDate()+', '+wS.getFullYear()
-    : monthNames[wS.getMonth()]+' '+wS.getDate()+' - '+monthNames[wE.getMonth()]+' '+wE.getDate()+', '+wE.getFullYear();
-
-  let html = `<h1 class="page-title">My Schedule</h1>`;
-  html += `<div class="card">`;
-  html += `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">`;
-  html += `<div style="display:flex;gap:8px">`;
-  html += `<button class="btn-secondary btn-sm" onclick="schedulePrevWeek()">‹ prev</button>`;
-  html += `<button class="btn-secondary btn-sm" onclick="scheduleThisWeek()">this week</button>`;
-  html += `<button class="btn-secondary btn-sm" onclick="scheduleNextWeek()">next ›</button>`;
-  html += `</div>`;
-  html += `<div style="font-size:15px;font-weight:700;color:var(--accent-dark)">${weekLabel}</div>`;
-  html += `<button class="btn-primary btn-sm" onclick="openScheduleAddModal(null)">+ add item</button>`;
-  html += `</div>`;
-  
-  html += `<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:10px">`;
-  
-  weekDates.forEach(function(date, i){
-    const ds = date.toISOString().slice(0,10);
-    const isToday = ds === todayStr;
-    const dayItems = (STATE.schedule || []).filter(function(s){ return s.date === ds; });
-    const traineeItems = dayItems.filter(function(s){ return s.type === 'trainee'; });
-    const otherItems = dayItems.filter(function(s){ return s.type !== 'trainee'; });
-    
-    const bdr = isToday ? 'var(--accent)' : 'var(--border)';
-    const bg = isToday ? 'linear-gradient(160deg,rgba(201,147,58,.1),transparent)' : 'var(--bg-card)';
-    
-    html += `<div style="border:1px solid ${bdr};border-radius:10px;padding:10px;min-height:140px;background:${bg}">`;
-    html += `<div style="text-align:center;margin-bottom:8px">`;
-    html += `<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:${isToday?'var(--accent-dark)':'var(--text-dim)'}">${days[i]}</div>`;
-    html += `<div style="font-size:18px;font-weight:700;color:${isToday?'var(--accent)':'var(--text)'}">${date.getDate()}</div>`;
-    html += `</div>`;
-
-    traineeItems.forEach(function(item){
-      html += `<div style="background:rgba(90,138,106,.12);border:1px solid rgba(90,138,106,.3);border-radius:6px;padding:5px 7px;margin-bottom:4px;font-size:11px">`;
-      html += `<div style="font-weight:600;color:var(--teal)">Trainee: ${esc(item.name)}</div>`;
-      if(item.time) html += `<div style="color:var(--text-dim);font-size:10px">${esc(item.time)}</div>`;
-      if(item.notes) html += `<div style="color:var(--text-dim);font-size:10px;margin-top:2px">${esc(item.notes)}</div>`;
-      html += `<div style="display:flex;gap:4px;margin-top:4px">`;
-      html += `<button class="edit-btn" style="font-size:9px;padding:1px 5px" onclick="openScheduleEditModal(${item.id})">edit</button>`;
-      html += `<button class="del-btn" style="font-size:10px;padding:1px 4px" onclick="deleteScheduleItem(${item.id})">×</button>`;
-      html += `</div></div>`;
-    });
-
-    otherItems.forEach(function(item){
-      html += `<div style="background:rgba(45,106,138,.1);border:1px solid rgba(45,106,138,.25);border-radius:6px;padding:5px 7px;margin-bottom:4px;font-size:11px">`;
-      html += `<div style="font-weight:600;color:var(--blue)">${esc(item.name)}</div>`;
-      if(item.time) html += `<div style="color:var(--text-dim);font-size:10px">${esc(item.time)}</div>`;
-      if(item.notes) html += `<div style="color:var(--text-dim);font-size:10px;margin-top:2px">${esc(item.notes)}</div>`;
-      html += `<div style="display:flex;gap:4px;margin-top:4px">`;
-      html += `<button class="edit-btn" style="font-size:9px;padding:1px 5px" onclick="openScheduleEditModal(${item.id})">edit</button>`;
-      html += `<button class="del-btn" style="font-size:10px;padding:1px 4px" onclick="deleteScheduleItem(${item.id})">×</button>`;
-      html += `</div></div>`;
-    });
-
-    if(dayItems.length===0) html += `<div style="text-align:center;color:var(--text-dim);font-size:10px;margin-top:12px;opacity:.6">free</div>`;
-    
-    html += `<button onclick="openSchedDayModal('${ds}')" style="width:100%;margin-top:6px;background:none;border:1px dashed var(--border);color:var(--text-dim);font-size:10px;padding:3px;border-radius:5px;cursor:pointer">+ add</button>`;
-    html += `</div>`;
-  });
-  
-  html += `</div></div>`;
-
-  // All schedule items list
-  html += `<div class="card">`;
-  html += `<div class="card-title" onclick="toggleSection('sched-list')">All Schedule Items<span class="card-title-toggle" id="toggle-sched-list">▼</span></div>`;
-  html += `<div class="card-content" id="content-sched-list">`;
-  
-  const allSched = (STATE.schedule || []).slice().sort((a,b) => a.date.localeCompare(b.date));
-  if(allSched.length === 0){
-    html += `<div class="empty-state">No schedule items yet. Click "+ add item" to plan your days.</div>`;
-  } else {
-    const byDate = {};
-    allSched.forEach(function(s){
-      if(!byDate[s.date]) byDate[s.date] = [];
-      byDate[s.date].push(s);
-    });
-    
-    Object.keys(byDate).sort().forEach(function(ds2){
-      const d = new Date(ds2 + 'T00:00:00');
-      const lbl = fullDays[d.getDay()] + ', ' + monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
-      const isToday2 = ds2 === todayStr;
-      const isPast = ds2 < todayStr;
-      
-      html += `<div style="margin-bottom:12px">`;
-      html += `<div style="font-size:11px;font-weight:700;color:${isToday2?'var(--accent-dark)':isPast?'var(--text-dim)':'var(--text)'};text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;padding:4px 8px;background:${isToday2?'rgba(201,147,58,.1)':'transparent'};border-radius:6px">${lbl}</div>`;
-      
-      byDate[ds2].forEach(function(item){
-        html += `<div class="item-row ${item.type==='trainee'?'green':'blue'}" style="margin-left:8px">`;
-        html += `<div class="item-body">`;
-        html += `<div style="font-weight:600;font-size:12px">${item.type==='trainee'?'Trainee: ':''}${esc(item.name)}</div>`;
-        if(item.time) html += `<div class="item-meta">${esc(item.time)}</div>`;
-        if(item.notes) html += `<div class="item-meta">${esc(item.notes)}</div>`;
-        html += `</div><div style="display:flex;gap:4px;flex-shrink:0">`;
-        html += `<button class="edit-btn" onclick="openScheduleEditModal(${item.id})">edit</button>`;
-        html += `<button class="del-btn" onclick="deleteScheduleItem(${item.id})">×</button>`;
-        html += `</div></div>`;
-      });
-      html += `</div>`;
-    });
-  }
-  html += `</div></div>`;
-  
-  setTimeout(() => updateSectionUI('sched-list'), 10);
-  
-  return html;   // Important: must return the HTML
-}
-  // All schedule items list
-  html += `<div class="card">`;
-  html += `<div class="card-title" onclick="toggleSection('sched-list')">All Schedule Items<span class="card-title-toggle" id="toggle-sched-list">▼</span></div>`;
-  html += `<div class="card-content" id="content-sched-list">`;
-  
-  const allSched = (STATE.schedule || []).slice().sort((a,b) => a.date.localeCompare(b.date));
-  if(allSched.length === 0){
-    html += `<div class="empty-state">No schedule items yet. Click "+ add item" to plan your days.</div>`;
-  } else {
-    const byDate = {};
-    allSched.forEach(function(s){
-      if(!byDate[s.date]) byDate[s.date] = [];
-      byDate[s.date].push(s);
-    });
-    
-    Object.keys(byDate).sort().forEach(function(ds2){
-      const d = new Date(ds2 + 'T00:00:00');
-      const lbl = fullDays[d.getDay()] + ', ' + monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
-      const isToday2 = ds2 === todayStr;
-      const isPast = ds2 < todayStr;
-      
-      html += `<div style="margin-bottom:12px">`;
-      html += `<div style="font-size:11px;font-weight:700;color:${isToday2?'var(--accent-dark)':isPast?'var(--text-dim)':'var(--text)'};text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;padding:4px 8px;background:${isToday2?'rgba(201,147,58,.1)':'transparent'};border-radius:6px">${lbl}</div>`;
-      
-      byDate[ds2].forEach(function(item){
-        html += `<div class="item-row ${item.type==='trainee'?'green':'blue'}" style="margin-left:8px">`;
-        html += `<div class="item-body">`;
-        html += `<div style="font-weight:600;font-size:12px">${item.type==='trainee'?'Trainee: ':''}${esc(item.name)}</div>`;
-        if(item.time) html += `<div class="item-meta">${esc(item.time)}</div>`;
-        if(item.notes) html += `<div class="item-meta">${esc(item.notes)}</div>`;
-        html += `</div><div style="display:flex;gap:4px;flex-shrink:0">`;
-        html += `<button class="edit-btn" onclick="openScheduleEditModal(${item.id})">edit</button>`;
-        html += `<button class="del-btn" onclick="deleteScheduleItem(${item.id})">×</button>`;
-        html += `</div></div>`;
-      });
-      html += `</div>`;
-    });
-  }
-  html += `</div></div>`;
-  
-  // Initialize collapsed state if needed
-  setTimeout(() => updateSectionUI('sched-list'), 10);
-  
-}
-    otherItems.forEach(function(item){
-      html+='<div style="background:rgba(45,106,138,.1);border:1px solid rgba(45,106,138,.25);border-radius:6px;padding:5px 7px;margin-bottom:4px;font-size:11px">';
-      html+='<div style="font-weight:600;color:var(--blue)">'+esc(item.name)+'</div>';
-      if(item.time)html+='<div style="color:var(--text-dim);font-size:10px">'+esc(item.time)+'</div>';
-      if(item.notes)html+='<div style="color:var(--text-dim);font-size:10px;margin-top:2px">'+esc(item.notes)+'</div>';
-      html+='<div style="display:flex;gap:4px;margin-top:4px">';
-      html+='<button class="edit-btn" style="font-size:9px;padding:1px 5px" onclick="openScheduleEditModal('+item.id+')">edit</button>';
-      html+='<button class="del-btn" style="font-size:10px;padding:1px 4px" onclick="deleteScheduleItem('+item.id+')">&times;</button>';
-      html+='</div></div>';
-    });
-    if(dayItems.length===0)html+='<div style="text-align:center;color:var(--text-dim);font-size:10px;margin-top:12px;opacity:.6">free</div>';
-    html+='<button onclick="openSchedDayModal('+JSON.stringify(ds)+')" style="width:100%;margin-top:6px;background:none;border:1px dashed var(--border);color:var(--text-dim);font-size:10px;padding:3px;border-radius:5px;cursor:pointer">+ add</button>';
-    html+='</div>';
-  });
-  html+='</div></div>';
-  html+='<div class="card">';
-  html+='<div class="card-title" onclick="toggleSection(\'sched-list\')">All Schedule Items<span class="card-title-toggle" id="toggle-sched-list">&#9660;</span></div>';
-  html+='<div class="card-content" id="sched-list">';
-  const allSched=(STATE.schedule||[]).slice().sort(function(a,b){return a.date.localeCompare(b.date);});
-  if(allSched.length===0){
-    html+='<div class="empty-state">No schedule items yet. Click "+ add item" to plan your days.</div>';
-  }else{
-    const byDate={};
-    allSched.forEach(function(s){if(!byDate[s.date])byDate[s.date]=[];byDate[s.date].push(s);});
-    Object.keys(byDate).sort().forEach(function(ds2){
-      const d=new Date(ds2+'T00:00:00');
-      const lbl=fullDays[d.getDay()]+', '+monthNames[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();
-      const isPast=ds2<todayStr,isToday2=ds2===todayStr;
-      html+='<div style="margin-bottom:12px">';
-      html+='<div style="font-size:11px;font-weight:700;color:'+(isToday2?'var(--accent-dark)':isPast?'var(--text-dim)':'var(--text)')+';text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;padding:4px 8px;background:'+(isToday2?'rgba(201,147,58,.1)':'transparent')+';border-radius:6px">'+lbl+'</div>';
-      byDate[ds2].forEach(function(item){
-        html+='<div class="item-row '+(item.type==='trainee'?'green':'blue')+'" style="margin-left:8px">';
-        html+='<div class="item-body">';
-        html+='<div style="font-weight:600;font-size:12px">'+(item.type==='trainee'?'Trainee: ':'')+esc(item.name)+'</div>';
-        if(item.time)html+='<div class="item-meta">'+esc(item.time)+'</div>';
-        if(item.notes)html+='<div class="item-meta">'+esc(item.notes)+'</div>';
-        html+='</div><div style="display:flex;gap:4px;flex-shrink:0">';
-        html+='<button class="edit-btn" onclick="openScheduleEditModal('+item.id+')">edit</button>';
-        html+='<button class="del-btn" onclick="deleteScheduleItem('+item.id+')">&times;</button>';
-        html+='</div></div>';
-      });
-      html+='</div>';
-    });
-  }
-  html+='</div></div>';
-  content.innerHTML=html;
-}
-function openSchedDayModal(ds){openScheduleAddModal(null);document.getElementById('sched-date').value=ds;}
-let scheduleWeekStart=getWeekStart(new Date());
-function getWeekStart(date){const d=new Date(date);d.setDate(d.getDate()-d.getDay());d.setHours(0,0,0,0);return d;}
-function schedulePrevWeek(){scheduleWeekStart=new Date(scheduleWeekStart);scheduleWeekStart.setDate(scheduleWeekStart.getDate()-7);renderSchedule();}
-function scheduleNextWeek(){scheduleWeekStart=new Date(scheduleWeekStart);scheduleWeekStart.setDate(scheduleWeekStart.getDate()+7);renderSchedule();}
-function scheduleThisWeek(){scheduleWeekStart=getWeekStart(new Date());renderSchedule();}
-let scheduleEditingId=null;
-function openScheduleAddModal(dateStr){
-  scheduleEditingId=null;
-  document.getElementById('sched-modal-title').textContent='Add Schedule Item';
-  document.getElementById('sched-date').value=dateStr||TODAY;
-  document.getElementById('sched-type').value='trainee';
-  document.getElementById('sched-name').value='';
-  document.getElementById('sched-time').value='';
-  document.getElementById('sched-notes').value='';
-  updateSchedNamePlaceholder();
-  document.getElementById('sched-modal').classList.add('open');
-}
-function openScheduleEditModal(id){
-  const item=(STATE.schedule||[]).find(function(s){return s.id===id;});
-  if(!item)return;
-  scheduleEditingId=id;
-  document.getElementById('sched-modal-title').textContent='Edit Schedule Item';
-  document.getElementById('sched-date').value=item.date;
-  document.getElementById('sched-type').value=item.type;
-  document.getElementById('sched-name').value=item.name;
-  document.getElementById('sched-time').value=item.time||'';
-  document.getElementById('sched-notes').value=item.notes||'';
-  updateSchedNamePlaceholder();
-  document.getElementById('sched-modal').classList.add('open');
-}
-function closeScheduleModal(){document.getElementById('sched-modal').classList.remove('open');scheduleEditingId=null;}
-function updateSchedNamePlaceholder(){
-  const type=document.getElementById('sched-type').value;
-  const nameInput=document.getElementById('sched-name');
-  const nameLabel=document.getElementById('sched-name-label');
-  if(type==='trainee'){nameInput.placeholder='e.g. Cameron, Joshua...';nameLabel.textContent='Trainee Name';}
-  else{nameInput.placeholder='e.g. Team meeting, call...';nameLabel.textContent='Event / Item';}
-}
-function saveScheduleItem(){
-  const date=document.getElementById('sched-date').value;
-  const type=document.getElementById('sched-type').value;
-  const name=document.getElementById('sched-name').value.trim();
-  const time=document.getElementById('sched-time').value.trim();
-  const notes=document.getElementById('sched-notes').value.trim();
-  if(!date||!name){alert('Please fill in the date and name fields.');return;}
-  if(!STATE.schedule)STATE.schedule=[];
-  if(!STATE.scheduleId)STATE.scheduleId=1;
-  if(scheduleEditingId!==null){
-    const idx=STATE.schedule.findIndex(function(s){return s.id===scheduleEditingId;});
-    if(idx!==-1)STATE.schedule[idx]=Object.assign({},STATE.schedule[idx],{date:date,type:type,name:name,time:time,notes:notes});
-  }else{
-    STATE.schedule.push({id:STATE.scheduleId++,date:date,type:type,name:name,time:time,notes:notes});
-  }
-  save();closeScheduleModal();
-  if(currentPage==='schedule')renderSchedule();
-}
-function deleteScheduleItem(id){
-  if(!confirm('Delete this schedule item?'))return;
-  STATE.schedule=(STATE.schedule||[]).filter(function(s){return s.id!==id;});
-  save();
-  if(currentPage==='schedule')renderSchedule();
-}
-
 </script>
-
-<!-- SCHEDULE MODAL -->
-<div class="modal-overlay" id="sched-modal">
-<div class="modal-box">
-<div class="modal-title" id="sched-modal-title">Add Schedule Item</div>
-<label class="modal-label">Date</label>
-<input type="date" id="sched-date">
-<label class="modal-label">Type</label>
-<select id="sched-type" onchange="updateSchedNamePlaceholder()">
-<option value="trainee">Trainee Meeting</option>
-<option value="event">Other Event</option>
-</select>
-<label class="modal-label" id="sched-name-label">Trainee Name</label>
-<input type="text" id="sched-name" placeholder="e.g. Cameron, Joshua...">
-<label class="modal-label">Time (optional)</label>
-<input type="time" id="sched-time">
-<label class="modal-label">Notes (optional)</label>
-<textarea id="sched-notes" placeholder="Any details for this item..."></textarea>
-<div class="modal-buttons">
-<button class="btn-secondary" onclick="closeScheduleModal()">cancel</button>
-<button class="btn-primary" onclick="saveScheduleItem()">save</button>
-</div>
-</div>
-</div>
 </body>
 </html>
