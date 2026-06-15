@@ -119,7 +119,7 @@ textarea{resize:vertical;min-height:80px}
 .fu-cb{width:18px;height:18px;border:1.5px solid var(--border);border-radius:5px;background:#fdfaf5;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
 .fu-cb:hover{border-color:var(--accent)}
 .fu-cb.on{background:linear-gradient(135deg,var(--green),var(--teal));border-color:var(--green)}
-.fu-cb.on::after{content:'â';color:#fff;font-size:10px;font-weight:700}
+.fu-cb.on::after{content:'Ã¢ÂÂ';color:#fff;font-size:10px;font-weight:700}
 .fu-body{flex:1;min-width:0}
 .fu-text{font-size:13px;line-height:1.4}
 .fu-text.done{text-decoration:line-through;color:var(--text-dim)}
@@ -145,8 +145,8 @@ h1.page-title{font-size:27px;font-weight:700;margin-bottom:24px;color:var(--fore
       <div class="nav-dots" id="nav-buttons"></div>
       <div class="save-ind" id="save-indicator">saved</div>
       <div class="data-controls">
-        <button class="data-btn" onclick="exportData()" title="Download your data">â¬ export</button>
-        <button class="data-btn" onclick="openImportModal()" title="Load data from file">â¬ import</button>
+        <button class="data-btn" onclick="exportData()" title="Download your data">Ã¢Â¬Â export</button>
+        <button class="data-btn" onclick="openImportModal()" title="Load data from file">Ã¢Â¬Â import</button>
       </div>
     </div>
   </div>
@@ -159,14 +159,14 @@ h1.page-title{font-size:27px;font-weight:700;margin-bottom:24px;color:var(--fore
 <!-- LOG MEETING MODAL -->
 <div class="modal-overlay" id="meeting-modal">
   <div class="modal-box">
-    <div class="modal-title">ðï¸ Log Meeting</div>
+    <div class="modal-title">Ã°ÂÂÂÃ¯Â¸Â Log Meeting</div>
     <label class="modal-label">Trainee(s)</label>
     <input type="text" id="m-meet-trainees" placeholder="Cameron, Joshua, Astra">
     <label class="modal-label">Date</label>
     <input type="date" id="m-meet-date">
     <label class="modal-label">What you covered / worked on</label>
     <textarea id="m-meet-notes" placeholder="What did you go over? What did they do well / need to fix?"></textarea>
-    <label class="modal-label">Transcript (optional â paste from Sell Me This Pen)</label>
+    <label class="modal-label">Transcript (optional Ã¢ÂÂ paste from Sell Me This Pen)</label>
     <textarea id="m-meet-transcript" style="min-height:120px" placeholder="Paste call transcript here if you have one..."></textarea>
     <label class="modal-label">Follow-up for them (optional)</label>
     <input type="text" id="m-meet-followup" placeholder="e.g. Go through neglected quotes, set follow-up tasks">
@@ -180,7 +180,7 @@ h1.page-title{font-size:27px;font-weight:700;margin-bottom:24px;color:var(--fore
 <!-- YAAKOV MODAL -->
 <div class="modal-overlay" id="yaakov-modal">
   <div class="modal-box">
-    <div class="modal-title">ð¯ Yaakov Meeting</div>
+    <div class="modal-title">Ã°ÂÂÂ¯ Yaakov Meeting</div>
     <p style="font-size:12px;color:var(--text-dim);margin-bottom:14px">Log direction from Yaakov anytime during the day</p>
     <label class="modal-label">Date</label>
     <input type="date" id="m-yak-date">
@@ -200,11 +200,11 @@ h1.page-title{font-size:27px;font-weight:700;margin-bottom:24px;color:var(--fore
 <!-- QUICK NOTE MODAL -->
 <div class="modal-overlay" id="note-modal">
   <div class="modal-box">
-    <div class="modal-title">ð­ Quick Thought</div>
+    <div class="modal-title">Ã°ÂÂÂ­ Quick Thought</div>
     <p style="font-size:12px;color:var(--text-dim);margin-bottom:14px">Jot it down now, sort it later. Lead names, reminders, anything.</p>
     <textarea id="m-note-text" style="min-height:100px" placeholder="What's on your mind?"></textarea>
     <label class="modal-label">Assign to trainee (optional)</label>
-    <select id="m-note-trainee"><option value="">â leave unassigned â</option></select>
+    <select id="m-note-trainee"><option value="">Ã¢ÂÂ leave unassigned Ã¢ÂÂ</option></select>
     <div class="modal-buttons">
       <button class="btn-secondary" onclick="closeNoteModal()">cancel</button>
       <button class="btn-primary" onclick="saveNote()">save</button>
@@ -215,11 +215,11 @@ h1.page-title{font-size:27px;font-weight:700;margin-bottom:24px;color:var(--fore
 <!-- FOLLOW-UP MODAL -->
 <div class="modal-overlay" id="fu-modal">
   <div class="modal-box">
-    <div class="modal-title">â New Follow-up</div>
+    <div class="modal-title">Ã¢ÂÂ New Follow-up</div>
     <label class="modal-label">What needs to happen</label>
     <input type="text" id="m-fu-text" placeholder="e.g. Check that Joshua set follow-up tasks on hot leads">
     <label class="modal-label">For trainee (optional)</label>
-    <select id="m-fu-trainee"><option value="">â general â</option></select>
+    <select id="m-fu-trainee"><option value="">Ã¢ÂÂ general Ã¢ÂÂ</option></select>
     <label class="modal-label">Check back by (optional)</label>
     <input type="date" id="m-fu-date">
     <div class="modal-buttons">
@@ -232,7 +232,7 @@ h1.page-title{font-size:27px;font-weight:700;margin-bottom:24px;color:var(--fore
 <!-- IMPORT MODAL -->
 <div class="modal-overlay" id="import-modal">
   <div class="modal-box">
-    <div class="modal-title">ð¥ Import Data</div>
+    <div class="modal-title">Ã°ÂÂÂ¥ Import Data</div>
     <p style="font-size:12px;color:var(--text-dim);margin-bottom:16px">Select your saved data file (.json)</p>
     <input type="file" id="import-file" accept=".json" style="width:100%;margin-bottom:16px;padding:8px;background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;color:var(--text);cursor:pointer">
     <div class="modal-buttons">
@@ -307,10 +307,10 @@ function updateSectionUI(id){
   if(content){
     if(collapsedSections[id]){
       content.classList.add('collapsed');
-      if(toggle)toggle.textContent='â¶';
+      if(toggle)toggle.textContent='Ã¢ÂÂ¶';
     }else{
       content.classList.remove('collapsed');
-      if(toggle)toggle.textContent='â¼';
+      if(toggle)toggle.textContent='Ã¢ÂÂ¼';
     }
   }
 }
@@ -341,18 +341,18 @@ function renderHome(){
   const openFu=STATE.followups.filter(f=>!f.done);
   const dueFu=openFu.filter(f=>f.dueDate&&f.dueDate<=TODAY);
   
-  const html=`<h1 class="page-title">ð Today's Workflow</h1>
+  const html=`<h1 class="page-title">Ã°ÂÂÂ Today's Workflow</h1>
     <div style="font-size:13px;color:var(--text-dim);margin-top:-16px;margin-bottom:24px">${TODAY_DISPLAY}</div>
     <div class="split-section">
       <div class="card">
-        <div class="card-title" onclick="toggleSection('home-yaakov')">ð¯ Yaakov${todayYak.length?`<span class="badge amber">${todayYak.length}</span>`:''}<span class="card-title-toggle" id="toggle-home-yaakov">â¼</span></div>
+        <div class="card-title" onclick="toggleSection('home-yaakov')">Ã°ÂÂÂ¯ Yaakov${todayYak.length?`<span class="badge amber">${todayYak.length}</span>`:''}<span class="card-title-toggle" id="toggle-home-yaakov">Ã¢ÂÂ¼</span></div>
         <div class="card-content" id="content-home-yaakov">
           ${todayYak.length?todayYak.map(y=>`<div style="margin-bottom:10px;padding:10px;background:var(--bg-dark);border-radius:6px;border-left:3px solid var(--accent)">${y.time?`<div class="item-meta">${y.time}</div>`:''}${y.notes?`<div>${esc(y.notes)}</div>`:''}</div>`).join(''):' <div class="empty-state">No Yaakov meetings today</div>'}
           <button class="btn-secondary" style="width:100%;margin-top:10px" onclick="openYaakovModal()">+ log Yaakov</button>
         </div>
       </div>
       <div class="card">
-        <div class="card-title" onclick="toggleSection('home-meetings')">ðï¸ Meetings Today${todayMeet.length?`<span class="badge amber">${todayMeet.length}</span>`:''}<span class="card-title-toggle" id="toggle-home-meetings">â¼</span></div>
+        <div class="card-title" onclick="toggleSection('home-meetings')">Ã°ÂÂÂÃ¯Â¸Â Meetings Today${todayMeet.length?`<span class="badge amber">${todayMeet.length}</span>`:''}<span class="card-title-toggle" id="toggle-home-meetings">Ã¢ÂÂ¼</span></div>
         <div class="card-content" id="content-home-meetings">
           ${todayMeet.length?todayMeet.map(m=>`<div style="margin-bottom:8px;padding:8px 10px;background:var(--bg-dark);border-radius:6px;border-left:3px solid var(--blue);font-size:12px;font-weight:600">${esc(m.trainees)}</div>`).join(''):'<div class="empty-state">No meetings today</div>'}
           <button class="btn-primary" style="width:100%;margin-top:10px" onclick="openMeetingModal()">+ log meeting</button>
@@ -360,7 +360,7 @@ function renderHome(){
       </div>
     </div>
     <div class="card">
-      <div class="card-title" onclick="toggleSection('home-followups')">â Follow-ups${dueFu.length?`<span class="badge red">${dueFu.length} due</span>`:openFu.length?`<span class="badge">${openFu.length} open</span>`:''}<span class="card-title-toggle" id="toggle-home-followups">â¼</span></div>
+      <div class="card-title" onclick="toggleSection('home-followups')">Ã¢ÂÂ Follow-ups${dueFu.length?`<span class="badge red">${dueFu.length} due</span>`:openFu.length?`<span class="badge">${openFu.length} open</span>`:''}<span class="card-title-toggle" id="toggle-home-followups">Ã¢ÂÂ¼</span></div>
       <div class="card-content" id="content-home-followups">
         ${openFu.length?openFu.slice(0,6).map(f=>fuRow(f)).join(''):'<div class="empty-state">Nothing to follow up on</div>'}
         <div style="display:flex;gap:8px;margin-top:10px">
@@ -370,9 +370,9 @@ function renderHome(){
       </div>
     </div>
     <div class="card">
-      <div class="card-title" onclick="toggleSection('home-notes')">ð­ Quick Notes${unassigned.length?`<span class="badge amber">${unassigned.length}</span>`:''}<span class="card-title-toggle" id="toggle-home-notes">â¼</span></div>
+      <div class="card-title" onclick="toggleSection('home-notes')">Ã°ÂÂÂ­ Quick Notes${unassigned.length?`<span class="badge amber">${unassigned.length}</span>`:''}<span class="card-title-toggle" id="toggle-home-notes">Ã¢ÂÂ¼</span></div>
       <div class="card-content" id="content-home-notes">
-        <div style="font-size:12px;color:var(--text-dim);margin-bottom:12px">Unassigned thoughts â assign to a trainee or clear</div>
+        <div style="font-size:12px;color:var(--text-dim);margin-bottom:12px">Unassigned thoughts Ã¢ÂÂ assign to a trainee or clear</div>
         ${unassigned.length?unassigned.map(n=>noteRow(n,true)).join(''):'<div class="empty-state">No unassigned notes</div>'}
         <button class="btn-secondary" style="width:100%;margin-top:10px" onclick="openNoteModal()">+ add a thought</button>
       </div>
@@ -390,9 +390,9 @@ function fuRow(f){
   const tag=f.traineeId?`<span class="fu-tag">${esc(traineeName(f.traineeId))}</span>`:'';
   return `<div class="fu-item ${overdue?'overdue':''}">
     <div class="fu-cb ${f.done?'on':''}" onclick="toggleFu(${f.id})"></div>
-    <div class="fu-body"><div class="fu-text ${f.done?'done':''}">${esc(f.text)}${tag}</div>${f.dueDate?`<div class="fu-meta ${overdue?'overdue':''}">${overdue?'overdue Â· ':'by '}${fmtDate(f.dueDate)}</div>`:''}
+    <div class="fu-body"><div class="fu-text ${f.done?'done':''}">${esc(f.text)}${tag}</div>${f.dueDate?`<div class="fu-meta ${overdue?'overdue':''}">${overdue?'overdue ÃÂ· ':'by '}${fmtDate(f.dueDate)}</div>`:''}
     </div>
-    <button class="del-btn" onclick="deleteFu(${f.id})">â</button>
+    <button class="del-btn" onclick="deleteFu(${f.id})">Ã¢ÂÂ</button>
   </div>`;
 }
 function noteRow(n,showAssign){
@@ -408,8 +408,8 @@ function noteRow(n,showAssign){
       `:''}
     </div>
     <div style="display:flex;gap:4px">
-      <button class="del-btn" onclick="editNote(${n.id})">â</button>
-      <button class="del-btn" onclick="deleteNote(${n.id})">â</button>
+      <button class="del-btn" onclick="editNote(${n.id})">Ã¢ÂÂ</button>
+      <button class="del-btn" onclick="deleteNote(${n.id})">Ã¢ÂÂ</button>
     </div>
   </div>`;
 }
@@ -435,15 +435,15 @@ function renderCalendar(){
     const dYak=STATE.yaakovMeetings.filter(y=>{const d=dateOf(y);return d&&keyFromDate(d)===selectedCalKey;});
     const[yy,mm,dd]=selectedCalKey.split('-').map(Number);
     detail=`<div class="day-detail"><div class="day-card"><div class="day-date">${MONTHS_FULL[mm-1]} ${dd}, ${yy}</div>
-      ${dYak.length?`<div class="day-section"><div class="day-section-title">ð¯ Yaakov (${dYak.length})</div>${dYak.map(y=>`<div class="item-row"><div class="item-body">${y.time?`<div class="item-meta">${y.time}</div>`:''}${y.notes?`<div>${esc(y.notes)}</div>`:''}</div></div>`).join('')}</div>`:''}
-      ${dMeet.length?`<div class="day-section"><div class="day-section-title">ðï¸ Trainee Meetings (${dMeet.length})</div>${dMeet.map(m=>`<div class="item-row blue"><div class="item-body"><div class="item-meta">${esc(m.trainees)}</div>${m.notes?`<div>${esc(m.notes)}</div>`:''}</div></div>`).join('')}</div>`:''}
+      ${dYak.length?`<div class="day-section"><div class="day-section-title">Ã°ÂÂÂ¯ Yaakov (${dYak.length})</div>${dYak.map(y=>`<div class="item-row"><div class="item-body">${y.time?`<div class="item-meta">${y.time}</div>`:''}${y.notes?`<div>${esc(y.notes)}</div>`:''}</div></div>`).join('')}</div>`:''}
+      ${dMeet.length?`<div class="day-section"><div class="day-section-title">Ã°ÂÂÂÃ¯Â¸Â Trainee Meetings (${dMeet.length})</div>${dMeet.map(m=>`<div class="item-row blue"><div class="item-body"><div class="item-meta">${esc(m.trainees)}</div>${m.notes?`<div>${esc(m.notes)}</div>`:''}</div></div>`).join('')}</div>`:''}
       ${(!dYak.length&&!dMeet.length)?'<div class="empty-state">Nothing logged this day</div>':''}
     </div></div>`;
   }
-  return `<h1 class="page-title">ð Calendar</h1>
+  return `<h1 class="page-title">Ã°ÂÂÂ Calendar</h1>
     <div class="card">
       <div class="cal-head"><div class="cal-month-label">${MONTHS_FULL[calMonth]} ${calYear}</div>
-        <div class="cal-nav-btns"><button class="btn-secondary btn-sm" onclick="calPrev()">â¹ prev</button><button class="btn-secondary btn-sm" onclick="calToday()">today</button><button class="btn-secondary btn-sm" onclick="calNext()">next âº</button></div>
+        <div class="cal-nav-btns"><button class="btn-secondary btn-sm" onclick="calPrev()">Ã¢ÂÂ¹ prev</button><button class="btn-secondary btn-sm" onclick="calToday()">today</button><button class="btn-secondary btn-sm" onclick="calNext()">next Ã¢ÂÂº</button></div>
       </div>
       <div class="cal-weekdays">${WEEKDAYS.map(w=>`<div class="cal-weekday">${w}</div>`).join('')}</div>
       <div class="cal-grid">${cells}</div>
@@ -458,15 +458,15 @@ function selectCalDay(key){selectedCalKey=(selectedCalKey===key)?null:key;showPa
 function renderFollowups(){
   const open=STATE.followups.filter(f=>!f.done).sort((a,b)=>(a.dueDate||'9999').localeCompare(b.dueDate||'9999'));
   const done=STATE.followups.filter(f=>f.done);
-  const html=`<h1 class="page-title">â Follow-ups</h1>
+  const html=`<h1 class="page-title">Ã¢ÂÂ Follow-ups</h1>
     <button class="btn-primary" style="margin-bottom:20px" onclick="openFuModal()">+ add follow-up</button>
     <div class="card">
-      <div class="card-title" onclick="toggleSection('fu-open')">Open${open.length?`<span class="badge amber">${open.length}</span>`:''}<span class="card-title-toggle" id="toggle-fu-open">â¼</span></div>
+      <div class="card-title" onclick="toggleSection('fu-open')">Open${open.length?`<span class="badge amber">${open.length}</span>`:''}<span class="card-title-toggle" id="toggle-fu-open">Ã¢ÂÂ¼</span></div>
       <div class="card-content" id="content-fu-open">
-        ${open.length?open.map(f=>fuRow(f)).join(''):'<div class="empty-state">Nothing open â you are caught up</div>'}
+        ${open.length?open.map(f=>fuRow(f)).join(''):'<div class="empty-state">Nothing open Ã¢ÂÂ you are caught up</div>'}
       </div>
     </div>
-    ${done.length?`<div class="card"><div class="card-title" onclick="toggleSection('fu-done')">Done<button class="btn-secondary btn-sm" onclick="clearDoneFu()" style="margin-left:auto">clear done</button><span class="card-title-toggle" id="toggle-fu-done">â¼</span></div><div class="card-content" id="content-fu-done">${done.map(f=>fuRow(f)).join('')}</div></div>`:''}`;
+    ${done.length?`<div class="card"><div class="card-title" onclick="toggleSection('fu-done')">Done<button class="btn-secondary btn-sm" onclick="clearDoneFu()" style="margin-left:auto">clear done</button><span class="card-title-toggle" id="toggle-fu-done">Ã¢ÂÂ¼</span></div><div class="card-content" id="content-fu-done">${done.map(f=>fuRow(f)).join('')}</div></div>`:''}`;
   
   setTimeout(()=>{
     ['fu-open','fu-done'].forEach(id=>updateSectionUI(id));
@@ -478,7 +478,7 @@ function openFuModal(prefillTrainee){
   document.getElementById('m-fu-text').value='';
   document.getElementById('m-fu-date').value='';
   const sel=document.getElementById('m-fu-trainee');
-  sel.innerHTML='<option value="">â general â</option>'+STATE.trainees.map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join('');
+  sel.innerHTML='<option value="">Ã¢ÂÂ general Ã¢ÂÂ</option>'+STATE.trainees.map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join('');
   sel.value=prefillTrainee?String(prefillTrainee):'';
   document.getElementById('fu-modal').classList.add('open');
   document.getElementById('m-fu-text').focus();
@@ -510,19 +510,19 @@ function renderYaakov(){
     const items=groups[key];
     const label=items[0].date||key;
     const collapsed=collapsedSections['yak-'+key]?'collapsed':'';
-    const arrow=collapsedSections['yak-'+key]?'â¶':'â¼';
+    const arrow=collapsedSections['yak-'+key]?'Ã¢ÂÂ¶':'Ã¢ÂÂ¼';
     const cardsHtml=items.map(y=>{
       const noteLines=y.notes?y.notes.split('\n').filter(Boolean):[];
       return `<div class="card" style="border-left:3px solid var(--accent);padding:18px 20px;margin-bottom:12px">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-          <span style="font-size:13px;font-weight:700;color:var(--accent-dark)">${y.time?`<span style="font-size:11px;color:var(--text-dim);font-weight:400;margin-right:6px">â° ${y.time}</span>`:''}Notes</span>
+          <span style="font-size:13px;font-weight:700;color:var(--accent-dark)">${y.time?`<span style="font-size:11px;color:var(--text-dim);font-weight:400;margin-right:6px">Ã¢ÂÂ° ${y.time}</span>`:''}Notes</span>
           <div style="display:flex;align-items:center;gap:4px">
-            <button class="edit-btn" onclick="editYaakov(${y.id})">â edit</button>
-            <button class="del-btn" onclick="deleteYaakov(${y.id})">â</button>
+            <button class="edit-btn" onclick="editYaakov(${y.id})">Ã¢ÂÂ edit</button>
+            <button class="del-btn" onclick="deleteYaakov(${y.id})">Ã¢ÂÂ</button>
           </div>
         </div>
         ${y.trainees?`<div style="font-size:11px;color:var(--text-dim);margin-bottom:10px"><strong>Trainees:</strong> ${esc(y.trainees)}</div>`:''}
-        <div id="notes-view-${y.id}"><ul style="list-style:none;padding:0;margin:0">${noteLines.length?noteLines.map(line=>`<li style="display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="color:var(--accent);margin-top:2px">â¢</span><span>${esc(line)}</span></li>`).join(''):'<li style="color:var(--text-dim);font-style:italic">No notes</li>'}</ul></div>
+        <div id="notes-view-${y.id}"><ul style="list-style:none;padding:0;margin:0">${noteLines.length?noteLines.map(line=>`<li style="display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="color:var(--accent);margin-top:2px">Ã¢ÂÂ¢</span><span>${esc(line)}</span></li>`).join(''):'<li style="color:var(--text-dim);font-style:italic">No notes</li>'}</ul></div>
         <div id="notes-edit-${y.id}" style="display:none">
           <textarea class="edit-note-area" id="notes-textarea-${y.id}">${esc(y.notes||'')}</textarea>
           <div><button class="save-edit-btn" onclick="saveYaakovEdit(${y.id})">save</button><button class="cancel-edit-btn" onclick="cancelYaakovEdit(${y.id})">cancel</button></div>
@@ -531,7 +531,7 @@ function renderYaakov(){
     }).join('');
     return `<div style="margin-bottom:16px">
       <div class="date-group-header" onclick="toggleSection('yak-${key}')">
-        <span class="date-group-label">ð ${label} <span class="badge" style="margin-left:6px">${items.length} note${items.length!==1?'s':''}</span></span>
+        <span class="date-group-label">Ã°ÂÂÂ ${label} <span class="badge" style="margin-left:6px">${items.length} note${items.length!==1?'s':''}</span></span>
         <span class="date-group-toggle" id="toggle-yak-${key}">${arrow}</span>
       </div>
       <div class="date-group-body ${collapsed}" id="content-yak-${key}">${cardsHtml}</div>
@@ -542,7 +542,7 @@ function renderYaakov(){
     groupKeys.forEach(key=>updateSectionUI('yak-'+key));
   },0);
   
-  return `<h1 class="page-title">ð¯ Yaakov Meetings</h1>
+  return `<h1 class="page-title">Ã°ÂÂÂ¯ Yaakov Meetings</h1>
     <button class="btn-primary" style="margin-bottom:20px" onclick="openYaakovModal()">+ log meeting</button>
     ${meetings.length===0?'<div class="empty-state">No meetings logged yet</div>':''}
     ${groupsHtml}`;
@@ -562,26 +562,26 @@ function renderTrainee(tr){
   </div>
     <div class="split-section">
       <div class="card">
-        <div class="card-title" onclick="toggleSection('tr-${tr.id}-notes')">General Notes<button class="btn-secondary btn-sm" onclick="openNoteFor(${tr.id})" style="margin-left:auto">+ add</button><span class="card-title-toggle" id="toggle-tr-${tr.id}-notes">â¼</span></div>
+        <div class="card-title" onclick="toggleSection('tr-${tr.id}-notes')">General Notes<button class="btn-secondary btn-sm" onclick="openNoteFor(${tr.id})" style="margin-left:auto">+ add</button><span class="card-title-toggle" id="toggle-tr-${tr.id}-notes">Ã¢ÂÂ¼</span></div>
         <div class="card-content" id="content-tr-${tr.id}-notes">
           ${trNotes.length?trNotes.map(n=>noteRow(n,false)).join(''):'<div class="empty-state">Jot down lead names or coaching points</div>'}
         </div>
       </div>
       <div class="card">
-        <div class="card-title" onclick="toggleSection('tr-${tr.id}-fu')">Follow-ups${openFu.length?`<span class="badge amber">${openFu.length}</span>`:''}<button class="btn-secondary btn-sm" onclick="openFuModal(${tr.id})" style="margin-left:auto">+ add</button><span class="card-title-toggle" id="toggle-tr-${tr.id}-fu">â¼</span></div>
+        <div class="card-title" onclick="toggleSection('tr-${tr.id}-fu')">Follow-ups${openFu.length?`<span class="badge amber">${openFu.length}</span>`:''}<button class="btn-secondary btn-sm" onclick="openFuModal(${tr.id})" style="margin-left:auto">+ add</button><span class="card-title-toggle" id="toggle-tr-${tr.id}-fu">Ã¢ÂÂ¼</span></div>
         <div class="card-content" id="content-tr-${tr.id}-fu">
           ${trFu.length?trFu.map(f=>fuRow(f)).join(''):'<div class="empty-state">No follow-ups</div>'}
         </div>
       </div>
     </div>
     <div class="card" style="margin-bottom:20px">
-      <div class="card-title" onclick="toggleSection('tr-${tr.id}-daynotes')">Day Notes<button class="btn-secondary btn-sm" onclick="openDayNoteFor(${tr.id})" style="margin-left:auto">+ add</button><span class="card-title-toggle" id="toggle-tr-${tr.id}-daynotes">â¼</span></div>
+      <div class="card-title" onclick="toggleSection('tr-${tr.id}-daynotes')">Day Notes<button class="btn-secondary btn-sm" onclick="openDayNoteFor(${tr.id})" style="margin-left:auto">+ add</button><span class="card-title-toggle" id="toggle-tr-${tr.id}-daynotes">Ã¢ÂÂ¼</span></div>
       <div class="card-content" id="content-tr-${tr.id}-daynotes">
-        ${trDayNotes.length?trDayNotes.map(n=>`<div class="item-row blue"><div class="item-body"><div class="note-date" style="color:var(--accent-light);font-weight:600">${n.date}</div><div style="white-space:pre-wrap">${esc(n.text)}</div></div><button class="del-btn" onclick="deleteDayNote(${n.id})">â</button></div>`).join(''):'<div class="empty-state">No day notes yet</div>'}
+        ${trDayNotes.length?trDayNotes.map(n=>`<div class="item-row blue"><div class="item-body"><div class="note-date" style="color:var(--accent-light);font-weight:600">${n.date}</div><div style="white-space:pre-wrap">${esc(n.text)}</div></div><button class="del-btn" onclick="deleteDayNote(${n.id})">Ã¢ÂÂ</button></div>`).join(''):'<div class="empty-state">No day notes yet</div>'}
       </div>
     </div>
     <div class="card" style="margin-bottom:20px">
-      <div class="card-title" onclick="toggleSection('tr-${tr.id}-meetings')">Meeting History<button class="btn-secondary btn-sm" onclick="openMeetingFor(${tr.id})" style="margin-left:auto">+ log meeting</button><span class="card-title-toggle" id="toggle-tr-${tr.id}-meetings">â¼</span></div>
+      <div class="card-title" onclick="toggleSection('tr-${tr.id}-meetings')">Meeting History<button class="btn-secondary btn-sm" onclick="openMeetingFor(${tr.id})" style="margin-left:auto">+ log meeting</button><span class="card-title-toggle" id="toggle-tr-${tr.id}-meetings">Ã¢ÂÂ¼</span></div>
       <div class="card-content" id="content-tr-${tr.id}-meetings">
         ${trMeetings.length?(()=>{
           const grps={};
@@ -592,7 +592,7 @@ function renderTrainee(tr){
             const lbl=items[0].date||key;
             const nsKey='tr-'+tr.id+'_'+key;
             const col=collapsedSections[nsKey]?'collapsed':'';
-            const arr=collapsedSections[nsKey]?'â¶':'â¼';
+            const arr=collapsedSections[nsKey]?'Ã¢ÂÂ¶':'Ã¢ÂÂ¼';
             const cards=items.map(m=>{
               const noteLines=m.notes?m.notes.split('\n').filter(Boolean):[];
               return `<div class="item-row" style="margin-bottom:10px;padding:14px;border-radius:10px">
@@ -600,11 +600,11 @@ function renderTrainee(tr){
                   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
                     <span style="font-size:11px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace">${m.trainees?esc(m.trainees):''}</span>
                     <div style="display:flex;gap:4px">
-                      <button class="edit-btn" onclick="editMeeting(${m.id})">â edit</button>
-                      <button class="del-btn" onclick="deleteMeeting(${m.id})">â</button>
+                      <button class="edit-btn" onclick="editMeeting(${m.id})">Ã¢ÂÂ edit</button>
+                      <button class="del-btn" onclick="deleteMeeting(${m.id})">Ã¢ÂÂ</button>
                     </div>
                   </div>
-                  <div id="meet-view-${m.id}"><ul style="list-style:none;padding:0;margin:0">${noteLines.length?noteLines.map(line=>`<li style="display:flex;gap:8px;align-items:flex-start;padding:4px 0"><span style="color:var(--blue);margin-top:1px">â¢</span><span>${esc(line)}</span></li>`).join(''):'<li style="color:var(--text-dim);font-style:italic">No notes</li>'}</ul></div>
+                  <div id="meet-view-${m.id}"><ul style="list-style:none;padding:0;margin:0">${noteLines.length?noteLines.map(line=>`<li style="display:flex;gap:8px;align-items:flex-start;padding:4px 0"><span style="color:var(--blue);margin-top:1px">Ã¢ÂÂ¢</span><span>${esc(line)}</span></li>`).join(''):'<li style="color:var(--text-dim);font-style:italic">No notes</li>'}</ul></div>
                   <div id="meet-edit-${m.id}" style="display:none">
                     <textarea class="edit-note-area" id="meet-textarea-${m.id}">${esc(m.notes||'')}</textarea>
                     <div><button class="save-edit-btn" onclick="saveMeetingEdit(${m.id})">save</button><button class="cancel-edit-btn" onclick="cancelMeetingEdit(${m.id})">cancel</button></div>
@@ -614,7 +614,7 @@ function renderTrainee(tr){
             }).join('');
             return `<div style="margin-bottom:12px">
               <div class="date-group-header" onclick="toggleSection('${nsKey}')">
-                <span class="date-group-label">ð ${lbl} <span class="badge" style="margin-left:6px">${items.length} meeting${items.length!==1?'s':''}</span></span>
+                <span class="date-group-label">Ã°ÂÂÂ ${lbl} <span class="badge" style="margin-left:6px">${items.length} meeting${items.length!==1?'s':''}</span></span>
                 <span class="date-group-toggle" id="toggle-${nsKey}">${arr}</span>
               </div>
               <div class="date-group-body ${col}" id="content-${nsKey}">${cards}</div>
@@ -750,7 +750,7 @@ function saveYaakovEdit(id){
 function openNoteModal(){
   document.getElementById('m-note-text').value='';
   const sel=document.getElementById('m-note-trainee');
-  sel.innerHTML='<option value="">â leave unassigned â</option>'+STATE.trainees.map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join('');
+  sel.innerHTML='<option value="">Ã¢ÂÂ leave unassigned Ã¢ÂÂ</option>'+STATE.trainees.map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join('');
   sel.value='';
   document.getElementById('note-modal').classList.add('open');
   document.getElementById('m-note-text').focus();
@@ -815,7 +815,7 @@ function buildSidebar(){
     <div class="sidebar-item ${currentPage==='calendar'?'active':''}" onclick="showPage('calendar')">Calendar</div>
     <div class="sidebar-item ${currentPage==='followups'?'active':''}" onclick="showPage('followups')"><span>Follow-ups</span>${openFu?`<span class="sidebar-count">${openFu}</span>`:''}</div>
     <div class="sidebar-item ${currentPage==='yaakov'?'active':''}" onclick="showPage('yaakov')">Yaakov</div>
-    <div class="sidebar-item ${currentPage==='schedule'?'active':''}" onclick="showPage('schedule')">📅 My Schedule</div>
+    <div class="sidebar-item ${currentPage==='schedule'?'active':''}" onclick="showPage('schedule')">ð My Schedule</div>
     <div class="sidebar-section" style="margin-top:16px">Trainees</div>
     ${STATE.trainees.map(t=>`<div class="sidebar-item ${currentPage==='trainee-'+t.id?'active':''}" onclick="showPage('trainee-${t.id}')">${esc(t.name)}</div>`).join('')}
     <div class="sidebar-item sidebar-add" onclick="addTrainee()">+ add trainee</div>`;
@@ -830,135 +830,99 @@ function renderSchedule(){
   const weekStart=scheduleWeekStart;
   const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   const fullDays=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  
-  // Calculate the 7 days of the current week
-  const weekDates=[];
-  for(let i=0;i<7;i++){
-    const d=new Date(weekStart);
-    d.setDate(d.getDate()+i);
-    weekDates.push(d);
-  }
-  
-  const todayStr=TODAY;
   const monthNames=['January','February','March','April','May','June','July','August','September','October','November','December'];
-  
-  // Week label
-  const wStart=weekDates[0];
-  const wEnd=weekDates[6];
-  const weekLabel=(wStart.getMonth()===wEnd.getMonth())
-    ? monthNames[wStart.getMonth()]+' '+wStart.getDate()+'–'+wEnd.getDate()+', '+wStart.getFullYear()
-    : monthNames[wStart.getMonth()]+' '+wStart.getDate()+' – '+monthNames[wEnd.getMonth()]+' '+wEnd.getDate()+', '+wEnd.getFullYear();
-  
-  let html='<h1 class="page-title">📅 My Schedule</h1>';
+  const weekDates=[];
+  for(let i=0;i<7;i++){const d=new Date(weekStart);d.setDate(d.getDate()+i);weekDates.push(d);}
+  const todayStr=TODAY;
+  const wS=weekDates[0],wE=weekDates[6];
+  const sep=String.fromCharCode(8211);
+  const weekLabel=(wS.getMonth()===wE.getMonth())
+    ?monthNames[wS.getMonth()]+' '+wS.getDate()+sep+wE.getDate()+', '+wS.getFullYear()
+    :monthNames[wS.getMonth()]+' '+wS.getDate()+' '+sep+' '+monthNames[wE.getMonth()]+' '+wE.getDate()+', '+wE.getFullYear();
+  let html='<h1 class="page-title">My Schedule</h1>';
   html+='<div class="card">';
   html+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">';
   html+='<div style="display:flex;gap:8px">';
-  html+='<button class="btn-secondary btn-sm" onclick="schedulePrevWeek()">← prev</button>';
+  html+='<button class="btn-secondary btn-sm" onclick="schedulePrevWeek()">prev</button>';
   html+='<button class="btn-secondary btn-sm" onclick="scheduleThisWeek()">this week</button>';
-  html+='<button class="btn-secondary btn-sm" onclick="scheduleNextWeek()">next →</button>';
+  html+='<button class="btn-secondary btn-sm" onclick="scheduleNextWeek()">next</button>';
   html+='</div>';
   html+='<div style="font-size:15px;font-weight:700;color:var(--accent-dark)">'+weekLabel+'</div>';
-  html+='<button class="btn-primary btn-sm" onclick="openScheduleAddModal()">+ add item</button>';
+  html+='<button class="btn-primary btn-sm" onclick="openScheduleAddModal(null)">+ add item</button>';
   html+='</div>';
-  
-  // Day columns in a grid
   html+='<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:10px">';
-  
-  weekDates.forEach((date,i)=>{
-    const dateStr=date.toISOString().slice(0,10);
-    const isToday=dateStr===todayStr;
-    const dayItems=(STATE.schedule||[]).filter(s=>s.date===dateStr);
-    const traineeMeetings=dayItems.filter(s=>s.type==='trainee');
-    const otherItems=dayItems.filter(s=>s.type!=='trainee');
-    
-    html+='<div style="border:1px solid '+(isToday?'var(--accent)':'var(--border)')+';border-radius:10px;padding:10px;min-height:140px;background:'+(isToday?'linear-gradient(160deg,rgba(201,147,58,.1),transparent)':'var(--bg-card)')+'">';
+  weekDates.forEach(function(date,i){
+    const ds=date.toISOString().slice(0,10);
+    const isToday=ds===todayStr;
+    const dayItems=(STATE.schedule||[]).filter(function(s){return s.date===ds;});
+    const traineeItems=dayItems.filter(function(s){return s.type==='trainee';});
+    const otherItems=dayItems.filter(function(s){return s.type!=='trainee';});
+    const bdr=isToday?'var(--accent)':'var(--border)';
+    const bg=isToday?'linear-gradient(160deg,rgba(201,147,58,.1),transparent)':'var(--bg-card)';
+    html+='<div style="border:1px solid '+bdr+';border-radius:10px;padding:10px;min-height:140px;background:'+bg+'">';
     html+='<div style="text-align:center;margin-bottom:8px">';
     html+='<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:'+(isToday?'var(--accent-dark)':'var(--text-dim)')+'">'+days[i]+'</div>';
     html+='<div style="font-size:18px;font-weight:700;color:'+(isToday?'var(--accent)':'var(--text)')+'">'+date.getDate()+'</div>';
     html+='</div>';
-    
-    // Trainee meetings
-    traineeMeetings.forEach(item=>{
-      html+='<div style="background:rgba(90,138,106,.12);border:1px solid rgba(90,138,106,.3);border-radius:6px;padding:5px 7px;margin-bottom:4px;font-size:11px;position:relative" class="sched-item">';
-      html+='<div style="font-weight:600;color:var(--teal)">👤 '+esc(item.name)+'</div>';
-      if(item.time)'<div style="color:var(--text-dim);font-size:10px">'+esc(item.time)+'</div>';
-      if(item.time) html+='<div style="color:var(--text-dim);font-size:10px">'+esc(item.time)+'</div>';
-      if(item.notes) html+='<div style="color:var(--text-dim);font-size:10px;margin-top:2px">'+esc(item.notes)+'</div>';
+    traineeItems.forEach(function(item){
+      html+='<div style="background:rgba(90,138,106,.12);border:1px solid rgba(90,138,106,.3);border-radius:6px;padding:5px 7px;margin-bottom:4px;font-size:11px">';
+      html+='<div style="font-weight:600;color:var(--teal)">Trainee: '+esc(item.name)+'</div>';
+      if(item.time)html+='<div style="color:var(--text-dim);font-size:10px">'+esc(item.time)+'</div>';
+      if(item.notes)html+='<div style="color:var(--text-dim);font-size:10px;margin-top:2px">'+esc(item.notes)+'</div>';
       html+='<div style="display:flex;gap:4px;margin-top:4px">';
       html+='<button class="edit-btn" style="font-size:9px;padding:1px 5px" onclick="openScheduleEditModal('+item.id+')">edit</button>';
-      html+='<button class="del-btn" style="font-size:10px;padding:1px 4px" onclick="deleteScheduleItem('+item.id+')">🗑</button>';
-      html+='</div>';
-      html+='</div>';
+      html+='<button class="del-btn" style="font-size:10px;padding:1px 4px" onclick="deleteScheduleItem('+item.id+')">&times;</button>';
+      html+='</div></div>';
     });
-    
-    // Other events
-    otherItems.forEach(item=>{
-      html+='<div style="background:rgba(45,106,138,.1);border:1px solid rgba(45,106,138,.25);border-radius:6px;padding:5px 7px;margin-bottom:4px;font-size:11px" class="sched-item">';
-      html+='<div style="font-weight:600;color:var(--blue)">📌 '+esc(item.name)+'</div>';
-      if(item.time) html+='<div style="color:var(--text-dim);font-size:10px">'+esc(item.time)+'</div>';
-      if(item.notes) html+='<div style="color:var(--text-dim);font-size:10px;margin-top:2px">'+esc(item.notes)+'</div>';
+    otherItems.forEach(function(item){
+      html+='<div style="background:rgba(45,106,138,.1);border:1px solid rgba(45,106,138,.25);border-radius:6px;padding:5px 7px;margin-bottom:4px;font-size:11px">';
+      html+='<div style="font-weight:600;color:var(--blue)">'+esc(item.name)+'</div>';
+      if(item.time)html+='<div style="color:var(--text-dim);font-size:10px">'+esc(item.time)+'</div>';
+      if(item.notes)html+='<div style="color:var(--text-dim);font-size:10px;margin-top:2px">'+esc(item.notes)+'</div>';
       html+='<div style="display:flex;gap:4px;margin-top:4px">';
       html+='<button class="edit-btn" style="font-size:9px;padding:1px 5px" onclick="openScheduleEditModal('+item.id+')">edit</button>';
-      html+='<button class="del-btn" style="font-size:10px;padding:1px 4px" onclick="deleteScheduleItem('+item.id+')">🗑</button>';
-      html+='</div>';
-      html+='</div>';
+      html+='<button class="del-btn" style="font-size:10px;padding:1px 4px" onclick="deleteScheduleItem('+item.id+')">&times;</button>';
+      html+='</div></div>';
     });
-    
-    if(dayItems.length===0){
-      html+='<div style="text-align:center;color:var(--text-dim);font-size:10px;margin-top:12px;opacity:.6">free</div>';
-    }
-    
-    // Quick add button per day
-    html+='<button onclick="openScheduleAddModal(''+dateStr+'')" style="width:100%;margin-top:6px;background:none;border:1px dashed var(--border);color:var(--text-dim);font-size:10px;padding:3px;border-radius:5px;cursor:pointer">+ add</button>';
+    if(dayItems.length===0)html+='<div style="text-align:center;color:var(--text-dim);font-size:10px;margin-top:12px;opacity:.6">free</div>';
+    const safeDs=JSON.stringify(ds);
+    html+='<button onclick="openSchedDayModal('+safeDs+')" style="width:100%;margin-top:6px;background:none;border:1px dashed var(--border);color:var(--text-dim);font-size:10px;padding:3px;border-radius:5px;cursor:pointer">+ add</button>';
     html+='</div>';
   });
-  
-  html+='</div>';
-  html+='</div>';
-  
-  // Upcoming list view below
+  html+='</div></div>';
   html+='<div class="card">';
-  html+='<div class="card-title" onclick="toggleSection('sched-list')">📋 All Schedule Items <span class="card-title-toggle" id="toggle-sched-list">▾</span></div>';
+  html+='<div class="card-title" onclick="toggleSection(\'sched-list\')">All Schedule Items<span class="card-title-toggle" id="toggle-sched-list">&#9660;</span></div>';
   html+='<div class="card-content" id="sched-list">';
-  
-  const allSched=(STATE.schedule||[]).sort((a,b)=>a.date.localeCompare(b.date));
-  
+  const allSched=(STATE.schedule||[]).slice().sort(function(a,b){return a.date.localeCompare(b.date);});
   if(allSched.length===0){
-    html+='<div class="empty-state">No schedule items yet. Click "+ add item" to start planning your days.</div>';
-  } else {
-    // Group by date
+    html+='<div class="empty-state">No schedule items yet.</div>';
+  }else{
     const byDate={};
-    allSched.forEach(s=>{
-      if(!byDate[s.date]) byDate[s.date]=[];
-      byDate[s.date].push(s);
-    });
-    
-    Object.keys(byDate).sort().forEach(dateStr=>{
-      const d=new Date(dateStr+'T00:00:00');
-      const label=fullDays[d.getDay()]+', '+monthNames[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();
-      const isPast=dateStr<todayStr;
+    allSched.forEach(function(s){if(!byDate[s.date])byDate[s.date]=[];byDate[s.date].push(s);});
+    Object.keys(byDate).sort().forEach(function(ds){
+      const d=new Date(ds+'T00:00:00');
+      const lbl=fullDays[d.getDay()]+', '+monthNames[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();
+      const isPast=ds<todayStr,isToday2=ds===todayStr;
       html+='<div style="margin-bottom:12px">';
-      html+='<div style="font-size:11px;font-weight:700;color:'+(dateStr===todayStr?'var(--accent-dark)':isPast?'var(--text-dim)':'var(--text)')+';text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;padding:4px 8px;background:'+(dateStr===todayStr?'rgba(201,147,58,.1)':'transparent')+';border-radius:6px">'+label+'</div>';
-      byDate[dateStr].forEach(item=>{
+      html+='<div style="font-size:11px;font-weight:700;color:'+(isToday2?'var(--accent-dark)':isPast?'var(--text-dim)':'var(--text)')+';text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;padding:4px 8px;background:'+(isToday2?'rgba(201,147,58,.1)':'transparent')+';border-radius:6px">'+lbl+'</div>';
+      byDate[ds].forEach(function(item){
         html+='<div class="item-row '+(item.type==='trainee'?'green':'blue')+'" style="margin-left:8px">';
         html+='<div class="item-body">';
-        html+='<div style="font-weight:600;font-size:12px">'+(item.type==='trainee'?'👤 Trainee: ':'📌 ')+esc(item.name)+'</div>';
-        if(item.time) html+='<div class="item-meta">⏰ '+esc(item.time)+'</div>';
-        if(item.notes) html+='<div class="item-meta">'+esc(item.notes)+'</div>';
-        html+='</div>';
-        html+='<div style="display:flex;gap:4px;flex-shrink:0">';
+        html+='<div style="font-weight:600;font-size:12px">'+(item.type==='trainee'?'Trainee: ':'')+esc(item.name)+'</div>';
+        if(item.time)html+='<div class="item-meta">'+esc(item.time)+'</div>';
+        if(item.notes)html+='<div class="item-meta">'+esc(item.notes)+'</div>';
+        html+='</div><div style="display:flex;gap:4px;flex-shrink:0">';
         html+='<button class="edit-btn" onclick="openScheduleEditModal('+item.id+')">edit</button>';
-        html+='<button class="del-btn" onclick="deleteScheduleItem('+item.id+')">🗑</button>';
-        html+='</div>';
-        html+='</div>';
+        html+='<button class="del-btn" onclick="deleteScheduleItem('+item.id+')">&times;</button>';
+        html+='</div></div>';
       });
       html+='</div>';
     });
   }
-  
   html+='</div></div>';
   content.innerHTML=html;
 }
+function openSchedDayModal(ds){openScheduleAddModal(null);document.getElementById('sched-date').value=ds;}
 
 let scheduleWeekStart=getWeekStart(new Date());
 
