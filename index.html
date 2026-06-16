@@ -113,19 +113,6 @@ textarea{resize:vertical;min-height:80px}
 .note-date{font-size:10px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;margin-bottom:4px}
 .mini-select{font-size:11px;padding:4px 8px;background:var(--border);border:none;color:var(--text-dim);border-radius:4px;cursor:pointer;margin-top:6px;width:auto}
 .mini-select:hover{background:var(--accent);color:var(--bg-dark)}
-/* FOLLOW-UPS */
-.fu-item{display:flex;align-items:flex-start;gap:11px;padding:12px;background:#fdfaf5;border:1px solid var(--border);border-radius:8px;margin-bottom:8px}
-.fu-item.overdue{border-color:rgba(194,59,42,.4);background:rgba(194,59,42,.06)}
-.fu-cb{width:18px;height:18px;border:1.5px solid var(--border);border-radius:5px;background:#fdfaf5;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
-.fu-cb:hover{border-color:var(--accent)}
-.fu-cb.on{background:linear-gradient(135deg,var(--green),var(--teal));border-color:var(--green)}
-.fu-cb.on::after{content:'\u2713';color:#fff;font-size:10px;font-weight:700}
-.fu-body{flex:1;min-width:0}
-.fu-text{font-size:13px;line-height:1.4}
-.fu-text.done{text-decoration:line-through;color:var(--text-dim)}
-.fu-meta{font-size:10px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;margin-top:3px}
-.fu-meta.overdue{color:var(--red)}
-.fu-tag{display:inline-block;font-size:10px;padding:1px 8px;border-radius:10px;background:rgba(45,106,138,.15);color:var(--blue);margin-left:6px}
 .quick-btn{position:fixed;bottom:24px;right:24px;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--teal));color:#fff;border:none;font-size:28px;cursor:pointer;transition:all .2s;box-shadow:0 4px 15px rgba(201,147,58,.3)}
 .quick-btn:hover{transform:scale(1.12) rotate(90deg);box-shadow:0 8px 30px rgba(90,138,106,.5)}
 ::-webkit-scrollbar{width:8px}
@@ -219,9 +206,7 @@ h1.page-title{font-size:27px;font-weight:700;margin-bottom:24px;color:var(--fore
 <label class="modal-label">What you covered / worked on</label>
 <textarea id="m-meet-notes" placeholder="What did you go over? What did they do well / need to fix?"></textarea>
 <label class="modal-label">Transcript (optional)</label>
-<textarea id="m-meet-transcript" style="min-height:120px" placeholder="Paste call transcript here if you have one..."></textarea>
-<label class="modal-label">Follow-up for them (optional)</label>
-<input type="text" id="m-meet-followup" placeholder="e.g. Go through neglected quotes, set follow-up tasks">
+<textarea id="m-meet-transcript" style="min-height:120px" placeholder="Paste call transcript here if you have one..."></textarea>>
 <div class="modal-buttons">
 <button class="btn-secondary" onclick="closeMeetingModal()">cancel</button>
 <button class="btn-primary" onclick="saveMeeting()">save meeting</button>
@@ -260,23 +245,6 @@ h1.page-title{font-size:27px;font-weight:700;margin-bottom:24px;color:var(--fore
 <div class="modal-buttons">
 <button class="btn-secondary" onclick="closeNoteModal()">cancel</button>
 <button class="btn-primary" onclick="saveNote()">save</button>
-</div>
-</div>
-</div>
-
-<!-- FOLLOW-UP MODAL -->
-<div class="modal-overlay" id="fu-modal">
-<div class="modal-box">
-<div class="modal-title">&#9989; New Follow-up</div>
-<label class="modal-label">What needs to happen</label>
-<input type="text" id="m-fu-text" placeholder="e.g. Check that Joshua set follow-up tasks on hot leads">
-<label class="modal-label">For trainee (optional)</label>
-<select id="m-fu-trainee"><option value="">&#8212; general &#8212;</option></select>
-<label class="modal-label">Check back by (optional)</label>
-<input type="date" id="m-fu-date">
-<div class="modal-buttons">
-<button class="btn-secondary" onclick="closeFuModal()">cancel</button>
-<button class="btn-primary" onclick="saveFu()">add</button>
 </div>
 </div>
 </div>
@@ -423,17 +391,15 @@ let currentPage='home';
 function showPage(name){ currentPage=name; document.getElementById('content').innerHTML=renderPage(name); updateNav(); buildSidebar(); }
 function updateNav(){
 const nav=document.getElementById('nav-buttons');
-const openFu=STATE.followups.filter(f=>!f.done).length;
 const todaySched=STATE.scheduleEntries.filter(e=>e.dateKey===TODAY).length;
 const pendingCr=STATE.callReviews.filter(function(r){return !r.reviewed;}).length;
-const items=[{id:'home',label:'Home'},{id:'schedule',label:'Schedule'+(todaySched?' ('+todaySched+')':'')},{id:'callreview',label:'Call Review'+(pendingCr?' ('+pendingCr+')':'')},{id:'calendar',label:'Calendar'},{id:'followups',label:'Follow-ups'+(openFu?' ('+openFu+')':'')},{id:'yaakov',label:'Yaakov'}];
+const items=[{id:'home',label:'Home'},{id:'schedule',label:'Schedule'+(todaySched?' ('+todaySched+')':'')},{id:'callreview',label:'Call Review'+(pendingCr?' ('+pendingCr+')':'')},{id:'calendar',label:'Calendar'},{id:'yaakov',label:'Yaakov'}];
 nav.innerHTML=items.map(i=>'<button class="nav-btn '+(currentPage===i.id?'active':'')+'" onclick="showPage(\''+i.id+'\')">'+i.label+'</button>').join('');
 }
 function renderPage(name){
 if(name==='home')return renderHome();
 if(name==='schedule')return renderSchedule();
 if(name==='calendar')return renderCalendar();
-if(name==='followups')return renderFollowups();
 if(name==='callreview')return renderCallReview();
 if(name==='yaakov')return renderYaakov();
 if(name.startsWith('trainee-')){const id=parseInt(name.split('-')[1]);const tr=STATE.trainees.find(t=>t.id===id);return tr?renderTrainee(tr):'<div class="empty-state">Not found</div>';}
@@ -446,8 +412,6 @@ const todayYak=STATE.yaakovMeetings.filter(y=>{const d=dateOf(y);return d&&keyFr
 const todayMeet=STATE.meetings.filter(m=>{const d=dateOf(m);return d&&keyFromDate(d)===TODAY;});
 const todaySched=STATE.scheduleEntries.filter(e=>e.dateKey===TODAY).sort((a,b)=>(a.time||'99:99').localeCompare(b.time||'99:99'));
 const unassigned=STATE.notes.filter(n=>!n.traineeId);
-const openFu=STATE.followups.filter(f=>!f.done);
-const dueFu=openFu.filter(f=>f.dueDate&&f.dueDate<=TODAY);
 
 const html='<h1 class="page-title">\u{1F4CA} Today\'s Workflow</h1>'+
 '<div style="font-size:13px;color:var(--text-dim);margin-top:-16px;margin-bottom:24px">'+TODAY_DISPLAY+'</div>'+
@@ -478,16 +442,6 @@ const html='<h1 class="page-title">\u{1F4CA} Today\'s Workflow</h1>'+
 '</div>'+
 '</div>'+
 '<div class="card">'+
-'<div class="card-title" onclick="toggleSection(\'home-followups\')">\u2705 Follow-ups'+(dueFu.length?'<span class="badge red">'+dueFu.length+' due</span>':openFu.length?'<span class="badge">'+openFu.length+' open</span>':'')+'<span class="card-title-toggle" id="toggle-home-followups">\u25BC</span></div>'+
-'<div class="card-content" id="content-home-followups">'+
-(openFu.length?openFu.slice(0,6).map(f=>fuRow(f)).join(''):'<div class="empty-state">Nothing to follow up on</div>')+
-'<div style="display:flex;gap:8px;margin-top:10px">'+
-'<button class="btn-secondary" style="flex:1" onclick="openFuModal()">+ add follow-up</button>'+
-(openFu.length>6?'<button class="btn-secondary" style="flex:1" onclick="showPage(\'followups\')">see all ('+openFu.length+')</button>':'')+
-'</div>'+
-'</div>'+
-'</div>'+
-'<div class="card">'+
 '<div class="card-title" onclick="toggleSection(\'home-notes\')">\u{1F4AD} Quick Notes'+(unassigned.length?'<span class="badge amber">'+unassigned.length+'</span>':'')+'<span class="card-title-toggle" id="toggle-home-notes">\u25BC</span></div>'+
 '<div class="card-content" id="content-home-notes">'+
 '<div style="font-size:12px;color:var(--text-dim);margin-bottom:12px">Unassigned thoughts \u2014 assign to a trainee or clear</div>'+
@@ -497,7 +451,7 @@ const html='<h1 class="page-title">\u{1F4CA} Today\'s Workflow</h1>'+
 '</div>';
 
 setTimeout(function(){
-['home-schedule','home-yaakov','home-meetings','home-followups','home-notes'].forEach(function(id){updateSectionUI(id);});
+['home-schedule','home-yaakov','home-meetings','home-notes'].forEach(function(id){updateSectionUI(id);});
 },0);
 
 return html;
@@ -644,16 +598,6 @@ STATE.scheduleEntries=STATE.scheduleEntries.filter(e=>e.id!==id);
 save();showPage(currentPage);
 }
 
-function fuRow(f){
-const overdue=f.dueDate&&f.dueDate<TODAY&&!f.done;
-const tag=f.traineeId?'<span class="fu-tag">'+esc(traineeName(f.traineeId))+'</span>':'';
-return '<div class="fu-item '+(overdue?'overdue':'')+'">'+
-'<div class="fu-cb '+(f.done?'on':'')+'" onclick="toggleFu('+f.id+')"></div>'+
-'<div class="fu-body"><div class="fu-text '+(f.done?'done':'')+'">'+esc(f.text)+tag+'</div>'+(f.dueDate?'<div class="fu-meta '+(overdue?'overdue':'')+'">'+( overdue?'overdue \u00B7 ':'by ')+fmtDate(f.dueDate)+'</div>':'')+
-'</div>'+
-'<button class="del-btn" onclick="deleteFu('+f.id+')">\u2715</button>'+
-'</div>';
-}
 function noteRow(n,showAssign){
 return '<div class="item-row">'+
 '<div class="item-body">'+
@@ -713,48 +657,6 @@ function calNext(){calMonth++;if(calMonth>11){calMonth=0;calYear++;}selectedCalK
 function calToday(){calMonth=NOW.getMonth();calYear=NOW.getFullYear();selectedCalKey=TODAY;showPage('calendar');}
 function selectCalDay(key){selectedCalKey=(selectedCalKey===key)?null:key;showPage('calendar');}
 
-// FOLLOW-UPS
-function renderFollowups(){
-const open=STATE.followups.filter(function(f){return !f.done;}).sort(function(a,b){return(a.dueDate||'9999').localeCompare(b.dueDate||'9999');});
-const done=STATE.followups.filter(function(f){return f.done;});
-const html='<h1 class="page-title">\u2705 Follow-ups</h1>'+
-'<button class="btn-primary" style="margin-bottom:20px" onclick="openFuModal()">+ add follow-up</button>'+
-'<div class="card">'+
-'<div class="card-title" onclick="toggleSection(\'fu-open\')">Open'+(open.length?'<span class="badge amber">'+open.length+'</span>':'')+'<span class="card-title-toggle" id="toggle-fu-open">\u25BC</span></div>'+
-'<div class="card-content" id="content-fu-open">'+
-(open.length?open.map(function(f){return fuRow(f);}).join(''):'<div class="empty-state">Nothing open \u2014 you are caught up</div>')+
-'</div>'+
-'</div>'+
-(done.length?'<div class="card"><div class="card-title" onclick="toggleSection(\'fu-done\')">Done<button class="btn-secondary btn-sm" onclick="clearDoneFu()" style="margin-left:auto">clear done</button><span class="card-title-toggle" id="toggle-fu-done">\u25BC</span></div><div class="card-content" id="content-fu-done">'+done.map(function(f){return fuRow(f);}).join('')+'</div></div>':'');
-
-setTimeout(function(){
-['fu-open','fu-done'].forEach(function(id){updateSectionUI(id);});
-},0);
-
-return html;
-}
-function openFuModal(prefillTrainee){
-document.getElementById('m-fu-text').value='';
-document.getElementById('m-fu-date').value='';
-const sel=document.getElementById('m-fu-trainee');
-sel.innerHTML='<option value="">\u2014 general \u2014</option>'+STATE.trainees.map(function(t){return '<option value="'+t.id+'">'+esc(t.name)+'</option>';}).join('');
-sel.value=prefillTrainee?String(prefillTrainee):'';
-document.getElementById('fu-modal').classList.add('open');
-document.getElementById('m-fu-text').focus();
-}
-function closeFuModal(){document.getElementById('fu-modal').classList.remove('open');}
-function saveFu(){
-const text=document.getElementById('m-fu-text').value.trim();
-if(!text)return;
-const tid=document.getElementById('m-fu-trainee').value;
-const due=document.getElementById('m-fu-date').value;
-STATE.followups.push({id:STATE.noteId++,text,traineeId:tid?parseInt(tid):null,dueDate:due||'',done:false,created:TODAY});
-save();closeFuModal();showPage(currentPage);
-}
-function toggleFu(id){const f=STATE.followups.find(function(x){return x.id===id;});if(f)f.done=!f.done;save();showPage(currentPage);}
-function deleteFu(id){STATE.followups=STATE.followups.filter(function(f){return f.id!==id;});save();showPage(currentPage);}
-function clearDoneFu(){STATE.followups=STATE.followups.filter(function(f){return !f.done;});save();showPage(currentPage);}
-
 // YAAKOV
 function renderYaakov(){
 const meetings=[...STATE.yaakovMeetings].sort(function(a,b){const da=dateOf(a),db=dateOf(b);return(db?db.getTime():0)-(da?da.getTime():0);});
@@ -811,8 +713,7 @@ function renderTrainee(tr){
 const trMeetings=STATE.meetings.filter(function(m){return m.traineesArray&&m.traineesArray.includes(tr.id);}).sort(function(a,b){const da=dateOf(a),db=dateOf(b);return(db?db.getTime():0)-(da?da.getTime():0);});
 const trNotes=STATE.notes.filter(function(n){return n.traineeId===tr.id;});
 const trDayNotes=STATE.dayNotes.filter(function(n){return n.traineeId===tr.id;}).sort(function(a,b){return b.dateKey.localeCompare(a.dateKey);});
-const trFu=STATE.followups.filter(function(f){return f.traineeId===tr.id;});
-const openFu=trFu.filter(function(f){return !f.done;});
+
 
 const html='<div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">'+
 '<h1 class="page-title" style="margin-bottom:0">'+esc(tr.name)+'</h1>'+
@@ -824,13 +725,6 @@ const html='<div style="display:flex;align-items:center;gap:12px;margin-bottom:2
 '<div class="card-title" onclick="toggleSection(\'tr-'+tr.id+'-notes\')">General Notes<button class="btn-secondary btn-sm" onclick="openNoteFor('+tr.id+')" style="margin-left:auto">+ add</button><span class="card-title-toggle" id="toggle-tr-'+tr.id+'-notes">\u25BC</span></div>'+
 '<div class="card-content" id="content-tr-'+tr.id+'-notes">'+
 (trNotes.length?trNotes.map(function(n){return noteRow(n,false);}).join(''):'<div class="empty-state">Jot down lead names or coaching points</div>')+
-'</div>'+
-'</div>'+
-'<div class="card">'+
-'<div class="card-title" onclick="toggleSection(\'tr-'+tr.id+'-fu\')">Follow-ups'+(openFu.length?'<span class="badge amber">'+openFu.length+'</span>':'')+'<button class="btn-secondary btn-sm" onclick="openFuModal('+tr.id+')" style="margin-left:auto">+ add</button><span class="card-title-toggle" id="toggle-tr-'+tr.id+'-fu">\u25BC</span></div>'+
-'<div class="card-content" id="content-tr-'+tr.id+'-fu">'+
-(trFu.length?trFu.map(function(f){return fuRow(f);}).join(''):'<div class="empty-state">No follow-ups</div>')+
-'</div>'+
 '</div>'+
 '</div>'+
 '<div class="card" style="margin-bottom:20px">'+
@@ -884,7 +778,7 @@ return '<div style="margin-bottom:12px">'+
 '</div>';
 
 setTimeout(function(){
-['tr-'+tr.id+'-notes','tr-'+tr.id+'-fu','tr-'+tr.id+'-daynotes','tr-'+tr.id+'-meetings'].forEach(function(id){updateSectionUI(id);});
+['tr-'+tr.id+'-notes','tr-'+tr.id+'-daynotes','tr-'+tr.id+'-meetings'].forEach(function(id){updateSectionUI(id);});
 const grps={};
 trMeetings.forEach(function(m){const k=m.dateKey||m.date||'?';if(!grps[k])grps[k]=[];grps[k].push(m);});
 Object.keys(grps).forEach(function(key){updateSectionUI('tr-'+tr.id+'_'+key);});
@@ -909,7 +803,6 @@ function saveMeeting(){
 const trainees=document.getElementById('m-meet-trainees').value.trim();
 const notes=document.getElementById('m-meet-notes').value.trim();
 const transcript=document.getElementById('m-meet-transcript').value.trim();
-const followup=document.getElementById('m-meet-followup').value.trim();
 const dateInput=document.getElementById('m-meet-date').value||TODAY;
 if(!trainees){alert('Please enter trainee names');return;}
 if(!notes&&!transcript){alert('Add notes or a transcript');return;}
@@ -923,7 +816,6 @@ if(!tr){tr={id:STATE.traineeId++,name};STATE.trainees.push(tr);}
 traineesArray.push(tr.id);
 });
 STATE.meetings.push({id:STATE.noteId++,date:dispDate,dateKey:dateInput,trainees,traineesArray,notes:cleanupNotes(notes),transcript});
-if(followup){ STATE.followups.push({id:STATE.noteId++,text:followup,traineeId:traineesArray[0]||null,dueDate:'',done:false,created:TODAY}); }
 save();updateNav();closeMeetingModal();
 if(currentPage==='calendar'){selectedCalKey=dateInput;showPage('calendar');}else{showPage(currentPage.startsWith('trainee-')?currentPage:'calendar');if(currentPage==='calendar'){selectedCalKey=dateInput;showPage('calendar');}}
 }
@@ -1263,7 +1155,6 @@ save();closeCrModal();showPage('callreview');
 
 
 function buildSidebar(){
-const openFu=STATE.followups.filter(function(f){return !f.done;}).length;
 const todaySched=STATE.scheduleEntries.filter(function(e){return e.dateKey===TODAY;}).length;
 const pendingCr=STATE.callReviews.filter(function(r){return !r.reviewed;}).length;
 const sidebar=document.getElementById('sidebar');
