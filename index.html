@@ -159,6 +159,29 @@ h1.page-title{font-size:27px;font-weight:700;margin-bottom:24px;color:var(--fore
 .sched-cb.checked::after{content:'\u2713';color:#fff;font-size:11px;font-weight:700}
 .sched-empty{text-align:center;padding:40px 20px;color:var(--text-dim);font-size:14px}
 .sched-section-header{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text-dim);padding:8px 0 6px;border-bottom:1px solid var(--border);margin-bottom:10px}
+/* CALL REVIEW */
+.cr-trainee-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.cr-lead{background:#fdfaf5;border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:flex-start;gap:12px;transition:border-color .2s}
+.cr-lead:hover{border-color:rgba(201,147,58,.4)}
+.cr-lead.reviewed{opacity:.55;border-color:rgba(90,138,106,.35);background:rgba(90,138,106,.05)}
+.cr-cb{width:20px;height:20px;border:2px solid var(--border);border-radius:5px;background:#fdfaf5;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s;margin-top:2px}
+.cr-cb:hover{border-color:var(--teal)}
+.cr-cb.checked{background:linear-gradient(135deg,var(--green),var(--teal));border-color:var(--green)}
+.cr-cb.checked::after{content:'\u2713';color:#fff;font-size:11px;font-weight:700}
+.cr-lead-body{flex:1;min-width:0}
+.cr-lead-name{font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px}
+.cr-lead-name.reviewed-text{text-decoration:line-through;color:var(--text-dim)}
+.cr-lead-meta{font-size:11px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;margin-bottom:4px}
+.cr-lead-note{font-size:12px;color:var(--text);line-height:1.55;background:rgba(201,147,58,.07);border-left:3px solid var(--accent);padding:6px 10px;border-radius:0 6px 6px 0;white-space:pre-wrap;margin-top:4px}
+.cr-actions{display:flex;gap:4px;flex-shrink:0;padding-top:2px}
+.cr-section-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px}
+.cr-clear-btn{font-size:11px;padding:4px 10px;background:rgba(194,59,42,.1);color:var(--red);border:1px solid rgba(194,59,42,.25);border-radius:6px;cursor:pointer;font-family:'IBM Plex Mono',monospace}
+.cr-clear-btn:hover{background:var(--red);color:#fff}
+.cr-empty{text-align:center;padding:40px 20px;color:var(--text-dim);font-size:13px}
+.cr-trainee-tab{padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:#fdfaf5;color:var(--text-dim);transition:all .15s;font-family:'IBM Plex Mono',monospace}
+.cr-trainee-tab:hover{border-color:var(--accent);color:var(--accent)}
+.cr-trainee-tab.active{background:linear-gradient(120deg,var(--accent),var(--accent-dark));color:#fff;border-color:var(--accent-dark)}
+.cr-trainee-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
 </style>
 </head>
 <body>
@@ -283,6 +306,29 @@ h1.page-title{font-size:27px;font-weight:700;margin-bottom:24px;color:var(--fore
 </div>
 </div>
 
+<!-- CALL REVIEW MODAL -->
+<div class="modal-overlay" id="cr-modal">
+<div class="modal-box">
+<div class="modal-title" id="cr-modal-title">&#128222; Add Lead to Review</div>
+<label class="modal-label">Trainee</label>
+<select id="m-cr-trainee"><option value="">&#8212; select trainee &#8212;</option></select>
+<label class="modal-label">Lead Name</label>
+<input type="text" id="m-cr-name" placeholder="e.g. Sylvia Snowden, James Land...">
+<label class="modal-label">Call Date &amp; Time (optional)</label>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<input type="date" id="m-cr-date">
+<input type="time" id="m-cr-time">
+</div>
+<label class="modal-label">Coaching Notes</label>
+<textarea id="m-cr-note" style="min-height:110px" placeholder="e.g. no fu quoted June 10th, no text since the 9th, calls too short..."></textarea>
+<input type="hidden" id="m-cr-edit-id" value="">
+<div class="modal-buttons">
+<button class="btn-secondary" onclick="closeCrModal()">cancel</button>
+<button class="btn-primary" onclick="saveCrLead()">save</button>
+</div>
+</div>
+</div>
+
 <!-- SCHEDULE ENTRY MODAL -->
 <div class="modal-overlay" id="sched-modal">
 <div class="modal-box">
@@ -312,7 +358,7 @@ h1.page-title{font-size:27px;font-weight:700;margin-bottom:24px;color:var(--fore
 
 <button class="quick-btn" onclick="openNoteModal()" title="Quick thought">+</button>
 <script>
-let STATE = { trainees:[], meetings:[], yaakovMeetings:[], notes:[], followups:[], dayNotes:[], scheduleEntries:[], noteId:1, traineeId:1, dayNoteId:1 };
+let STATE = { trainees:[], meetings:[], yaakovMeetings:[], notes:[], followups:[], dayNotes:[], scheduleEntries:[], callReviews:[], noteId:1, traineeId:1, dayNoteId:1 };
 const NOW = new Date();
 const TODAY = NOW.toISOString().slice(0,10);
 const TODAY_DISPLAY = NOW.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
@@ -325,7 +371,7 @@ let schedViewDate = TODAY;
 function load(){
 try{ const s=localStorage.getItem('coaching_v7'); if(s)STATE=JSON.parse(s); }catch(e){}
 try{ const c=localStorage.getItem('coaching_collapsed'); if(c)collapsedSections=JSON.parse(c); }catch(e){}
-STATE.trainees=STATE.trainees||[];STATE.meetings=STATE.meetings||[];STATE.yaakovMeetings=STATE.yaakovMeetings||[];STATE.notes=STATE.notes||[];STATE.followups=STATE.followups||[];STATE.dayNotes=STATE.dayNotes||[];STATE.scheduleEntries=STATE.scheduleEntries||[];
+STATE.trainees=STATE.trainees||[];STATE.meetings=STATE.meetings||[];STATE.yaakovMeetings=STATE.yaakovMeetings||[];STATE.notes=STATE.notes||[];STATE.followups=STATE.followups||[];STATE.dayNotes=STATE.dayNotes||[];STATE.scheduleEntries=STATE.scheduleEntries||[];STATE.callReviews=STATE.callReviews||[];
 if(!STATE.noteId)STATE.noteId=1; if(!STATE.traineeId)STATE.traineeId=1; if(!STATE.dayNoteId)STATE.dayNoteId=1;
 document.getElementById('save-indicator').textContent='loaded';
 }
@@ -374,7 +420,7 @@ function updateNav(){
 const nav=document.getElementById('nav-buttons');
 const openFu=STATE.followups.filter(f=>!f.done).length;
 const todaySched=STATE.scheduleEntries.filter(e=>e.dateKey===TODAY).length;
-const items=[{id:'home',label:'Home'},{id:'schedule',label:'Schedule'+(todaySched?' ('+todaySched+')':'')},{id:'calendar',label:'Calendar'},{id:'followups',label:'Follow-ups'+(openFu?' ('+openFu+')':'')},{id:'yaakov',label:'Yaakov'}];
+const items=[{id:'home',label:'Home'},{id:'schedule',label:'Schedule'+(todaySched?' ('+todaySched+')':'')},{id:'callreview',label:'Call Review'+(pendingCr?' ('+pendingCr+')':'')},{id:'calendar',label:'Calendar'},{id:'followups',label:'Follow-ups'+(openFu?' ('+openFu+')':'')},{id:'yaakov',label:'Yaakov'}];
 nav.innerHTML=items.map(i=>'<button class="nav-btn '+(currentPage===i.id?'active':'')+'" onclick="showPage(\''+i.id+'\')">'+i.label+'</button>').join('');
 }
 function renderPage(name){
@@ -382,6 +428,7 @@ if(name==='home')return renderHome();
 if(name==='schedule')return renderSchedule();
 if(name==='calendar')return renderCalendar();
 if(name==='followups')return renderFollowups();
+if(name==='callreview')return renderCallReview();
 if(name==='yaakov')return renderYaakov();
 if(name.startsWith('trainee-')){const id=parseInt(name.split('-')[1]);const tr=STATE.trainees.find(t=>t.id===id);return tr?renderTrainee(tr):'<div class="empty-state">Not found</div>';}
 return '';
@@ -995,17 +1042,203 @@ function importData(){
 const file=document.getElementById('import-file').files[0];
 if(!file){alert('Please select a file');return;}
 const reader=new FileReader();
-reader.onload=function(e){try{STATE=JSON.parse(e.target.result);STATE.followups=STATE.followups||[];STATE.notes=STATE.notes||[];STATE.dayNotes=STATE.dayNotes||[];STATE.scheduleEntries=STATE.scheduleEntries||[];localStorage.setItem('coaching_v7',JSON.stringify(STATE));closeImportModal();showPage('home');updateNav();buildSidebar();}catch(err){alert('Error importing file: '+err.message);}};
+reader.onload=function(e){try{STATE=JSON.parse(e.target.result);STATE.followups=STATE.followups||[];STATE.notes=STATE.notes||[];STATE.dayNotes=STATE.dayNotes||[];STATE.scheduleEntries=STATE.scheduleEntries||[];STATE.callReviews=STATE.callReviews||[];localStorage.setItem('coaching_v7',JSON.stringify(STATE));closeImportModal();showPage('home');updateNav();buildSidebar();}catch(err){alert('Error importing file: '+err.message);}};
 reader.readAsText(file);
+}
+
+// CALL REVIEW
+let crTraineeFilter = null;
+
+function renderCallReview(){
+// Group callReviews by traineeId
+const reviews = STATE.callReviews;
+
+// Get trainees that have reviews
+const traineesWithReviews = STATE.trainees.filter(function(t){
+return reviews.some(function(r){return r.traineeId===t.id;});
+});
+
+// If we have a filter but trainee no longer has reviews, reset
+if(crTraineeFilter !== null && !traineesWithReviews.find(function(t){return t.id===crTraineeFilter;})){
+crTraineeFilter = null;
+}
+
+// If no filter set, show first trainee with reviews or null
+const activeTraineeId = crTraineeFilter !== null ? crTraineeFilter : (traineesWithReviews.length ? traineesWithReviews[0].id : null);
+
+// Filter to active trainee's reviews
+const activeReviews = activeTraineeId !== null
+? reviews.filter(function(r){return r.traineeId===activeTraineeId;})
+: reviews;
+
+// Sort: pending first, then by name
+activeReviews.sort(function(a,b){
+if(a.reviewed !== b.reviewed) return a.reviewed ? 1 : -1;
+return (a.name||'').localeCompare(b.name||'');
+});
+
+const activeTrainee = STATE.trainees.find(function(t){return t.id===activeTraineeId;});
+const activeTraineeName = activeTrainee ? activeTrainee.name : 'All Trainees';
+
+const pendingCount = activeReviews.filter(function(r){return !r.reviewed;}).length;
+const doneCount = activeReviews.filter(function(r){return r.reviewed;}).length;
+
+// Trainee tabs
+const tabs = traineesWithReviews.map(function(t){
+const cnt = reviews.filter(function(r){return r.traineeId===t.id&&!r.reviewed;}).length;
+const isActive = t.id === activeTraineeId;
+return '<div class="cr-trainee-tab'+(isActive?' active':'')+'" onclick="crSetTrainee('+t.id+')">'+
+esc(t.name)+(cnt?'<span style="margin-left:5px;font-size:10px;background:rgba(255,255,255,.25);padding:1px 5px;border-radius:8px">'+cnt+'</span>':'')+
+'</div>';
+}).join('');
+
+// Lead rows
+const leadRows = activeReviews.length ? activeReviews.map(function(r){return crLeadRow(r);}).join('') :
+'<div class="cr-empty"><div style="font-size:28px;margin-bottom:10px">\u{1F4CB}</div>No leads here yet.<br><span style="font-size:12px">Click \u201C+ add lead\u201D to start your call review list.</span></div>';
+
+// Progress bar
+const progressHtml = activeReviews.length ?
+'<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">'+
+'<div style="flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden">'+
+'<div style="height:100%;width:'+(activeReviews.length?Math.round(doneCount/activeReviews.length*100):0)+'%;background:linear-gradient(90deg,var(--teal),var(--green));border-radius:3px;transition:width .3s"></div>'+
+'</div>'+
+'<span style="font-size:11px;color:var(--text-dim);font-family:\'IBM Plex Mono\',monospace;white-space:nowrap">'+doneCount+' / '+activeReviews.length+' reviewed</span>'+
+'</div>' : '';
+
+const clearBtn = doneCount > 0 ?
+'<button class="cr-clear-btn" onclick="crClearReviewed('+(activeTraineeId||'null')+')" title="Remove reviewed leads">clear reviewed</button>' : '';
+
+return '<h1 class="page-title">\u{1F4CB} Call Review</h1>'+
+'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">'+
+'<div style="font-size:13px;color:var(--text-dim)">Go through leads before meeting with a trainee</div>'+
+'<button class="btn-primary" onclick="openCrModal()">+ add lead</button>'+
+'</div>'+
+(traineesWithReviews.length > 1 ? '<div class="cr-trainee-tabs">'+tabs+'</div>' : '')+
+'<div class="card">'+
+'<div class="cr-section-bar">'+
+'<div>'+
+'<span style="font-size:15px;font-weight:700;color:var(--text)">'+esc(activeTraineeName)+'</span>'+
+(pendingCount?'<span class="badge amber" style="margin-left:8px">'+pendingCount+' pending</span>':'<span class="badge" style="margin-left:8px">all done \u2713</span>')+
+'</div>'+
+clearBtn+
+'</div>'+
+progressHtml+
+leadRows+
+'</div>';
+}
+
+function crLeadRow(r){
+const metaParts = [];
+if(r.callDate)metaParts.push(r.callDate);
+if(r.callTime)metaParts.push(fmtTime(r.callTime));
+const metaStr = metaParts.join(' at ');
+return '<div class="cr-lead'+(r.reviewed?' reviewed':'')+'">'+
+'<div class="cr-cb'+(r.reviewed?' checked':'')+'" onclick="crToggle('+r.id+')" title="'+(r.reviewed?'Mark pending':'Mark reviewed')+'"></div>'+
+'<div class="cr-lead-body">'+
+'<div class="cr-lead-name'+(r.reviewed?' reviewed-text':'')+'">'+esc(r.name)+'</div>'+
+(metaStr?'<div class="cr-lead-meta">'+esc(metaStr)+'</div>':'')+
+(r.note?'<div class="cr-lead-note">'+esc(r.note)+'</div>':'')+
+'</div>'+
+'<div class="cr-actions">'+
+'<button class="edit-btn" onclick="openCrEditModal('+r.id+')" title="Edit">\u270F</button>'+
+'<button class="del-btn" onclick="deleteCrLead('+r.id+')" title="Delete">\u2715</button>'+
+'</div>'+
+'</div>';
+}
+
+function crSetTrainee(id){
+crTraineeFilter = id;
+showPage('callreview');
+}
+
+function crToggle(id){
+const r = STATE.callReviews.find(function(x){return x.id===id;});
+if(r) r.reviewed = !r.reviewed;
+save();
+showPage('callreview');
+}
+
+function deleteCrLead(id){
+if(!confirm('Delete this lead?'))return;
+STATE.callReviews = STATE.callReviews.filter(function(r){return r.id!==id;});
+save();
+showPage('callreview');
+}
+
+function crClearReviewed(traineeId){
+if(!confirm('Remove all reviewed leads'+(traineeId?' for this trainee':'')+' from the list?'))return;
+if(traineeId===null||traineeId==='null'){
+STATE.callReviews = STATE.callReviews.filter(function(r){return !r.reviewed;});
+}else{
+STATE.callReviews = STATE.callReviews.filter(function(r){return !(r.traineeId===traineeId&&r.reviewed);});
+}
+save();
+showPage('callreview');
+}
+
+function openCrModal(prefillTraineeId){
+document.getElementById('cr-modal-title').textContent='\u{1F4CB} Add Lead to Review';
+document.getElementById('m-cr-edit-id').value='';
+document.getElementById('m-cr-name').value='';
+document.getElementById('m-cr-date').value='';
+document.getElementById('m-cr-time').value='';
+document.getElementById('m-cr-note').value='';
+const sel = document.getElementById('m-cr-trainee');
+sel.innerHTML='<option value="">\u2014 select trainee \u2014</option>'+
+STATE.trainees.map(function(t){return '<option value="'+t.id+'">'+esc(t.name)+'</option>';}).join('');
+const useId = prefillTraineeId !== undefined ? prefillTraineeId : (crTraineeFilter !== null ? crTraineeFilter : '');
+sel.value = useId !== null && useId !== undefined ? String(useId) : '';
+document.getElementById('cr-modal').classList.add('open');
+document.getElementById('m-cr-name').focus();
+}
+
+function openCrEditModal(id){
+const r = STATE.callReviews.find(function(x){return x.id===id;});
+if(!r)return;
+document.getElementById('cr-modal-title').textContent='\u270F Edit Lead';
+document.getElementById('m-cr-edit-id').value=id;
+document.getElementById('m-cr-name').value=r.name||'';
+document.getElementById('m-cr-date').value=r.callDate||'';
+document.getElementById('m-cr-time').value=r.callTime||'';
+document.getElementById('m-cr-note').value=r.note||'';
+const sel=document.getElementById('m-cr-trainee');
+sel.innerHTML='<option value="">\u2014 select trainee \u2014</option>'+
+STATE.trainees.map(function(t){return '<option value="'+t.id+'">'+esc(t.name)+'</option>';}).join('');
+sel.value=r.traineeId?String(r.traineeId):'';
+document.getElementById('cr-modal').classList.add('open');
+document.getElementById('m-cr-name').focus();
+}
+
+function closeCrModal(){document.getElementById('cr-modal').classList.remove('open');}
+
+function saveCrLead(){
+const name=document.getElementById('m-cr-name').value.trim();
+if(!name){alert('Enter a lead name');return;}
+const traineeIdVal=document.getElementById('m-cr-trainee').value;
+const traineeId=traineeIdVal?parseInt(traineeIdVal):null;
+const callDate=document.getElementById('m-cr-date').value;
+const callTime=document.getElementById('m-cr-time').value;
+const note=document.getElementById('m-cr-note').value.trim();
+const editId=document.getElementById('m-cr-edit-id').value;
+if(editId){
+const r=STATE.callReviews.find(function(x){return x.id===parseInt(editId);});
+if(r){r.name=name;r.traineeId=traineeId;r.callDate=callDate;r.callTime=callTime;r.note=note;}
+}else{
+STATE.callReviews.push({id:STATE.noteId++,name,traineeId,callDate,callTime,note,reviewed:false,added:TODAY});
+if(traineeId!==null)crTraineeFilter=traineeId;
+}
+save();closeCrModal();showPage('callreview');
 }
 
 function buildSidebar(){
 const openFu=STATE.followups.filter(function(f){return !f.done;}).length;
 const todaySched=STATE.scheduleEntries.filter(function(e){return e.dateKey===TODAY;}).length;
+const pendingCr=STATE.callReviews.filter(function(r){return !r.reviewed;}).length;
 const sidebar=document.getElementById('sidebar');
 sidebar.innerHTML='<div class="sidebar-section">Navigation</div>'+
 '<div class="sidebar-item '+(currentPage==='home'?'active':'')+'" onclick="showPage(\'home\')">Home</div>'+
 '<div class="sidebar-item '+(currentPage==='schedule'?'active':'')+'" onclick="showPage(\'schedule\')"><span>Schedule</span>'+(todaySched?'<span class="sidebar-count">'+todaySched+'</span>':'')+' </div>'+
+'<div class="sidebar-item '+(currentPage==='callreview'?'active':'')+'" onclick="showPage(\'callreview\')"><span>Call Review</span>'+(pendingCr?'<span class="sidebar-count">'+pendingCr+'</span>':'')+' </div>'+
 '<div class="sidebar-item '+(currentPage==='calendar'?'active':'')+'" onclick="showPage(\'calendar\')">Calendar</div>'+
 '<div class="sidebar-item '+(currentPage==='followups'?'active':'')+'" onclick="showPage(\'followups\')"><span>Follow-ups</span>'+(openFu?'<span class="sidebar-count">'+openFu+'</span>':'')+' </div>'+
 '<div class="sidebar-item '+(currentPage==='yaakov'?'active':'')+'" onclick="showPage(\'yaakov\')">Yaakov</div>'+
@@ -1013,7 +1246,6 @@ sidebar.innerHTML='<div class="sidebar-section">Navigation</div>'+
 STATE.trainees.map(function(t){return '<div class="sidebar-item '+(currentPage==='trainee-'+t.id?'active':'')+'" onclick="showPage(\'trainee-'+t.id+'\')">'+esc(t.name)+'</div>';}).join('')+
 '<div class="sidebar-item sidebar-add" onclick="addTrainee()">+ add trainee</div>';
 }
-
 load();buildSidebar();showPage('home');
 window.addEventListener('beforeunload',save);
 </script>
