@@ -178,10 +178,15 @@ h1.page-title{font-size:27px;font-weight:700;margin-bottom:24px;color:var(--fore
 .cr-clear-btn{font-size:11px;padding:4px 10px;background:rgba(194,59,42,.1);color:var(--red);border:1px solid rgba(194,59,42,.25);border-radius:6px;cursor:pointer;font-family:'IBM Plex Mono',monospace}
 .cr-clear-btn:hover{background:var(--red);color:#fff}
 .cr-empty{text-align:center;padding:40px 20px;color:var(--text-dim);font-size:13px}
-.cr-trainee-tab{padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:#fdfaf5;color:var(--text-dim);transition:all .15s;font-family:'IBM Plex Mono',monospace}
-.cr-trainee-tab:hover{border-color:var(--accent);color:var(--accent)}
-.cr-trainee-tab.active{background:linear-gradient(120deg,var(--accent),var(--accent-dark));color:#fff;border-color:var(--accent-dark)}
-.cr-trainee-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+/* CR accordion */
+.cr-accordion{margin-bottom:12px;border:1px solid var(--border);border-radius:14px;overflow:hidden;background:#fdfaf5}
+.cr-accordion-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;cursor:pointer;background:linear-gradient(90deg,rgba(201,147,58,.09),transparent);user-select:none;transition:background .15s}
+.cr-accordion-header:hover{background:linear-gradient(90deg,rgba(201,147,58,.18),transparent)}
+.cr-accordion-title{font-size:15px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:10px}
+.cr-accordion-toggle{font-size:13px;color:var(--text-dim);transition:transform .22s;display:inline-block}
+.cr-accordion-body{padding:0 16px 4px;max-height:3000px;transition:max-height .3s ease,opacity .3s ease,padding .3s ease;overflow:hidden;opacity:1}
+.cr-accordion-body.cr-collapsed{max-height:0!important;opacity:0;padding-top:0;padding-bottom:0}
+.cr-accordion-actions{display:flex;gap:6px;align-items:center}
 </style>
 </head>
 <body>
@@ -1049,102 +1054,106 @@ reader.readAsText(file);
 
 // CALL REVIEW
 let crTraineeFilter = null;
+let crCollapsed = {};
 
 function renderCallReview(){
-// Group callReviews by traineeId
 const reviews = STATE.callReviews;
-
-// Get trainees that have reviews
 const traineesWithReviews = STATE.trainees.filter(function(t){
-return reviews.some(function(r){return r.traineeId===t.id;});
+  return reviews.some(function(r){return r.traineeId===t.id;});
 });
+const noTraineeReviews = reviews.filter(function(r){return !r.traineeId;});
 
-// If we have a filter but trainee no longer has reviews, reset
-if(crTraineeFilter !== null && !traineesWithReviews.find(function(t){return t.id===crTraineeFilter;})){
-crTraineeFilter = null;
+function accordionSection(traineeId, traineeName, sectionReviews){
+  var sKey = 'cr-acc-' + (traineeId||'none');
+  var isCollapsed = !!crCollapsed[sKey];
+  var pending = sectionReviews.filter(function(r){return !r.reviewed;}).length;
+  var done = sectionReviews.filter(function(r){return r.reviewed;}).length;
+  var total = sectionReviews.length;
+
+  var sorted = sectionReviews.slice().sort(function(a,b){
+    if(a.reviewed !== b.reviewed) return a.reviewed ? 1 : -1;
+    return (a.name||'').localeCompare(b.name||'');
+  });
+
+  var progressHtml = total ?
+    '<div style="display:flex;align-items:center;gap:10px;padding:10px 0 6px">'+
+    '<div style="flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden">'+
+    '<div style="height:100%;width:'+Math.round(done/total*100)+'%;background:linear-gradient(90deg,var(--teal),var(--green));border-radius:3px;transition:width .3s"></div>'+
+    '</div>'+
+    '<span style="font-size:10px;color:var(--text-dim);font-family:\'IBM Plex Mono\',monospace;white-space:nowrap">'+done+'/'+total+'</span>'+
+    '</div>' : '';
+
+  var leadsHtml = sorted.map(function(r){return crLeadRow(r);}).join('');
+
+  var tid = traineeId || '';
+  var addBtn = '<button class="btn-secondary btn-sm" onclick="openCrModal('+tid+');event.stopPropagation();" style="font-size:11px;padding:4px 10px">+ add lead</button>';
+  var clearAllBtn = total > 0 ? '<button style="font-size:11px;padding:4px 10px;background:rgba(194,59,42,.1);color:var(--red);border:1px solid rgba(194,59,42,.25);border-radius:6px;cursor:pointer;font-family:\'IBM Plex Mono\',monospace" onclick="crDeleteAll('+(traineeId||'null')+');event.stopPropagation();" title="Delete all leads for this trainee after meeting">delete all</button>' : '';
+  var clearDoneBtn = done > 0 ? '<button class="cr-clear-btn" onclick="crClearReviewed('+(traineeId||'null')+');event.stopPropagation();" title="Remove reviewed leads">clear reviewed</button>' : '';
+
+  return '<div class="cr-accordion">'+
+    '<div class="cr-accordion-header" onclick="crToggleAccordion(\''+sKey+'\')">'+
+    '<div class="cr-accordion-title">'+
+    esc(traineeName)+
+    (pending?'<span class="badge amber">'+pending+' pending</span>':'<span class="badge" style="background:rgba(90,138,106,.2);color:var(--teal)">done ✓</span>')+
+    '</div>'+
+    '<div class="cr-accordion-actions">'+
+    addBtn+
+    (done>0?clearDoneBtn:'')+
+    (total>0?clearAllBtn:'')+
+    '<span class="cr-accordion-toggle" style="margin-left:6px">'+(isCollapsed?'▶':'▼')+'</span>'+
+    '</div>'+
+    '</div>'+
+    '<div class="cr-accordion-body'+(isCollapsed?' cr-collapsed':'')+'">'+
+    progressHtml+
+    (total ? leadsHtml : '<div class="cr-empty" style="padding:20px 0 16px;text-align:center"><div style="font-size:22px;margin-bottom:6px">📋</div>No leads yet.</div>')+
+    '</div>'+
+    '</div>';
 }
 
-// If no filter set, show first trainee with reviews or null
-const activeTraineeId = crTraineeFilter !== null ? crTraineeFilter : (traineesWithReviews.length ? traineesWithReviews[0].id : null);
-
-// Filter to active trainee's reviews
-const activeReviews = activeTraineeId !== null
-? reviews.filter(function(r){return r.traineeId===activeTraineeId;})
-: reviews;
-
-// Sort: pending first, then by name
-activeReviews.sort(function(a,b){
-if(a.reviewed !== b.reviewed) return a.reviewed ? 1 : -1;
-return (a.name||'').localeCompare(b.name||'');
-});
-
-const activeTrainee = STATE.trainees.find(function(t){return t.id===activeTraineeId;});
-const activeTraineeName = activeTrainee ? activeTrainee.name : 'All Trainees';
-
-const pendingCount = activeReviews.filter(function(r){return !r.reviewed;}).length;
-const doneCount = activeReviews.filter(function(r){return r.reviewed;}).length;
-
-// Trainee tabs
-const tabs = traineesWithReviews.map(function(t){
-const cnt = reviews.filter(function(r){return r.traineeId===t.id&&!r.reviewed;}).length;
-const isActive = t.id === activeTraineeId;
-return '<div class="cr-trainee-tab'+(isActive?' active':'')+'" onclick="crSetTrainee('+t.id+')">'+
-esc(t.name)+(cnt?'<span style="margin-left:5px;font-size:10px;background:rgba(255,255,255,.25);padding:1px 5px;border-radius:8px">'+cnt+'</span>':'')+
-'</div>';
+var sections = traineesWithReviews.map(function(t){
+  var tReviews = reviews.filter(function(r){return r.traineeId===t.id;});
+  return accordionSection(t.id, t.name, tReviews);
 }).join('');
 
-// Lead rows
-const leadRows = activeReviews.length ? activeReviews.map(function(r){return crLeadRow(r);}).join('') :
-'<div class="cr-empty"><div style="font-size:28px;margin-bottom:10px">\u{1F4CB}</div>No leads here yet.<br><span style="font-size:12px">Click \u201C+ add lead\u201D to start your call review list.</span></div>';
+if(noTraineeReviews.length){
+  sections += accordionSection(null, 'Unassigned', noTraineeReviews);
+}
 
-// Progress bar
-const progressHtml = activeReviews.length ?
-'<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">'+
-'<div style="flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden">'+
-'<div style="height:100%;width:'+(activeReviews.length?Math.round(doneCount/activeReviews.length*100):0)+'%;background:linear-gradient(90deg,var(--teal),var(--green));border-radius:3px;transition:width .3s"></div>'+
-'</div>'+
-'<span style="font-size:11px;color:var(--text-dim);font-family:\'IBM Plex Mono\',monospace;white-space:nowrap">'+doneCount+' / '+activeReviews.length+' reviewed</span>'+
-'</div>' : '';
+var totalPending = reviews.filter(function(r){return !r.reviewed;}).length;
 
-const clearBtn = doneCount > 0 ?
-'<button class="cr-clear-btn" onclick="crClearReviewed('+(activeTraineeId||'null')+')" title="Remove reviewed leads">clear reviewed</button>' : '';
+return '<h1 class="page-title">📋 Call Review</h1>'+
+  '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px">'+
+  '<div style="font-size:13px;color:var(--text-dim)">Go through leads before meeting with a trainee</div>'+
+  '<div style="display:flex;gap:8px">'+
+  (totalPending===0&&reviews.length?'<button class="btn-secondary btn-sm" onclick="crDeleteAllEverything()" style="color:var(--red)">clear everything</button>':'')+
+  '<button class="btn-primary" onclick="openCrModal()">+ add lead</button>'+
+  '</div>'+
+  '</div>'+
+  (sections || '<div class="card"><div class="cr-empty"><div style="font-size:32px;margin-bottom:12px">📋</div><div>No leads yet.</div><div style="margin-top:8px;font-size:13px">Click “+ add lead” to start your call review list.</div></div></div>');
+}
 
-return '<h1 class="page-title">\u{1F4CB} Call Review</h1>'+
-'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">'+
-'<div style="font-size:13px;color:var(--text-dim)">Go through leads before meeting with a trainee</div>'+
-'<button class="btn-primary" onclick="openCrModal()">+ add lead</button>'+
-'</div>'+
-(traineesWithReviews.length > 1 ? '<div class="cr-trainee-tabs">'+tabs+'</div>' : '')+
-'<div class="card">'+
-'<div class="cr-section-bar">'+
-'<div>'+
-'<span style="font-size:15px;font-weight:700;color:var(--text)">'+esc(activeTraineeName)+'</span>'+
-(pendingCount?'<span class="badge amber" style="margin-left:8px">'+pendingCount+' pending</span>':'<span class="badge" style="margin-left:8px">all done \u2713</span>')+
-'</div>'+
-clearBtn+
-'</div>'+
-progressHtml+
-leadRows+
-'</div>';
+function crToggleAccordion(sKey){
+crCollapsed[sKey] = !crCollapsed[sKey];
+showPage('callreview');
 }
 
 function crLeadRow(r){
-const metaParts = [];
+var metaParts = [];
 if(r.callDate)metaParts.push(r.callDate);
 if(r.callTime)metaParts.push(fmtTime(r.callTime));
-const metaStr = metaParts.join(' at ');
+var metaStr = metaParts.join(' at ');
 return '<div class="cr-lead'+(r.reviewed?' reviewed':'')+'">'+
-'<div class="cr-cb'+(r.reviewed?' checked':'')+'" onclick="crToggle('+r.id+')" title="'+(r.reviewed?'Mark pending':'Mark reviewed')+'"></div>'+
-'<div class="cr-lead-body">'+
-'<div class="cr-lead-name'+(r.reviewed?' reviewed-text':'')+'">'+esc(r.name)+'</div>'+
-(metaStr?'<div class="cr-lead-meta">'+esc(metaStr)+'</div>':'')+
-(r.note?'<div class="cr-lead-note">'+esc(r.note)+'</div>':'')+
-'</div>'+
-'<div class="cr-actions">'+
-'<button class="edit-btn" onclick="openCrEditModal('+r.id+')" title="Edit">\u270F</button>'+
-'<button class="del-btn" onclick="deleteCrLead('+r.id+')" title="Delete">\u2715</button>'+
-'</div>'+
-'</div>';
+  '<div class="cr-cb'+(r.reviewed?' checked':'')+'" onclick="crToggle('+r.id+')" title="'+(r.reviewed?'Mark pending':'Mark reviewed')+'"></div>'+
+  '<div class="cr-lead-body">'+
+  '<div class="cr-lead-name'+(r.reviewed?' reviewed-text':'')+'">'+esc(r.name)+'</div>'+
+  (metaStr?'<div class="cr-lead-meta">'+esc(metaStr)+'</div>':'')+
+  (r.note?'<div class="cr-lead-note">'+esc(r.note)+'</div>':'')+
+  '</div>'+
+  '<div class="cr-actions">'+
+  '<button class="edit-btn" onclick="openCrEditModal('+r.id+')" title="Edit">✏</button>'+
+  '<button class="del-btn" onclick="deleteCrLead('+r.id+')" title="Delete">✕</button>'+
+  '</div>'+
+  '</div>';
 }
 
 function crSetTrainee(id){
@@ -1153,7 +1162,7 @@ showPage('callreview');
 }
 
 function crToggle(id){
-const r = STATE.callReviews.find(function(x){return x.id===id;});
+var r = STATE.callReviews.find(function(x){return x.id===id;});
 if(r) r.reviewed = !r.reviewed;
 save();
 showPage('callreview');
@@ -1167,44 +1176,65 @@ showPage('callreview');
 }
 
 function crClearReviewed(traineeId){
-if(!confirm('Remove all reviewed leads'+(traineeId?' for this trainee':'')+' from the list?'))return;
-if(traineeId===null||traineeId==='null'){
-STATE.callReviews = STATE.callReviews.filter(function(r){return !r.reviewed;});
+var isNull = (traineeId===null||traineeId==='null'||traineeId===undefined);
+if(!confirm('Remove reviewed leads'+(isNull?'':' for this trainee')+' from the list?'))return;
+if(isNull){
+  STATE.callReviews = STATE.callReviews.filter(function(r){return !r.reviewed||!!r.traineeId;});
 }else{
-STATE.callReviews = STATE.callReviews.filter(function(r){return !(r.traineeId===traineeId&&r.reviewed);});
+  STATE.callReviews = STATE.callReviews.filter(function(r){return !(r.traineeId===traineeId&&r.reviewed);});
 }
 save();
 showPage('callreview');
 }
 
+function crDeleteAll(traineeId){
+var isNull = (traineeId===null||traineeId==='null'||traineeId===undefined);
+var name = isNull ? 'unassigned' : ((STATE.trainees.find(function(t){return t.id===traineeId;})||{name:'this trainee'}).name);
+if(!confirm('Delete ALL leads for '+name+'?\nUse this after the meeting is done.'))return;
+if(isNull){
+  STATE.callReviews = STATE.callReviews.filter(function(r){return !!r.traineeId;});
+}else{
+  STATE.callReviews = STATE.callReviews.filter(function(r){return r.traineeId!==traineeId;});
+}
+save();
+showPage('callreview');
+}
+
+function crDeleteAllEverything(){
+if(!confirm('Clear ALL leads from every trainee?'))return;
+STATE.callReviews = [];
+save();
+showPage('callreview');
+}
+
 function openCrModal(prefillTraineeId){
-document.getElementById('cr-modal-title').textContent='\u{1F4CB} Add Lead to Review';
+document.getElementById('cr-modal-title').textContent='📋 Add Lead to Review';
 document.getElementById('m-cr-edit-id').value='';
 document.getElementById('m-cr-name').value='';
 document.getElementById('m-cr-date').value='';
 document.getElementById('m-cr-time').value='';
 document.getElementById('m-cr-note').value='';
-const sel = document.getElementById('m-cr-trainee');
-sel.innerHTML='<option value="">\u2014 select trainee \u2014</option>'+
-STATE.trainees.map(function(t){return '<option value="'+t.id+'">'+esc(t.name)+'</option>';}).join('');
-const useId = prefillTraineeId !== undefined ? prefillTraineeId : (crTraineeFilter !== null ? crTraineeFilter : '');
-sel.value = useId !== null && useId !== undefined ? String(useId) : '';
+var sel = document.getElementById('m-cr-trainee');
+sel.innerHTML='<option value="">— select trainee —</option>'+
+  STATE.trainees.map(function(t){return '<option value="'+t.id+'">'+esc(t.name)+'</option>';}).join('');
+var useId = (prefillTraineeId !== undefined && prefillTraineeId !== null && prefillTraineeId !== '') ? prefillTraineeId : (crTraineeFilter !== null ? crTraineeFilter : '');
+sel.value = (useId !== null && useId !== undefined && useId !== '') ? String(useId) : '';
 document.getElementById('cr-modal').classList.add('open');
 document.getElementById('m-cr-name').focus();
 }
 
 function openCrEditModal(id){
-const r = STATE.callReviews.find(function(x){return x.id===id;});
+var r = STATE.callReviews.find(function(x){return x.id===id;});
 if(!r)return;
-document.getElementById('cr-modal-title').textContent='\u270F Edit Lead';
+document.getElementById('cr-modal-title').textContent='✏ Edit Lead';
 document.getElementById('m-cr-edit-id').value=id;
 document.getElementById('m-cr-name').value=r.name||'';
 document.getElementById('m-cr-date').value=r.callDate||'';
 document.getElementById('m-cr-time').value=r.callTime||'';
 document.getElementById('m-cr-note').value=r.note||'';
-const sel=document.getElementById('m-cr-trainee');
-sel.innerHTML='<option value="">\u2014 select trainee \u2014</option>'+
-STATE.trainees.map(function(t){return '<option value="'+t.id+'">'+esc(t.name)+'</option>';}).join('');
+var sel=document.getElementById('m-cr-trainee');
+sel.innerHTML='<option value="">— select trainee —</option>'+
+  STATE.trainees.map(function(t){return '<option value="'+t.id+'">'+esc(t.name)+'</option>';}).join('');
 sel.value=r.traineeId?String(r.traineeId):'';
 document.getElementById('cr-modal').classList.add('open');
 document.getElementById('m-cr-name').focus();
@@ -1213,23 +1243,24 @@ document.getElementById('m-cr-name').focus();
 function closeCrModal(){document.getElementById('cr-modal').classList.remove('open');}
 
 function saveCrLead(){
-const name=document.getElementById('m-cr-name').value.trim();
+var name=document.getElementById('m-cr-name').value.trim();
 if(!name){alert('Enter a lead name');return;}
-const traineeIdVal=document.getElementById('m-cr-trainee').value;
-const traineeId=traineeIdVal?parseInt(traineeIdVal):null;
-const callDate=document.getElementById('m-cr-date').value;
-const callTime=document.getElementById('m-cr-time').value;
-const note=document.getElementById('m-cr-note').value.trim();
-const editId=document.getElementById('m-cr-edit-id').value;
+var traineeIdVal=document.getElementById('m-cr-trainee').value;
+var traineeId=traineeIdVal?parseInt(traineeIdVal):null;
+var callDate=document.getElementById('m-cr-date').value;
+var callTime=document.getElementById('m-cr-time').value;
+var note=document.getElementById('m-cr-note').value.trim();
+var editId=document.getElementById('m-cr-edit-id').value;
 if(editId){
-const r=STATE.callReviews.find(function(x){return x.id===parseInt(editId);});
-if(r){r.name=name;r.traineeId=traineeId;r.callDate=callDate;r.callTime=callTime;r.note=note;}
+  var r=STATE.callReviews.find(function(x){return x.id===parseInt(editId);});
+  if(r){r.name=name;r.traineeId=traineeId;r.callDate=callDate;r.callTime=callTime;r.note=note;}
 }else{
-STATE.callReviews.push({id:STATE.noteId++,name,traineeId,callDate,callTime,note,reviewed:false,added:TODAY});
-if(traineeId!==null)crTraineeFilter=traineeId;
+  STATE.callReviews.push({id:STATE.noteId++,name:name,traineeId:traineeId,callDate:callDate,callTime:callTime,note:note,reviewed:false,added:TODAY});
+  if(traineeId!==null)crTraineeFilter=traineeId;
 }
 save();closeCrModal();showPage('callreview');
 }
+
 
 function buildSidebar(){
 const openFu=STATE.followups.filter(function(f){return !f.done;}).length;
