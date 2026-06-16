@@ -8,13 +8,13 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg-dark:#f5efe3;--bg-grad1:#ede4d3;--bg-grad2:#f5efe3;
-  --bg-card:#fdfaf5;--bg-hover:#ede4d3;--border:#d4c9b4;
-  --text:#0d1a12;--text-dim:#6a8a74;
-  --accent:#c9933a;--accent-light:#e8b96a;--accent-dark:#a67220;
-  --teal:#5a8a6a;--green:#5a8a6a;--red:#c23b2a;--blue:#2d6a8a;
-  --purple:#7a5a8a;--amber:#c9933a;--pink:#c23b2a;
-  --forest:#0d2b1e;--forest2:#143324;--cream:#f5efe3;
+--bg-dark:#f5efe3;--bg-grad1:#ede4d3;--bg-grad2:#f5efe3;
+--bg-card:#fdfaf5;--bg-hover:#ede4d3;--border:#d4c9b4;
+--text:#0d1a12;--text-dim:#6a8a74;
+--accent:#c9933a;--accent-light:#e8b96a;--accent-dark:#a67220;
+--teal:#5a8a6a;--green:#5a8a6a;--red:#c23b2a;--blue:#2d6a8a;
+--purple:#7a5a8a;--amber:#c9933a;--pink:#c23b2a;
+--forest:#0d2b1e;--forest2:#143324;--cream:#f5efe3;
 }
 html,body{height:100%;margin:0;padding:0;background:var(--cream);color:var(--text);font-family:'Outfit',sans-serif;font-size:15px;line-height:1.6;overflow:hidden}
 body{background:var(--cream)}
@@ -119,7 +119,7 @@ textarea{resize:vertical;min-height:80px}
 .fu-cb{width:18px;height:18px;border:1.5px solid var(--border);border-radius:5px;background:#fdfaf5;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
 .fu-cb:hover{border-color:var(--accent)}
 .fu-cb.on{background:linear-gradient(135deg,var(--green),var(--teal));border-color:var(--green)}
-.fu-cb.on::after{content:'✓';color:#fff;font-size:10px;font-weight:700}
+.fu-cb.on::after{content:'\u2713';color:#fff;font-size:10px;font-weight:700}
 .fu-body{flex:1;min-width:0}
 .fu-text{font-size:13px;line-height:1.4}
 .fu-text.done{text-decoration:line-through;color:var(--text-dim)}
@@ -135,134 +135,184 @@ textarea{resize:vertical;min-height:80px}
 .badge.amber{background:linear-gradient(120deg,var(--accent),var(--accent-dark));color:#fff}
 .badge.red{background:var(--red);color:#fff}
 h1.page-title{font-size:27px;font-weight:700;margin-bottom:24px;color:var(--forest);letter-spacing:-.5px}
+/* SCHEDULE */
+.sched-date-nav{display:flex;align-items:center;gap:12px;margin-bottom:24px;flex-wrap:wrap}
+.sched-date-label{font-size:20px;font-weight:700;color:var(--accent-light);min-width:160px}
+.sched-entry{background:#fdfaf5;border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:10px;display:flex;align-items:flex-start;gap:14px;transition:border-color .2s}
+.sched-entry:hover{border-color:rgba(201,147,58,.5)}
+.sched-entry.type-meeting{border-left:4px solid var(--blue)}
+.sched-entry.type-task{border-left:4px solid var(--teal)}
+.sched-entry.done-entry{opacity:.6}
+.sched-time{font-size:13px;font-weight:700;color:var(--accent);font-family:'IBM Plex Mono',monospace;min-width:52px;padding-top:2px}
+.sched-body{flex:1;min-width:0}
+.sched-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px}
+.sched-title.done-text{text-decoration:line-through;color:var(--text-dim)}
+.sched-who{font-size:12px;color:var(--blue);margin-bottom:3px}
+.sched-note{font-size:12px;color:var(--text-dim);line-height:1.5;margin-top:4px;white-space:pre-wrap}
+.sched-type-badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:8px;font-weight:600;margin-right:6px}
+.sched-type-badge.meeting{background:rgba(45,106,138,.15);color:var(--blue)}
+.sched-type-badge.task{background:rgba(90,138,106,.15);color:var(--teal)}
+.sched-actions{display:flex;gap:4px;flex-shrink:0;padding-top:2px}
+.sched-cb{width:20px;height:20px;border:2px solid var(--border);border-radius:5px;background:#fdfaf5;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s;margin-top:2px}
+.sched-cb:hover{border-color:var(--teal)}
+.sched-cb.checked{background:linear-gradient(135deg,var(--green),var(--teal));border-color:var(--green)}
+.sched-cb.checked::after{content:'\u2713';color:#fff;font-size:11px;font-weight:700}
+.sched-empty{text-align:center;padding:40px 20px;color:var(--text-dim);font-size:14px}
+.sched-section-header{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text-dim);padding:8px 0 6px;border-bottom:1px solid var(--border);margin-bottom:10px}
 </style>
 </head>
 <body>
 <div class="app">
-  <div class="header">
-    <div class="logo">coaching hub</div>
-    <div style="display:flex;align-items:center;gap:16px">
-      <div class="nav-dots" id="nav-buttons"></div>
-      <div class="save-ind" id="save-indicator">saved</div>
-      <div class="data-controls">
-        <button class="data-btn" onclick="exportData()" title="Download your data">⬇ export</button>
-        <button class="data-btn" onclick="openImportModal()" title="Load data from file">⬆ import</button>
-      </div>
-    </div>
-  </div>
-  <div class="main">
-    <div class="sidebar" id="sidebar"></div>
-    <div class="content" id="content"></div>
-  </div>
+<div class="header">
+<div class="logo">coaching hub</div>
+<div style="display:flex;align-items:center;gap:16px">
+<div class="nav-dots" id="nav-buttons"></div>
+<div class="save-ind" id="save-indicator">saved</div>
+<div class="data-controls">
+<button class="data-btn" onclick="exportData()" title="Download your data">&#8595; export</button>
+<button class="data-btn" onclick="openImportModal()" title="Load data from file">&#8593; import</button>
+</div>
+</div>
+</div>
+<div class="main">
+<div class="sidebar" id="sidebar"></div>
+<div class="content" id="content"></div>
+</div>
 </div>
 
 <!-- LOG MEETING MODAL -->
 <div class="modal-overlay" id="meeting-modal">
-  <div class="modal-box">
-    <div class="modal-title">🎙️ Log Meeting</div>
-    <label class="modal-label">Trainee(s)</label>
-    <input type="text" id="m-meet-trainees" placeholder="Cameron, Joshua, Astra">
-    <label class="modal-label">Date</label>
-    <input type="date" id="m-meet-date">
-    <label class="modal-label">What you covered / worked on</label>
-    <textarea id="m-meet-notes" placeholder="What did you go over? What did they do well / need to fix?"></textarea>
-    <label class="modal-label">Transcript (optional — paste from Sell Me This Pen)</label>
-    <textarea id="m-meet-transcript" style="min-height:120px" placeholder="Paste call transcript here if you have one..."></textarea>
-    <label class="modal-label">Follow-up for them (optional)</label>
-    <input type="text" id="m-meet-followup" placeholder="e.g. Go through neglected quotes, set follow-up tasks">
-    <div class="modal-buttons">
-      <button class="btn-secondary" onclick="closeMeetingModal()">cancel</button>
-      <button class="btn-primary" onclick="saveMeeting()">save meeting</button>
-    </div>
-  </div>
+<div class="modal-box">
+<div class="modal-title">&#127897;&#65039; Log Meeting</div>
+<label class="modal-label">Trainee(s)</label>
+<input type="text" id="m-meet-trainees" placeholder="Cameron, Joshua, Astra">
+<label class="modal-label">Date</label>
+<input type="date" id="m-meet-date">
+<label class="modal-label">What you covered / worked on</label>
+<textarea id="m-meet-notes" placeholder="What did you go over? What did they do well / need to fix?"></textarea>
+<label class="modal-label">Transcript (optional)</label>
+<textarea id="m-meet-transcript" style="min-height:120px" placeholder="Paste call transcript here if you have one..."></textarea>
+<label class="modal-label">Follow-up for them (optional)</label>
+<input type="text" id="m-meet-followup" placeholder="e.g. Go through neglected quotes, set follow-up tasks">
+<div class="modal-buttons">
+<button class="btn-secondary" onclick="closeMeetingModal()">cancel</button>
+<button class="btn-primary" onclick="saveMeeting()">save meeting</button>
+</div>
+</div>
 </div>
 
 <!-- YAAKOV MODAL -->
 <div class="modal-overlay" id="yaakov-modal">
-  <div class="modal-box">
-    <div class="modal-title">🎯 Yaakov Meeting</div>
-    <p style="font-size:12px;color:var(--text-dim);margin-bottom:14px">Log direction from Yaakov anytime during the day</p>
-    <label class="modal-label">Date</label>
-    <input type="date" id="m-yak-date">
-    <label class="modal-label">Time (optional)</label>
-    <input type="time" id="m-yak-time">
-    <label class="modal-label">What Yaakov said / direction</label>
-    <textarea id="m-yak-notes" placeholder="Who to focus on? What does he want done? Any issues?"></textarea>
-    <label class="modal-label">Trainees mentioned (optional)</label>
-    <input type="text" id="m-yak-trainees" placeholder="Cameron, Joshua, Astra">
-    <div class="modal-buttons">
-      <button class="btn-secondary" onclick="closeYaakovModal()">cancel</button>
-      <button class="btn-primary" onclick="saveYaakovMeeting()">log it</button>
-    </div>
-  </div>
+<div class="modal-box">
+<div class="modal-title">&#127919; Yaakov Meeting</div>
+<p style="font-size:12px;color:var(--text-dim);margin-bottom:14px">Log direction from Yaakov anytime during the day</p>
+<label class="modal-label">Date</label>
+<input type="date" id="m-yak-date">
+<label class="modal-label">Time (optional)</label>
+<input type="time" id="m-yak-time">
+<label class="modal-label">What Yaakov said / direction</label>
+<textarea id="m-yak-notes" placeholder="Who to focus on? What does he want done? Any issues?"></textarea>
+<label class="modal-label">Trainees mentioned (optional)</label>
+<input type="text" id="m-yak-trainees" placeholder="Cameron, Joshua, Astra">
+<div class="modal-buttons">
+<button class="btn-secondary" onclick="closeYaakovModal()">cancel</button>
+<button class="btn-primary" onclick="saveYaakovMeeting()">log it</button>
+</div>
+</div>
 </div>
 
 <!-- QUICK NOTE MODAL -->
 <div class="modal-overlay" id="note-modal">
-  <div class="modal-box">
-    <div class="modal-title">💭 Quick Thought</div>
-    <p style="font-size:12px;color:var(--text-dim);margin-bottom:14px">Jot it down now, sort it later. Lead names, reminders, anything.</p>
-    <textarea id="m-note-text" style="min-height:100px" placeholder="What's on your mind?"></textarea>
-    <label class="modal-label">Assign to trainee (optional)</label>
-    <select id="m-note-trainee"><option value="">— leave unassigned —</option></select>
-    <div class="modal-buttons">
-      <button class="btn-secondary" onclick="closeNoteModal()">cancel</button>
-      <button class="btn-primary" onclick="saveNote()">save</button>
-    </div>
-  </div>
+<div class="modal-box">
+<div class="modal-title">&#128173; Quick Thought</div>
+<p style="font-size:12px;color:var(--text-dim);margin-bottom:14px">Jot it down now, sort it later.</p>
+<textarea id="m-note-text" style="min-height:100px" placeholder="What's on your mind?"></textarea>
+<label class="modal-label">Assign to trainee (optional)</label>
+<select id="m-note-trainee"><option value="">&#8212; leave unassigned &#8212;</option></select>
+<div class="modal-buttons">
+<button class="btn-secondary" onclick="closeNoteModal()">cancel</button>
+<button class="btn-primary" onclick="saveNote()">save</button>
+</div>
+</div>
 </div>
 
 <!-- FOLLOW-UP MODAL -->
 <div class="modal-overlay" id="fu-modal">
-  <div class="modal-box">
-    <div class="modal-title">✅ New Follow-up</div>
-    <label class="modal-label">What needs to happen</label>
-    <input type="text" id="m-fu-text" placeholder="e.g. Check that Joshua set follow-up tasks on hot leads">
-    <label class="modal-label">For trainee (optional)</label>
-    <select id="m-fu-trainee"><option value="">— general —</option></select>
-    <label class="modal-label">Check back by (optional)</label>
-    <input type="date" id="m-fu-date">
-    <div class="modal-buttons">
-      <button class="btn-secondary" onclick="closeFuModal()">cancel</button>
-      <button class="btn-primary" onclick="saveFu()">add</button>
-    </div>
-  </div>
+<div class="modal-box">
+<div class="modal-title">&#9989; New Follow-up</div>
+<label class="modal-label">What needs to happen</label>
+<input type="text" id="m-fu-text" placeholder="e.g. Check that Joshua set follow-up tasks on hot leads">
+<label class="modal-label">For trainee (optional)</label>
+<select id="m-fu-trainee"><option value="">&#8212; general &#8212;</option></select>
+<label class="modal-label">Check back by (optional)</label>
+<input type="date" id="m-fu-date">
+<div class="modal-buttons">
+<button class="btn-secondary" onclick="closeFuModal()">cancel</button>
+<button class="btn-primary" onclick="saveFu()">add</button>
+</div>
+</div>
 </div>
 
 <!-- IMPORT MODAL -->
 <div class="modal-overlay" id="import-modal">
-  <div class="modal-box">
-    <div class="modal-title">📥 Import Data</div>
-    <p style="font-size:12px;color:var(--text-dim);margin-bottom:16px">Select your saved data file (.json)</p>
-    <input type="file" id="import-file" accept=".json" style="width:100%;margin-bottom:16px;padding:8px;background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;color:var(--text);cursor:pointer">
-    <div class="modal-buttons">
-      <button class="btn-secondary" onclick="closeImportModal()">cancel</button>
-      <button class="btn-primary" onclick="importData()">import</button>
-    </div>
-  </div>
+<div class="modal-box">
+<div class="modal-title">&#128229; Import Data</div>
+<p style="font-size:12px;color:var(--text-dim);margin-bottom:16px">Select your saved data file (.json)</p>
+<input type="file" id="import-file" accept=".json" style="width:100%;margin-bottom:16px;padding:8px;background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;color:var(--text);cursor:pointer">
+<div class="modal-buttons">
+<button class="btn-secondary" onclick="closeImportModal()">cancel</button>
+<button class="btn-primary" onclick="importData()">import</button>
+</div>
+</div>
 </div>
 
 <!-- DAY NOTE MODAL -->
 <div class="modal-overlay" id="daynote-modal">
-  <div class="modal-box">
-    <div class="modal-title">Add Day Note</div>
-    <p style="font-size:12px;color:var(--text-dim);margin-bottom:14px">Log notes tied to a specific date for this trainee.</p>
-    <label class="modal-label">Date</label>
-    <input type="date" id="m-daynote-date">
-    <label class="modal-label">Notes</label>
-    <textarea id="m-daynote-text" style="min-height:120px" placeholder="What happened on this day? Key coaching points, observations..."></textarea>
-    <input type="hidden" id="m-daynote-trainee-id">
-    <div class="modal-buttons">
-      <button class="btn-secondary" onclick="closeDayNoteModal()">cancel</button>
-      <button class="btn-primary" onclick="saveDayNote()">save day note</button>
-    </div>
-  </div>
+<div class="modal-box">
+<div class="modal-title">Add Day Note</div>
+<p style="font-size:12px;color:var(--text-dim);margin-bottom:14px">Log notes tied to a specific date for this trainee.</p>
+<label class="modal-label">Date</label>
+<input type="date" id="m-daynote-date">
+<label class="modal-label">Notes</label>
+<textarea id="m-daynote-text" style="min-height:120px" placeholder="What happened on this day? Key coaching points, observations..."></textarea>
+<input type="hidden" id="m-daynote-trainee-id">
+<div class="modal-buttons">
+<button class="btn-secondary" onclick="closeDayNoteModal()">cancel</button>
+<button class="btn-primary" onclick="saveDayNote()">save day note</button>
+</div>
+</div>
+</div>
+
+<!-- SCHEDULE ENTRY MODAL -->
+<div class="modal-overlay" id="sched-modal">
+<div class="modal-box">
+<div class="modal-title" id="sched-modal-title">&#128197; Add Schedule Entry</div>
+<label class="modal-label">Type</label>
+<select id="m-sched-type">
+<option value="meeting">&#129309; Meeting</option>
+<option value="task">&#9989; Task / To-do</option>
+</select>
+<label class="modal-label">Date</label>
+<input type="date" id="m-sched-date">
+<label class="modal-label">Time (optional)</label>
+<input type="time" id="m-sched-time">
+<label class="modal-label" id="m-sched-title-label">Title / What</label>
+<input type="text" id="m-sched-title" placeholder="e.g. Team check-in, Review proposals...">
+<label class="modal-label" id="m-sched-who-label" style="display:block">Who (for meetings)</label>
+<input type="text" id="m-sched-who" placeholder="e.g. Cameron, Joshua...">
+<label class="modal-label">Notes (optional)</label>
+<textarea id="m-sched-notes" style="min-height:80px" placeholder="Any details, agenda, prep needed..."></textarea>
+<input type="hidden" id="m-sched-edit-id" value="">
+<div class="modal-buttons">
+<button class="btn-secondary" onclick="closeSchedModal()">cancel</button>
+<button class="btn-primary" onclick="saveSchedEntry()">save</button>
+</div>
+</div>
 </div>
 
 <button class="quick-btn" onclick="openNoteModal()" title="Quick thought">+</button>
-
 <script>
-let STATE = { trainees:[], meetings:[], yaakovMeetings:[], notes:[], followups:[], dayNotes:[], noteId:1, traineeId:1, dayNoteId:1 };
+let STATE = { trainees:[], meetings:[], yaakovMeetings:[], notes:[], followups:[], dayNotes:[], scheduleEntries:[], noteId:1, traineeId:1, dayNoteId:1 };
 const NOW = new Date();
 const TODAY = NOW.toISOString().slice(0,10);
 const TODAY_DISPLAY = NOW.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
@@ -270,24 +320,25 @@ const MONTHS_FULL = ['January','February','March','April','May','June','July','A
 const WEEKDAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 let calMonth = NOW.getMonth(), calYear = NOW.getFullYear(), selectedCalKey = null;
 let collapsedSections = {};
+let schedViewDate = TODAY;
 
 function load(){
-  try{ const s=localStorage.getItem('coaching_v7'); if(s)STATE=JSON.parse(s); }catch(e){}
-  try{ const c=localStorage.getItem('coaching_collapsed'); if(c)collapsedSections=JSON.parse(c); }catch(e){}
-  STATE.trainees=STATE.trainees||[];STATE.meetings=STATE.meetings||[];STATE.yaakovMeetings=STATE.yaakovMeetings||[];STATE.notes=STATE.notes||[];STATE.followups=STATE.followups||[];STATE.dayNotes=STATE.dayNotes||[];
-  if(!STATE.noteId)STATE.noteId=1; if(!STATE.traineeId)STATE.traineeId=1; if(!STATE.dayNoteId)STATE.dayNoteId=1;
-  document.getElementById('save-indicator').textContent='loaded';
+try{ const s=localStorage.getItem('coaching_v7'); if(s)STATE=JSON.parse(s); }catch(e){}
+try{ const c=localStorage.getItem('coaching_collapsed'); if(c)collapsedSections=JSON.parse(c); }catch(e){}
+STATE.trainees=STATE.trainees||[];STATE.meetings=STATE.meetings||[];STATE.yaakovMeetings=STATE.yaakovMeetings||[];STATE.notes=STATE.notes||[];STATE.followups=STATE.followups||[];STATE.dayNotes=STATE.dayNotes||[];STATE.scheduleEntries=STATE.scheduleEntries||[];
+if(!STATE.noteId)STATE.noteId=1; if(!STATE.traineeId)STATE.traineeId=1; if(!STATE.dayNoteId)STATE.dayNoteId=1;
+document.getElementById('save-indicator').textContent='loaded';
 }
 function cleanupNotes(text){
-  if(!text||!text.trim())return text;
-  var raw=text.trim();
-  var parts=raw.split(/(?<=[.!?])\s+|;\s*|\n+/).map(function(s){return s.trim();}).filter(Boolean);
-  return parts.map(function(s){
-    if(!s)return '';
-    s=s.charAt(0).toUpperCase()+s.slice(1);
-    if(!/[.!?]$/.test(s))s+='.';
-    return s;
-  }).join('\n');
+if(!text||!text.trim())return text;
+var raw=text.trim();
+var parts=raw.split(/(?<=[.!?])\s+|;\s*|\n+/).map(function(s){return s.trim();}).filter(Boolean);
+return parts.map(function(s){
+if(!s)return '';
+s=s.charAt(0).toUpperCase()+s.slice(1);
+if(!/[.!?]$/.test(s))s+='.';
+return s;
+}).join('\n');
 }
 function save(){ try{localStorage.setItem('coaching_v7',JSON.stringify(STATE));localStorage.setItem('coaching_collapsed',JSON.stringify(collapsedSections));document.getElementById('save-indicator').textContent='saved';}catch(e){document.getElementById('save-indicator').textContent='error';}}
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -295,158 +346,314 @@ function dateOf(item){ if(item.dateKey){const[y,m,d]=item.dateKey.split('-').map
 function keyFromDate(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
 function traineeName(id){ const t=STATE.trainees.find(x=>x.id===id); return t?t.name:''; }
 function fmtDate(key){ if(!key)return''; const[y,m,d]=key.split('-').map(Number); return MONTHS_FULL[m-1].slice(0,3)+' '+d; }
+function fmtDateFull(key){ if(!key)return''; const[y,m,d]=key.split('-').map(Number); return MONTHS_FULL[m-1]+' '+d+', '+y; }
+function fmtTime(t){ if(!t)return''; const[h,m]=t.split(':').map(Number); const ampm=h>=12?'pm':'am'; return ((h%12)||12)+':'+(m<10?'0':'')+m+' '+ampm; }
 
 function toggleSection(id){
-  collapsedSections[id]=!collapsedSections[id];
-  save();
-  updateSectionUI(id);
+collapsedSections[id]=!collapsedSections[id];
+save();
+updateSectionUI(id);
 }
 function updateSectionUI(id){
-  const content=document.getElementById('content-'+id);
-  const toggle=document.getElementById('toggle-'+id);
-  if(content){
-    if(collapsedSections[id]){
-      content.classList.add('collapsed');
-      if(toggle)toggle.textContent='▶';
-    }else{
-      content.classList.remove('collapsed');
-      if(toggle)toggle.textContent='▼';
-    }
-  }
+const content=document.getElementById('content-'+id);
+const toggle=document.getElementById('toggle-'+id);
+if(content){
+if(collapsedSections[id]){
+content.classList.add('collapsed');
+if(toggle)toggle.textContent='\u25B6';
+}else{
+content.classList.remove('collapsed');
+if(toggle)toggle.textContent='\u25BC';
+}
+}
 }
 
 let currentPage='home';
 function showPage(name){ currentPage=name; document.getElementById('content').innerHTML=renderPage(name); updateNav(); buildSidebar(); }
 function updateNav(){
-  const nav=document.getElementById('nav-buttons');
-  const openFu=STATE.followups.filter(f=>!f.done).length;
-  const items=[{id:'home',label:'Home'},{id:'calendar',label:'Calendar'},{id:'followups',label:'Follow-ups'+(openFu?' ('+openFu+')':'')},{id:'yaakov',label:'Yaakov'}];
-  nav.innerHTML=items.map(i=>`<button class="nav-btn ${currentPage===i.id?'active':''}" onclick="showPage('${i.id}')">${i.label}</button>`).join('');
+const nav=document.getElementById('nav-buttons');
+const openFu=STATE.followups.filter(f=>!f.done).length;
+const todaySched=STATE.scheduleEntries.filter(e=>e.dateKey===TODAY).length;
+const items=[{id:'home',label:'Home'},{id:'schedule',label:'Schedule'+(todaySched?' ('+todaySched+')':'')},{id:'calendar',label:'Calendar'},{id:'followups',label:'Follow-ups'+(openFu?' ('+openFu+')':'')},{id:'yaakov',label:'Yaakov'}];
+nav.innerHTML=items.map(i=>'<button class="nav-btn '+(currentPage===i.id?'active':'')+'" onclick="showPage(\''+i.id+'\')">'+i.label+'</button>').join('');
 }
 function renderPage(name){
-  if(name==='home')return renderHome();
-  if(name==='calendar')return renderCalendar();
-  if(name==='followups')return renderFollowups();
-  if(name==='yaakov')return renderYaakov();
-  if(name.startsWith('trainee-')){const id=parseInt(name.split('-')[1]);const tr=STATE.trainees.find(t=>t.id===id);return tr?renderTrainee(tr):'<div class="empty-state">Not found</div>';}
-  return '';
+if(name==='home')return renderHome();
+if(name==='schedule')return renderSchedule();
+if(name==='calendar')return renderCalendar();
+if(name==='followups')return renderFollowups();
+if(name==='yaakov')return renderYaakov();
+if(name.startsWith('trainee-')){const id=parseInt(name.split('-')[1]);const tr=STATE.trainees.find(t=>t.id===id);return tr?renderTrainee(tr):'<div class="empty-state">Not found</div>';}
+return '';
 }
 
 // HOME
 function renderHome(){
-  const todayYak=STATE.yaakovMeetings.filter(y=>{const d=dateOf(y);return d&&keyFromDate(d)===TODAY;});
-  const todayMeet=STATE.meetings.filter(m=>{const d=dateOf(m);return d&&keyFromDate(d)===TODAY;});
-  const unassigned=STATE.notes.filter(n=>!n.traineeId);
-  const openFu=STATE.followups.filter(f=>!f.done);
-  const dueFu=openFu.filter(f=>f.dueDate&&f.dueDate<=TODAY);
-  
-  const html=`<h1 class="page-title">📊 Today's Workflow</h1>
-    <div style="font-size:13px;color:var(--text-dim);margin-top:-16px;margin-bottom:24px">${TODAY_DISPLAY}</div>
-    <div class="split-section">
-      <div class="card">
-        <div class="card-title" onclick="toggleSection('home-yaakov')">🎯 Yaakov${todayYak.length?`<span class="badge amber">${todayYak.length}</span>`:''}<span class="card-title-toggle" id="toggle-home-yaakov">▼</span></div>
-        <div class="card-content" id="content-home-yaakov">
-          ${todayYak.length?todayYak.map(y=>`<div style="margin-bottom:10px;padding:10px;background:var(--bg-dark);border-radius:6px;border-left:3px solid var(--accent)">${y.time?`<div class="item-meta">${y.time}</div>`:''}${y.notes?`<div>${esc(y.notes)}</div>`:''}</div>`).join(''):' <div class="empty-state">No Yaakov meetings today</div>'}
-          <button class="btn-secondary" style="width:100%;margin-top:10px" onclick="openYaakovModal()">+ log Yaakov</button>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-title" onclick="toggleSection('home-meetings')">🎙️ Meetings Today${todayMeet.length?`<span class="badge amber">${todayMeet.length}</span>`:''}<span class="card-title-toggle" id="toggle-home-meetings">▼</span></div>
-        <div class="card-content" id="content-home-meetings">
-          ${todayMeet.length?todayMeet.map(m=>`<div style="margin-bottom:8px;padding:8px 10px;background:var(--bg-dark);border-radius:6px;border-left:3px solid var(--blue);font-size:12px;font-weight:600">${esc(m.trainees)}</div>`).join(''):'<div class="empty-state">No meetings today</div>'}
-          <button class="btn-primary" style="width:100%;margin-top:10px" onclick="openMeetingModal()">+ log meeting</button>
-        </div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title" onclick="toggleSection('home-followups')">✅ Follow-ups${dueFu.length?`<span class="badge red">${dueFu.length} due</span>`:openFu.length?`<span class="badge">${openFu.length} open</span>`:''}<span class="card-title-toggle" id="toggle-home-followups">▼</span></div>
-      <div class="card-content" id="content-home-followups">
-        ${openFu.length?openFu.slice(0,6).map(f=>fuRow(f)).join(''):'<div class="empty-state">Nothing to follow up on</div>'}
-        <div style="display:flex;gap:8px;margin-top:10px">
-          <button class="btn-secondary" style="flex:1" onclick="openFuModal()">+ add follow-up</button>
-          ${openFu.length>6?`<button class="btn-secondary" style="flex:1" onclick="showPage('followups')">see all (${openFu.length})</button>`:''}
-        </div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title" onclick="toggleSection('home-notes')">💭 Quick Notes${unassigned.length?`<span class="badge amber">${unassigned.length}</span>`:''}<span class="card-title-toggle" id="toggle-home-notes">▼</span></div>
-      <div class="card-content" id="content-home-notes">
-        <div style="font-size:12px;color:var(--text-dim);margin-bottom:12px">Unassigned thoughts — assign to a trainee or clear</div>
-        ${unassigned.length?unassigned.map(n=>noteRow(n,true)).join(''):'<div class="empty-state">No unassigned notes</div>'}
-        <button class="btn-secondary" style="width:100%;margin-top:10px" onclick="openNoteModal()">+ add a thought</button>
-      </div>
-    </div>`;
-  
-  setTimeout(()=>{
-    ['home-yaakov','home-meetings','home-followups','home-notes'].forEach(id=>updateSectionUI(id));
-  },0);
-  
-  return html;
+const todayYak=STATE.yaakovMeetings.filter(y=>{const d=dateOf(y);return d&&keyFromDate(d)===TODAY;});
+const todayMeet=STATE.meetings.filter(m=>{const d=dateOf(m);return d&&keyFromDate(d)===TODAY;});
+const todaySched=STATE.scheduleEntries.filter(e=>e.dateKey===TODAY).sort((a,b)=>(a.time||'99:99').localeCompare(b.time||'99:99'));
+const unassigned=STATE.notes.filter(n=>!n.traineeId);
+const openFu=STATE.followups.filter(f=>!f.done);
+const dueFu=openFu.filter(f=>f.dueDate&&f.dueDate<=TODAY);
+
+const html='<h1 class="page-title">\u{1F4CA} Today\'s Workflow</h1>'+
+'<div style="font-size:13px;color:var(--text-dim);margin-top:-16px;margin-bottom:24px">'+TODAY_DISPLAY+'</div>'+
+'<div class="card">'+
+'<div class="card-title" onclick="toggleSection(\'home-schedule\')">\u{1F4C5} Today\'s Schedule'+(todaySched.length?'<span class="badge amber">'+todaySched.length+'</span>':'')+'<span class="card-title-toggle" id="toggle-home-schedule">\u25BC</span></div>'+
+'<div class="card-content" id="content-home-schedule">'+
+(todaySched.length?todaySched.map(e=>schedEntryRow(e,true)).join(''):'<div class="sched-empty">Nothing scheduled for today</div>')+
+'<div style="display:flex;gap:8px;margin-top:12px">'+
+'<button class="btn-primary" style="flex:1" onclick="openSchedModal(\'\',TODAY)">+ add to today</button>'+
+'<button class="btn-secondary" style="flex:1" onclick="showPage(\'schedule\')">view full schedule</button>'+
+'</div>'+
+'</div>'+
+'</div>'+
+'<div class="split-section">'+
+'<div class="card">'+
+'<div class="card-title" onclick="toggleSection(\'home-yaakov\')">\u{1F3AF} Yaakov'+(todayYak.length?'<span class="badge amber">'+todayYak.length+'</span>':'')+'<span class="card-title-toggle" id="toggle-home-yaakov">\u25BC</span></div>'+
+'<div class="card-content" id="content-home-yaakov">'+
+(todayYak.length?todayYak.map(y=>'<div style="margin-bottom:10px;padding:10px;background:var(--bg-dark);border-radius:6px;border-left:3px solid var(--accent)">'+(y.time?'<div class="item-meta">'+y.time+'</div>':'')+(y.notes?'<div>'+esc(y.notes)+'</div>':'')+'</div>').join(''):'<div class="empty-state">No Yaakov meetings today</div>')+
+'<button class="btn-secondary" style="width:100%;margin-top:10px" onclick="openYaakovModal()">+ log Yaakov</button>'+
+'</div>'+
+'</div>'+
+'<div class="card">'+
+'<div class="card-title" onclick="toggleSection(\'home-meetings\')">\u{1F399}\uFE0F Meetings Today'+(todayMeet.length?'<span class="badge amber">'+todayMeet.length+'</span>':'')+'<span class="card-title-toggle" id="toggle-home-meetings">\u25BC</span></div>'+
+'<div class="card-content" id="content-home-meetings">'+
+(todayMeet.length?todayMeet.map(m=>'<div style="margin-bottom:8px;padding:8px 10px;background:var(--bg-dark);border-radius:6px;border-left:3px solid var(--blue);font-size:12px;font-weight:600">'+esc(m.trainees)+'</div>').join(''):'<div class="empty-state">No meetings today</div>')+
+'<button class="btn-primary" style="width:100%;margin-top:10px" onclick="openMeetingModal()">+ log meeting</button>'+
+'</div>'+
+'</div>'+
+'</div>'+
+'<div class="card">'+
+'<div class="card-title" onclick="toggleSection(\'home-followups\')">\u2705 Follow-ups'+(dueFu.length?'<span class="badge red">'+dueFu.length+' due</span>':openFu.length?'<span class="badge">'+openFu.length+' open</span>':'')+'<span class="card-title-toggle" id="toggle-home-followups">\u25BC</span></div>'+
+'<div class="card-content" id="content-home-followups">'+
+(openFu.length?openFu.slice(0,6).map(f=>fuRow(f)).join(''):'<div class="empty-state">Nothing to follow up on</div>')+
+'<div style="display:flex;gap:8px;margin-top:10px">'+
+'<button class="btn-secondary" style="flex:1" onclick="openFuModal()">+ add follow-up</button>'+
+(openFu.length>6?'<button class="btn-secondary" style="flex:1" onclick="showPage(\'followups\')">see all ('+openFu.length+')</button>':'')+
+'</div>'+
+'</div>'+
+'</div>'+
+'<div class="card">'+
+'<div class="card-title" onclick="toggleSection(\'home-notes\')">\u{1F4AD} Quick Notes'+(unassigned.length?'<span class="badge amber">'+unassigned.length+'</span>':'')+'<span class="card-title-toggle" id="toggle-home-notes">\u25BC</span></div>'+
+'<div class="card-content" id="content-home-notes">'+
+'<div style="font-size:12px;color:var(--text-dim);margin-bottom:12px">Unassigned thoughts \u2014 assign to a trainee or clear</div>'+
+(unassigned.length?unassigned.map(n=>noteRow(n,true)).join(''):'<div class="empty-state">No unassigned notes</div>')+
+'<button class="btn-secondary" style="width:100%;margin-top:10px" onclick="openNoteModal()">+ add a thought</button>'+
+'</div>'+
+'</div>';
+
+setTimeout(function(){
+['home-schedule','home-yaakov','home-meetings','home-followups','home-notes'].forEach(function(id){updateSectionUI(id);});
+},0);
+
+return html;
+}
+
+// SCHEDULE
+function renderSchedule(){
+const entries=STATE.scheduleEntries.filter(e=>e.dateKey===schedViewDate).sort(function(a,b){return (a.time||'99:99').localeCompare(b.time||'99:99');});
+const meetings=entries.filter(e=>e.type==='meeting');
+const tasks=entries.filter(e=>e.type==='task');
+const dateObj=new Date(schedViewDate+'T12:00:00');
+const dispDate=MONTHS_FULL[dateObj.getMonth()]+' '+dateObj.getDate()+', '+dateObj.getFullYear();
+const isToday=schedViewDate===TODAY;
+
+function changeSchedDate(delta){
+const d=new Date(schedViewDate+'T12:00:00');
+d.setDate(d.getDate()+delta);
+schedViewDate=keyFromDate(d);
+showPage('schedule');
+}
+window._changeSchedDate=changeSchedDate;
+
+const entriesHtml=entries.length?(
+(meetings.length?'<div class="sched-section-header">\u{1F91D} Meetings ('+meetings.length+')</div>'+meetings.map(function(e){return schedEntryRow(e,false);}).join(''):'')+
+(tasks.length?'<div class="sched-section-header" style="margin-top:'+(meetings.length?'16':'0')+'px">\u2705 Tasks &amp; To-dos ('+tasks.length+')</div>'+tasks.map(function(e){return schedEntryRow(e,false);}).join(''):'')):
+'<div class="sched-empty" style="padding:60px 20px"><div style="font-size:32px;margin-bottom:12px">\u{1F4C5}</div><div>Nothing scheduled for this day.</div><div style="margin-top:8px;font-size:13px">Add a meeting or task below.</div></div>';
+
+return '<h1 class="page-title">\u{1F4C5} Daily Schedule</h1>'+
+'<div class="sched-date-nav">'+
+'<button class="btn-secondary btn-sm" onclick="window._changeSchedDate(-1)">\u2039 prev</button>'+
+'<div class="sched-date-label">'+dispDate+(isToday?' <span class="badge amber">Today</span>':'')+'</div>'+
+'<button class="btn-secondary btn-sm" onclick="window._changeSchedDate(1)">next \u203A</button>'+
+'<button class="btn-secondary btn-sm" onclick="schedViewDate=TODAY;showPage(\'schedule\')">Today</button>'+
+'<input type="date" value="'+schedViewDate+'" onchange="schedViewDate=this.value;showPage(\'schedule\')" style="width:auto;padding:6px 10px;font-size:12px">'+
+'</div>'+
+'<div class="card">'+
+entriesHtml+
+'</div>'+
+'<div style="display:flex;gap:10px;margin-top:4px">'+
+'<button class="btn-primary" onclick="openSchedModal(\'meeting\',schedViewDate)">+ add meeting</button>'+
+'<button class="btn-secondary" onclick="openSchedModal(\'task\',schedViewDate)">+ add task</button>'+
+'</div>';
+}
+
+function schedEntryRow(e,compact){
+const timeStr=e.time?fmtTime(e.time):'';
+const isDone=!!e.done;
+return '<div class="sched-entry type-'+e.type+(isDone?' done-entry':'')+'">'+
+'<div class="sched-cb'+(isDone?' checked':'')+'" onclick="toggleSchedDone('+e.id+')" title="'+(isDone?'Mark undone':'Mark done')+'"></div>'+
+'<div style="flex:1;min-width:0">'+
+(timeStr?'<div class="sched-time">'+esc(timeStr)+'</div>':'')+
+'<div class="sched-title'+(isDone?' done-text':'')+'"><span class="sched-type-badge '+e.type+'">'+( e.type==='meeting'?'meeting':'task')+'</span>'+esc(e.title)+'</div>'+
+(e.who&&e.type==='meeting'?'<div class="sched-who">\u{1F464} with: '+esc(e.who)+'</div>':'')+
+(e.notes&&!compact?'<div class="sched-note">'+esc(e.notes)+'</div>':'')+
+(e.notes&&compact?'<div class="sched-note" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:400px">'+esc(e.notes)+'</div>':'')+
+'</div>'+
+'<div class="sched-actions">'+
+'<button class="edit-btn" onclick="openSchedEditModal('+e.id+')" title="Edit">\u270F</button>'+
+'<button class="del-btn" onclick="deleteSchedEntry('+e.id+')" title="Delete">\u2715</button>'+
+'</div>'+
+'</div>';
+}
+
+function openSchedModal(type,dateKey){
+document.getElementById('sched-modal-title').textContent=(type==='meeting'?'\u{1F91D} Add Meeting':'type==='task'?'\u2705 Add Task':'\u{1F4C5}'+' Add Schedule Entry');
+document.getElementById('m-sched-type').value=type||'meeting';
+document.getElementById('m-sched-date').value=dateKey||schedViewDate||TODAY;
+document.getElementById('m-sched-time').value='';
+document.getElementById('m-sched-title').value='';
+document.getElementById('m-sched-who').value='';
+document.getElementById('m-sched-notes').value='';
+document.getElementById('m-sched-edit-id').value='';
+updateSchedWhoLabel();
+document.getElementById('sched-modal').classList.add('open');
+document.getElementById('m-sched-title').focus();
+}
+
+function openSchedEditModal(id){
+const e=STATE.scheduleEntries.find(x=>x.id===id);
+if(!e)return;
+document.getElementById('sched-modal-title').textContent='\u270F Edit Entry';
+document.getElementById('m-sched-type').value=e.type||'meeting';
+document.getElementById('m-sched-date').value=e.dateKey||TODAY;
+document.getElementById('m-sched-time').value=e.time||'';
+document.getElementById('m-sched-title').value=e.title||'';
+document.getElementById('m-sched-who').value=e.who||'';
+document.getElementById('m-sched-notes').value=e.notes||'';
+document.getElementById('m-sched-edit-id').value=id;
+updateSchedWhoLabel();
+document.getElementById('sched-modal').classList.add('open');
+document.getElementById('m-sched-title').focus();
+}
+
+function updateSchedWhoLabel(){
+const type=document.getElementById('m-sched-type').value;
+const whoLabel=document.getElementById('m-sched-who-label');
+const whoInput=document.getElementById('m-sched-who');
+if(type==='meeting'){
+whoLabel.style.display='block';
+whoInput.style.display='block';
+whoLabel.textContent='Who are you meeting with?';
+whoInput.placeholder='e.g. Cameron, Joshua, client name...';
+}else{
+whoLabel.style.display='none';
+whoInput.style.display='none';
+}
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+var typeEl=document.getElementById('m-sched-type');
+if(typeEl)typeEl.addEventListener('change',updateSchedWhoLabel);
+});
+
+function closeSchedModal(){document.getElementById('sched-modal').classList.remove('open');}
+
+function saveSchedEntry(){
+const title=document.getElementById('m-sched-title').value.trim();
+if(!title){alert('Please enter a title');return;}
+const type=document.getElementById('m-sched-type').value;
+const dateKey=document.getElementById('m-sched-date').value||TODAY;
+const time=document.getElementById('m-sched-time').value;
+const who=document.getElementById('m-sched-who').value.trim();
+const notes=document.getElementById('m-sched-notes').value.trim();
+const editId=document.getElementById('m-sched-edit-id').value;
+if(editId){
+const e=STATE.scheduleEntries.find(x=>x.id===parseInt(editId));
+if(e){e.type=type;e.dateKey=dateKey;e.time=time;e.title=title;e.who=who;e.notes=notes;}
+}else{
+STATE.scheduleEntries.push({id:STATE.noteId++,type,dateKey,time,title,who,notes,done:false});
+}
+schedViewDate=dateKey;
+save();closeSchedModal();showPage(currentPage==='schedule'||currentPage==='home'?currentPage:'schedule');
+}
+
+function toggleSchedDone(id){
+const e=STATE.scheduleEntries.find(x=>x.id===id);
+if(e)e.done=!e.done;
+save();showPage(currentPage);
+}
+
+function deleteSchedEntry(id){
+if(!confirm('Delete this entry?'))return;
+STATE.scheduleEntries=STATE.scheduleEntries.filter(e=>e.id!==id);
+save();showPage(currentPage);
 }
 
 function fuRow(f){
-  const overdue=f.dueDate&&f.dueDate<TODAY&&!f.done;
-  const tag=f.traineeId?`<span class="fu-tag">${esc(traineeName(f.traineeId))}</span>`:'';
-  return `<div class="fu-item ${overdue?'overdue':''}">
-    <div class="fu-cb ${f.done?'on':''}" onclick="toggleFu(${f.id})"></div>
-    <div class="fu-body"><div class="fu-text ${f.done?'done':''}">${esc(f.text)}${tag}</div>${f.dueDate?`<div class="fu-meta ${overdue?'overdue':''}">${overdue?'overdue · ':'by '}${fmtDate(f.dueDate)}</div>`:''}
-    </div>
-    <button class="del-btn" onclick="deleteFu(${f.id})">✕</button>
-  </div>`;
+const overdue=f.dueDate&&f.dueDate<TODAY&&!f.done;
+const tag=f.traineeId?'<span class="fu-tag">'+esc(traineeName(f.traineeId))+'</span>':'';
+return '<div class="fu-item '+(overdue?'overdue':'')+'">'+
+'<div class="fu-cb '+(f.done?'on':'')+'" onclick="toggleFu('+f.id+')"></div>'+
+'<div class="fu-body"><div class="fu-text '+(f.done?'done':'')+'">'+esc(f.text)+tag+'</div>'+(f.dueDate?'<div class="fu-meta '+(overdue?'overdue':'')+'">'+( overdue?'overdue \u00B7 ':'by ')+fmtDate(f.dueDate)+'</div>':'')+
+'</div>'+
+'<button class="del-btn" onclick="deleteFu('+f.id+')">\u2715</button>'+
+'</div>';
 }
 function noteRow(n,showAssign){
-  return `<div class="item-row">
-    <div class="item-body">
-      <div class="note-date">${n.date}</div>
-      <div>${esc(n.text)}</div>
-      ${showAssign&&STATE.trainees.length?`
-        <select class="mini-select" onchange="assignNote(${n.id},this.value)">
-          <option value="">assign to trainee...</option>
-          ${STATE.trainees.map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join('')}
-        </select>
-      `:''}
-    </div>
-    <div style="display:flex;gap:4px">
-      <button class="del-btn" onclick="editNote(${n.id})">✎</button>
-      <button class="del-btn" onclick="deleteNote(${n.id})">✕</button>
-    </div>
-  </div>`;
+return '<div class="item-row">'+
+'<div class="item-body">'+
+'<div class="note-date">'+n.date+'</div>'+
+'<div>'+esc(n.text)+'</div>'+
+(showAssign&&STATE.trainees.length?'<select class="mini-select" onchange="assignNote('+n.id+',this.value)"><option value="">assign to trainee...</option>'+STATE.trainees.map(function(t){return '<option value="'+t.id+'">'+esc(t.name)+'</option>';}).join('')+'</select>':'')+
+'</div>'+
+'<div style="display:flex;gap:4px">'+
+'<button class="del-btn" onclick="editNote('+n.id+')">\u270E</button>'+
+'<button class="del-btn" onclick="deleteNote('+n.id+')">\u2715</button>'+
+'</div>'+
+'</div>';
 }
 
 // CALENDAR
 function renderCalendar(){
-  const firstDay=new Date(calYear,calMonth,1).getDay();
-  const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
-  let cells='';
-  for(let i=0;i<firstDay;i++)cells+='<div class="cal-cell empty"></div>';
-  for(let day=1;day<=daysInMonth;day++){
-    const key=calYear+'-'+String(calMonth+1).padStart(2,'0')+'-'+String(day).padStart(2,'0');
-    const dMeet=STATE.meetings.filter(m=>{const d=dateOf(m);return d&&keyFromDate(d)===key;});
-    const dYak=STATE.yaakovMeetings.filter(y=>{const d=dateOf(y);return d&&keyFromDate(d)===key;});
-    const isToday=(calYear===NOW.getFullYear()&&calMonth===NOW.getMonth()&&day===NOW.getDate());
-    const has=dMeet.length||dYak.length;
-    const names=dMeet.map(m=>m.trainees).join(', ');
-    cells+=`<div class="cal-cell ${isToday?'today':''} ${has?'has-activity':''} ${selectedCalKey===key?'selected':''}" onclick="selectCalDay('${key}')"><div class="cal-day-num">${day}</div>${dYak.length?`<div class="cal-yaakov-tag">YAK</div>`:''}${names?`<div class="cal-names">${esc(names)}</div>`:''}</div>`;
-  }
-  let detail='';
-  if(selectedCalKey){
-    const dMeet=STATE.meetings.filter(m=>{const d=dateOf(m);return d&&keyFromDate(d)===selectedCalKey;});
-    const dYak=STATE.yaakovMeetings.filter(y=>{const d=dateOf(y);return d&&keyFromDate(d)===selectedCalKey;});
-    const[yy,mm,dd]=selectedCalKey.split('-').map(Number);
-    detail=`<div class="day-detail"><div class="day-card"><div class="day-date">${MONTHS_FULL[mm-1]} ${dd}, ${yy}</div>
-      ${dYak.length?`<div class="day-section"><div class="day-section-title">🎯 Yaakov (${dYak.length})</div>${dYak.map(y=>`<div class="item-row"><div class="item-body">${y.time?`<div class="item-meta">${y.time}</div>`:''}${y.notes?`<div>${esc(y.notes)}</div>`:''}</div></div>`).join('')}</div>`:''}
-      ${dMeet.length?`<div class="day-section"><div class="day-section-title">🎙️ Trainee Meetings (${dMeet.length})</div>${dMeet.map(m=>`<div class="item-row blue"><div class="item-body"><div class="item-meta">${esc(m.trainees)}</div>${m.notes?`<div>${esc(m.notes)}</div>`:''}</div></div>`).join('')}</div>`:''}
-      ${(!dYak.length&&!dMeet.length)?'<div class="empty-state">Nothing logged this day</div>':''}
-    </div></div>`;
-  }
-  return `<h1 class="page-title">📅 Calendar</h1>
-    <div class="card">
-      <div class="cal-head"><div class="cal-month-label">${MONTHS_FULL[calMonth]} ${calYear}</div>
-        <div class="cal-nav-btns"><button class="btn-secondary btn-sm" onclick="calPrev()">‹ prev</button><button class="btn-secondary btn-sm" onclick="calToday()">today</button><button class="btn-secondary btn-sm" onclick="calNext()">next ›</button></div>
-      </div>
-      <div class="cal-weekdays">${WEEKDAYS.map(w=>`<div class="cal-weekday">${w}</div>`).join('')}</div>
-      <div class="cal-grid">${cells}</div>
-    </div>${detail}`;
+const firstDay=new Date(calYear,calMonth,1).getDay();
+const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
+let cells='';
+for(let i=0;i<firstDay;i++)cells+='<div class="cal-cell empty"></div>';
+for(let day=1;day<=daysInMonth;day++){
+const key=calYear+'-'+String(calMonth+1).padStart(2,'0')+'-'+String(day).padStart(2,'0');
+const dMeet=STATE.meetings.filter(function(m){const d=dateOf(m);return d&&keyFromDate(d)===key;});
+const dYak=STATE.yaakovMeetings.filter(function(y){const d=dateOf(y);return d&&keyFromDate(d)===key;});
+const dSched=STATE.scheduleEntries.filter(function(e){return e.dateKey===key;});
+const isToday=(calYear===NOW.getFullYear()&&calMonth===NOW.getMonth()&&day===NOW.getDate());
+const has=dMeet.length||dYak.length||dSched.length;
+const names=dMeet.map(function(m){return m.trainees;}).join(', ');
+const schedCount=dSched.length;
+cells+='<div class="cal-cell '+(isToday?'today':'')+' '+(has?'has-activity':'')+' '+(selectedCalKey===key?'selected':'')+'" onclick="selectCalDay(\''+key+'\')">'+'<div class="cal-day-num">'+day+'</div>'+(dYak.length?'<div class="cal-yaakov-tag">YAK</div>':'')+(names?'<div class="cal-names">'+esc(names)+'</div>':'')+(schedCount?'<div class="cal-names" style="color:var(--accent)">\u{1F4C5} '+schedCount+'</div>':'')+'</div>';
+}
+let detail='';
+if(selectedCalKey){
+const dMeet=STATE.meetings.filter(function(m){const d=dateOf(m);return d&&keyFromDate(d)===selectedCalKey;});
+const dYak=STATE.yaakovMeetings.filter(function(y){const d=dateOf(y);return d&&keyFromDate(d)===selectedCalKey;});
+const dSched=STATE.scheduleEntries.filter(function(e){return e.dateKey===selectedCalKey;}).sort(function(a,b){return(a.time||'99:99').localeCompare(b.time||'99:99');});
+const parts=selectedCalKey.split('-').map(Number);
+const yy=parts[0],mm=parts[1],dd=parts[2];
+detail='<div class="day-detail"><div class="day-card"><div class="day-date">'+MONTHS_FULL[mm-1]+' '+dd+', '+yy+'</div>'+
+(dSched.length?'<div class="day-section"><div class="day-section-title">\u{1F4C5} Scheduled ('+dSched.length+')</div>'+dSched.map(function(e){return schedEntryRow(e,true);}).join('')+'<button class="btn-secondary btn-sm" style="margin-top:8px" onclick="schedViewDate=\''+selectedCalKey+'\';showPage(\'schedule\')">view / edit day</button></div>':'')+
+(dYak.length?'<div class="day-section"><div class="day-section-title">\u{1F3AF} Yaakov ('+dYak.length+')</div>'+dYak.map(function(y){return '<div class="item-row"><div class="item-body">'+(y.time?'<div class="item-meta">'+y.time+'</div>':'')+(y.notes?'<div>'+esc(y.notes)+'</div>':'')+'</div></div>';}).join('')+'</div>':'')+
+(dMeet.length?'<div class="day-section"><div class="day-section-title">\u{1F399}\uFE0F Trainee Meetings ('+dMeet.length+')</div>'+dMeet.map(function(m){return '<div class="item-row blue"><div class="item-body"><div class="item-meta">'+esc(m.trainees)+'</div>'+(m.notes?'<div>'+esc(m.notes)+'</div>':'')+'</div></div>';}).join('')+'</div>':'')+
+(!dYak.length&&!dMeet.length&&!dSched.length?'<div class="empty-state">Nothing logged this day</div>':'')+
+'</div></div>';
+}
+return '<h1 class="page-title">\u{1F4C5} Calendar</h1>'+
+'<div class="card">'+
+'<div class="cal-head"><div class="cal-month-label">'+MONTHS_FULL[calMonth]+' '+calYear+'</div>'+
+'<div class="cal-nav-btns"><button class="btn-secondary btn-sm" onclick="calPrev()">\u2039 prev</button><button class="btn-secondary btn-sm" onclick="calToday()">today</button><button class="btn-secondary btn-sm" onclick="calNext()">next \u203A</button></div>'+
+'</div>'+
+'<div class="cal-weekdays">'+WEEKDAYS.map(function(w){return '<div class="cal-weekday">'+w+'</div>';}).join('')+'</div>'+
+'<div class="cal-grid">'+cells+'</div>'+
+'</div>'+detail;
 }
 function calPrev(){calMonth--;if(calMonth<0){calMonth=11;calYear--;}selectedCalKey=null;showPage('calendar');}
 function calNext(){calMonth++;if(calMonth>11){calMonth=0;calYear++;}selectedCalKey=null;showPage('calendar');}
@@ -455,368 +662,356 @@ function selectCalDay(key){selectedCalKey=(selectedCalKey===key)?null:key;showPa
 
 // FOLLOW-UPS
 function renderFollowups(){
-  const open=STATE.followups.filter(f=>!f.done).sort((a,b)=>(a.dueDate||'9999').localeCompare(b.dueDate||'9999'));
-  const done=STATE.followups.filter(f=>f.done);
-  const html=`<h1 class="page-title">✅ Follow-ups</h1>
-    <button class="btn-primary" style="margin-bottom:20px" onclick="openFuModal()">+ add follow-up</button>
-    <div class="card">
-      <div class="card-title" onclick="toggleSection('fu-open')">Open${open.length?`<span class="badge amber">${open.length}</span>`:''}<span class="card-title-toggle" id="toggle-fu-open">▼</span></div>
-      <div class="card-content" id="content-fu-open">
-        ${open.length?open.map(f=>fuRow(f)).join(''):'<div class="empty-state">Nothing open — you are caught up</div>'}
-      </div>
-    </div>
-    ${done.length?`<div class="card"><div class="card-title" onclick="toggleSection('fu-done')">Done<button class="btn-secondary btn-sm" onclick="clearDoneFu()" style="margin-left:auto">clear done</button><span class="card-title-toggle" id="toggle-fu-done">▼</span></div><div class="card-content" id="content-fu-done">${done.map(f=>fuRow(f)).join('')}</div></div>`:''}`;
-  
-  setTimeout(()=>{
-    ['fu-open','fu-done'].forEach(id=>updateSectionUI(id));
-  },0);
-  
-  return html;
+const open=STATE.followups.filter(function(f){return !f.done;}).sort(function(a,b){return(a.dueDate||'9999').localeCompare(b.dueDate||'9999');});
+const done=STATE.followups.filter(function(f){return f.done;});
+const html='<h1 class="page-title">\u2705 Follow-ups</h1>'+
+'<button class="btn-primary" style="margin-bottom:20px" onclick="openFuModal()">+ add follow-up</button>'+
+'<div class="card">'+
+'<div class="card-title" onclick="toggleSection(\'fu-open\')">Open'+(open.length?'<span class="badge amber">'+open.length+'</span>':'')+'<span class="card-title-toggle" id="toggle-fu-open">\u25BC</span></div>'+
+'<div class="card-content" id="content-fu-open">'+
+(open.length?open.map(function(f){return fuRow(f);}).join(''):'<div class="empty-state">Nothing open \u2014 you are caught up</div>')+
+'</div>'+
+'</div>'+
+(done.length?'<div class="card"><div class="card-title" onclick="toggleSection(\'fu-done\')">Done<button class="btn-secondary btn-sm" onclick="clearDoneFu()" style="margin-left:auto">clear done</button><span class="card-title-toggle" id="toggle-fu-done">\u25BC</span></div><div class="card-content" id="content-fu-done">'+done.map(function(f){return fuRow(f);}).join('')+'</div></div>':'');
+
+setTimeout(function(){
+['fu-open','fu-done'].forEach(function(id){updateSectionUI(id);});
+},0);
+
+return html;
 }
 function openFuModal(prefillTrainee){
-  document.getElementById('m-fu-text').value='';
-  document.getElementById('m-fu-date').value='';
-  const sel=document.getElementById('m-fu-trainee');
-  sel.innerHTML='<option value="">— general —</option>'+STATE.trainees.map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join('');
-  sel.value=prefillTrainee?String(prefillTrainee):'';
-  document.getElementById('fu-modal').classList.add('open');
-  document.getElementById('m-fu-text').focus();
+document.getElementById('m-fu-text').value='';
+document.getElementById('m-fu-date').value='';
+const sel=document.getElementById('m-fu-trainee');
+sel.innerHTML='<option value="">\u2014 general \u2014</option>'+STATE.trainees.map(function(t){return '<option value="'+t.id+'">'+esc(t.name)+'</option>';}).join('');
+sel.value=prefillTrainee?String(prefillTrainee):'';
+document.getElementById('fu-modal').classList.add('open');
+document.getElementById('m-fu-text').focus();
 }
 function closeFuModal(){document.getElementById('fu-modal').classList.remove('open');}
 function saveFu(){
-  const text=document.getElementById('m-fu-text').value.trim();
-  if(!text)return;
-  const tid=document.getElementById('m-fu-trainee').value;
-  const due=document.getElementById('m-fu-date').value;
-  STATE.followups.push({id:STATE.noteId++,text,traineeId:tid?parseInt(tid):null,dueDate:due||'',done:false,created:TODAY});
-  save();closeFuModal();showPage(currentPage);
+const text=document.getElementById('m-fu-text').value.trim();
+if(!text)return;
+const tid=document.getElementById('m-fu-trainee').value;
+const due=document.getElementById('m-fu-date').value;
+STATE.followups.push({id:STATE.noteId++,text,traineeId:tid?parseInt(tid):null,dueDate:due||'',done:false,created:TODAY});
+save();closeFuModal();showPage(currentPage);
 }
-function toggleFu(id){const f=STATE.followups.find(x=>x.id===id);if(f)f.done=!f.done;save();showPage(currentPage);}
-function deleteFu(id){STATE.followups=STATE.followups.filter(f=>f.id!==id);save();showPage(currentPage);}
-function clearDoneFu(){STATE.followups=STATE.followups.filter(f=>!f.done);save();showPage(currentPage);}
+function toggleFu(id){const f=STATE.followups.find(function(x){return x.id===id;});if(f)f.done=!f.done;save();showPage(currentPage);}
+function deleteFu(id){STATE.followups=STATE.followups.filter(function(f){return f.id!==id;});save();showPage(currentPage);}
+function clearDoneFu(){STATE.followups=STATE.followups.filter(function(f){return !f.done;});save();showPage(currentPage);}
 
 // YAAKOV
 function renderYaakov(){
-  const meetings=[...STATE.yaakovMeetings].sort((a,b)=>{const da=dateOf(a),db=dateOf(b);return(db?db.getTime():0)-(da?da.getTime():0);});
-  const groups={};
-  meetings.forEach(y=>{
-    const key=y.dateKey||y.date||'Unknown';
-    if(!groups[key])groups[key]=[];
-    groups[key].push(y);
-  });
-  const groupKeys=Object.keys(groups).sort((a,b)=>b.localeCompare(a));
-  const groupsHtml=groupKeys.map(key=>{
-    const items=groups[key];
-    const label=items[0].date||key;
-    const collapsed=collapsedSections['yak-'+key]?'collapsed':'';
-    const arrow=collapsedSections['yak-'+key]?'▶':'▼';
-    const cardsHtml=items.map(y=>{
-      const noteLines=y.notes?y.notes.split('\n').filter(Boolean):[];
-      return `<div class="card" style="border-left:3px solid var(--accent);padding:18px 20px;margin-bottom:12px">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-          <span style="font-size:13px;font-weight:700;color:var(--accent-dark)">${y.time?`<span style="font-size:11px;color:var(--text-dim);font-weight:400;margin-right:6px">⏰ ${y.time}</span>`:''}Notes</span>
-          <div style="display:flex;align-items:center;gap:4px">
-            <button class="edit-btn" onclick="editYaakov(${y.id})">✏ edit</button>
-            <button class="del-btn" onclick="deleteYaakov(${y.id})">✕</button>
-          </div>
-        </div>
-        ${y.trainees?`<div style="font-size:11px;color:var(--text-dim);margin-bottom:10px"><strong>Trainees:</strong> ${esc(y.trainees)}</div>`:''}
-        <div id="notes-view-${y.id}"><ul style="list-style:none;padding:0;margin:0">${noteLines.length?noteLines.map(line=>`<li style="display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="color:var(--accent);margin-top:2px">•</span><span>${esc(line)}</span></li>`).join(''):'<li style="color:var(--text-dim);font-style:italic">No notes</li>'}</ul></div>
-        <div id="notes-edit-${y.id}" style="display:none">
-          <textarea class="edit-note-area" id="notes-textarea-${y.id}">${esc(y.notes||'')}</textarea>
-          <div><button class="save-edit-btn" onclick="saveYaakovEdit(${y.id})">save</button><button class="cancel-edit-btn" onclick="cancelYaakovEdit(${y.id})">cancel</button></div>
-        </div>
-      </div>`;
-    }).join('');
-    return `<div style="margin-bottom:16px">
-      <div class="date-group-header" onclick="toggleSection('yak-${key}')">
-        <span class="date-group-label">📅 ${label} <span class="badge" style="margin-left:6px">${items.length} note${items.length!==1?'s':''}</span></span>
-        <span class="date-group-toggle" id="toggle-yak-${key}">${arrow}</span>
-      </div>
-      <div class="date-group-body ${collapsed}" id="content-yak-${key}">${cardsHtml}</div>
-    </div>`;
-  }).join('');
-  
-  setTimeout(()=>{
-    groupKeys.forEach(key=>updateSectionUI('yak-'+key));
-  },0);
-  
-  return `<h1 class="page-title">🎯 Yaakov Meetings</h1>
-    <button class="btn-primary" style="margin-bottom:20px" onclick="openYaakovModal()">+ log meeting</button>
-    ${meetings.length===0?'<div class="empty-state">No meetings logged yet</div>':''}
-    ${groupsHtml}`;
+const meetings=[...STATE.yaakovMeetings].sort(function(a,b){const da=dateOf(a),db=dateOf(b);return(db?db.getTime():0)-(da?da.getTime():0);});
+const groups={};
+meetings.forEach(function(y){
+const key=y.dateKey||y.date||'Unknown';
+if(!groups[key])groups[key]=[];
+groups[key].push(y);
+});
+const groupKeys=Object.keys(groups).sort(function(a,b){return b.localeCompare(a);});
+const groupsHtml=groupKeys.map(function(key){
+const items=groups[key];
+const label=items[0].date||key;
+const collapsed=collapsedSections['yak-'+key]?'collapsed':'';
+const arrow=collapsedSections['yak-'+key]?'\u25B6':'\u25BC';
+const cardsHtml=items.map(function(y){
+const noteLines=y.notes?y.notes.split('\n').filter(Boolean):[];
+return '<div class="card" style="border-left:3px solid var(--accent);padding:18px 20px;margin-bottom:12px">'+
+'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">'+
+'<span style="font-size:13px;font-weight:700;color:var(--accent-dark)">'+(y.time?'<span style="font-size:11px;color:var(--text-dim);font-weight:400;margin-right:6px">\u23F0 '+y.time+'</span>':'')+'Notes</span>'+
+'<div style="display:flex;align-items:center;gap:4px">'+
+'<button class="edit-btn" onclick="editYaakov('+y.id+')">\u270F edit</button>'+
+'<button class="del-btn" onclick="deleteYaakov('+y.id+')">\u2715</button>'+
+'</div>'+
+'</div>'+
+(y.trainees?'<div style="font-size:11px;color:var(--text-dim);margin-bottom:10px"><strong>Trainees:</strong> '+esc(y.trainees)+'</div>':'')+
+'<div id="notes-view-'+y.id+'"><ul style="list-style:none;padding:0;margin:0">'+(noteLines.length?noteLines.map(function(line){return '<li style="display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="color:var(--accent);margin-top:2px">\u2022</span><span>'+esc(line)+'</span></li>';}).join(''):'<li style="color:var(--text-dim);font-style:italic">No notes</li>')+'</ul></div>'+
+'<div id="notes-edit-'+y.id+'" style="display:none">'+
+'<textarea class="edit-note-area" id="notes-textarea-'+y.id+'">'+esc(y.notes||'')+'</textarea>'+
+'<div><button class="save-edit-btn" onclick="saveYaakovEdit('+y.id+')">save</button><button class="cancel-edit-btn" onclick="cancelYaakovEdit('+y.id+')">cancel</button></div>'+
+'</div>'+
+'</div>';
+}).join('');
+return '<div style="margin-bottom:16px">'+
+'<div class="date-group-header" onclick="toggleSection(\'yak-'+key+'\')">'+
+'<span class="date-group-label">\u{1F4C5} '+label+' <span class="badge" style="margin-left:6px">'+items.length+' note'+(items.length!==1?'s':'')+'</span></span>'+
+'<span class="date-group-toggle" id="toggle-yak-'+key+'">'+arrow+'</span>'+
+'</div>'+
+'<div class="date-group-body '+collapsed+'" id="content-yak-'+key+'">'+cardsHtml+'</div>'+
+'</div>';
+}).join('');
+
+setTimeout(function(){
+groupKeys.forEach(function(key){updateSectionUI('yak-'+key);});
+},0);
+
+return '<h1 class="page-title">\u{1F3AF} Yaakov Meetings</h1>'+
+'<button class="btn-primary" style="margin-bottom:20px" onclick="openYaakovModal()">+ log meeting</button>'+
+(meetings.length===0?'<div class="empty-state">No meetings logged yet</div>':'')+
+groupsHtml;
 }
 
 function renderTrainee(tr){
-  const trMeetings=STATE.meetings.filter(m=>m.traineesArray&&m.traineesArray.includes(tr.id)).sort((a,b)=>{const da=dateOf(a),db=dateOf(b);return(db?db.getTime():0)-(da?da.getTime():0);});
-  const trNotes=STATE.notes.filter(n=>n.traineeId===tr.id);
-  const trDayNotes=STATE.dayNotes.filter(n=>n.traineeId===tr.id).sort((a,b)=>b.dateKey.localeCompare(a.dateKey));
-  const trFu=STATE.followups.filter(f=>f.traineeId===tr.id);
-  const openFu=trFu.filter(f=>!f.done);
-  
-  const html=`<div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">
-    <h1 class="page-title" style="margin-bottom:0">${esc(tr.name)}</h1>
-    <button class="btn-secondary btn-sm" onclick="renameTrainee(${tr.id})" style="padding:4px 10px;font-size:11px">rename</button>
-    <button class="btn-secondary btn-sm" onclick="removeTrainee(${tr.id})" style="padding:4px 10px;font-size:11px;color:var(--red);border-color:rgba(248,113,113,.3)">delete</button>
-  </div>
-    <div class="split-section">
-      <div class="card">
-        <div class="card-title" onclick="toggleSection('tr-${tr.id}-notes')">General Notes<button class="btn-secondary btn-sm" onclick="openNoteFor(${tr.id})" style="margin-left:auto">+ add</button><span class="card-title-toggle" id="toggle-tr-${tr.id}-notes">▼</span></div>
-        <div class="card-content" id="content-tr-${tr.id}-notes">
-          ${trNotes.length?trNotes.map(n=>noteRow(n,false)).join(''):'<div class="empty-state">Jot down lead names or coaching points</div>'}
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-title" onclick="toggleSection('tr-${tr.id}-fu')">Follow-ups${openFu.length?`<span class="badge amber">${openFu.length}</span>`:''}<button class="btn-secondary btn-sm" onclick="openFuModal(${tr.id})" style="margin-left:auto">+ add</button><span class="card-title-toggle" id="toggle-tr-${tr.id}-fu">▼</span></div>
-        <div class="card-content" id="content-tr-${tr.id}-fu">
-          ${trFu.length?trFu.map(f=>fuRow(f)).join(''):'<div class="empty-state">No follow-ups</div>'}
-        </div>
-      </div>
-    </div>
-    <div class="card" style="margin-bottom:20px">
-      <div class="card-title" onclick="toggleSection('tr-${tr.id}-daynotes')">Day Notes<button class="btn-secondary btn-sm" onclick="openDayNoteFor(${tr.id})" style="margin-left:auto">+ add</button><span class="card-title-toggle" id="toggle-tr-${tr.id}-daynotes">▼</span></div>
-      <div class="card-content" id="content-tr-${tr.id}-daynotes">
-        ${trDayNotes.length?trDayNotes.map(n=>`<div class="item-row blue"><div class="item-body"><div class="note-date" style="color:var(--accent-light);font-weight:600">${n.date}</div><div style="white-space:pre-wrap">${esc(n.text)}</div></div><button class="del-btn" onclick="deleteDayNote(${n.id})">✕</button></div>`).join(''):'<div class="empty-state">No day notes yet</div>'}
-      </div>
-    </div>
-    <div class="card" style="margin-bottom:20px">
-      <div class="card-title" onclick="toggleSection('tr-${tr.id}-meetings')">Meeting History<button class="btn-secondary btn-sm" onclick="openMeetingFor(${tr.id})" style="margin-left:auto">+ log meeting</button><span class="card-title-toggle" id="toggle-tr-${tr.id}-meetings">▼</span></div>
-      <div class="card-content" id="content-tr-${tr.id}-meetings">
-        ${trMeetings.length?(()=>{
-          const grps={};
-          trMeetings.forEach(m=>{const k=m.dateKey||m.date||'?';if(!grps[k])grps[k]=[];grps[k].push(m);});
-          const gKeys=Object.keys(grps).sort((a,b)=>b.localeCompare(a));
-          return gKeys.map(key=>{
-            const items=grps[key];
-            const lbl=items[0].date||key;
-            const nsKey='tr-'+tr.id+'_'+key;
-            const col=collapsedSections[nsKey]?'collapsed':'';
-            const arr=collapsedSections[nsKey]?'▶':'▼';
-            const cards=items.map(m=>{
-              const noteLines=m.notes?m.notes.split('\n').filter(Boolean):[];
-              return `<div class="item-row" style="margin-bottom:10px;padding:14px;border-radius:10px">
-                <div class="item-body">
-                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-                    <span style="font-size:11px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace">${m.trainees?esc(m.trainees):''}</span>
-                    <div style="display:flex;gap:4px">
-                      <button class="edit-btn" onclick="editMeeting(${m.id})">✏ edit</button>
-                      <button class="del-btn" onclick="deleteMeeting(${m.id})">✕</button>
-                    </div>
-                  </div>
-                  <div id="meet-view-${m.id}"><ul style="list-style:none;padding:0;margin:0">${noteLines.length?noteLines.map(line=>`<li style="display:flex;gap:8px;align-items:flex-start;padding:4px 0"><span style="color:var(--blue);margin-top:1px">•</span><span>${esc(line)}</span></li>`).join(''):'<li style="color:var(--text-dim);font-style:italic">No notes</li>'}</ul></div>
-                  <div id="meet-edit-${m.id}" style="display:none">
-                    <textarea class="edit-note-area" id="meet-textarea-${m.id}">${esc(m.notes||'')}</textarea>
-                    <div><button class="save-edit-btn" onclick="saveMeetingEdit(${m.id})">save</button><button class="cancel-edit-btn" onclick="cancelMeetingEdit(${m.id})">cancel</button></div>
-                  </div>
-                </div>
-              </div>`;
-            }).join('');
-            return `<div style="margin-bottom:12px">
-              <div class="date-group-header" onclick="toggleSection('${nsKey}')">
-                <span class="date-group-label">📅 ${lbl} <span class="badge" style="margin-left:6px">${items.length} meeting${items.length!==1?'s':''}</span></span>
-                <span class="date-group-toggle" id="toggle-${nsKey}">${arr}</span>
-              </div>
-              <div class="date-group-body ${col}" id="content-${nsKey}">${cards}</div>
-            </div>`;
-          }).join('');
-        })():'<div class="empty-state">No meetings logged yet</div>'}
-      </div>
-    </div>`;
-  
-  setTimeout(()=>{
-    ['tr-'+tr.id+'-notes','tr-'+tr.id+'-fu','tr-'+tr.id+'-daynotes','tr-'+tr.id+'-meetings'].forEach(id=>updateSectionUI(id));
-    const grps={};
-    trMeetings.forEach(m=>{const k=m.dateKey||m.date||'?';if(!grps[k])grps[k]=[];grps[k].push(m);});
-    const gKeys=Object.keys(grps).sort((a,b)=>b.localeCompare(a));
-    gKeys.forEach(key=>updateSectionUI('tr-'+tr.id+'_'+key));
-  },0);
-  
-  return html;
+const trMeetings=STATE.meetings.filter(function(m){return m.traineesArray&&m.traineesArray.includes(tr.id);}).sort(function(a,b){const da=dateOf(a),db=dateOf(b);return(db?db.getTime():0)-(da?da.getTime():0);});
+const trNotes=STATE.notes.filter(function(n){return n.traineeId===tr.id;});
+const trDayNotes=STATE.dayNotes.filter(function(n){return n.traineeId===tr.id;}).sort(function(a,b){return b.dateKey.localeCompare(a.dateKey);});
+const trFu=STATE.followups.filter(function(f){return f.traineeId===tr.id;});
+const openFu=trFu.filter(function(f){return !f.done;});
+
+const html='<div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">'+
+'<h1 class="page-title" style="margin-bottom:0">'+esc(tr.name)+'</h1>'+
+'<button class="btn-secondary btn-sm" onclick="renameTrainee('+tr.id+')" style="padding:4px 10px;font-size:11px">rename</button>'+
+'<button class="btn-secondary btn-sm" onclick="removeTrainee('+tr.id+')" style="padding:4px 10px;font-size:11px;color:var(--red);border-color:rgba(248,113,113,.3)">delete</button>'+
+'</div>'+
+'<div class="split-section">'+
+'<div class="card">'+
+'<div class="card-title" onclick="toggleSection(\'tr-'+tr.id+'-notes\')">General Notes<button class="btn-secondary btn-sm" onclick="openNoteFor('+tr.id+')" style="margin-left:auto">+ add</button><span class="card-title-toggle" id="toggle-tr-'+tr.id+'-notes">\u25BC</span></div>'+
+'<div class="card-content" id="content-tr-'+tr.id+'-notes">'+
+(trNotes.length?trNotes.map(function(n){return noteRow(n,false);}).join(''):'<div class="empty-state">Jot down lead names or coaching points</div>')+
+'</div>'+
+'</div>'+
+'<div class="card">'+
+'<div class="card-title" onclick="toggleSection(\'tr-'+tr.id+'-fu\')">Follow-ups'+(openFu.length?'<span class="badge amber">'+openFu.length+'</span>':'')+'<button class="btn-secondary btn-sm" onclick="openFuModal('+tr.id+')" style="margin-left:auto">+ add</button><span class="card-title-toggle" id="toggle-tr-'+tr.id+'-fu">\u25BC</span></div>'+
+'<div class="card-content" id="content-tr-'+tr.id+'-fu">'+
+(trFu.length?trFu.map(function(f){return fuRow(f);}).join(''):'<div class="empty-state">No follow-ups</div>')+
+'</div>'+
+'</div>'+
+'</div>'+
+'<div class="card" style="margin-bottom:20px">'+
+'<div class="card-title" onclick="toggleSection(\'tr-'+tr.id+'-daynotes\')">Day Notes<button class="btn-secondary btn-sm" onclick="openDayNoteFor('+tr.id+')" style="margin-left:auto">+ add</button><span class="card-title-toggle" id="toggle-tr-'+tr.id+'-daynotes">\u25BC</span></div>'+
+'<div class="card-content" id="content-tr-'+tr.id+'-daynotes">'+
+(trDayNotes.length?trDayNotes.map(function(n){return '<div class="item-row blue"><div class="item-body"><div class="note-date" style="color:var(--accent-light);font-weight:600">'+n.date+'</div><div style="white-space:pre-wrap">'+esc(n.text)+'</div></div><button class="del-btn" onclick="deleteDayNote('+n.id+')">\u2715</button></div>';}).join(''):'<div class="empty-state">No day notes yet</div>')+
+'</div>'+
+'</div>'+
+'<div class="card" style="margin-bottom:20px">'+
+'<div class="card-title" onclick="toggleSection(\'tr-'+tr.id+'-meetings\')">Meeting History<button class="btn-secondary btn-sm" onclick="openMeetingFor('+tr.id+')" style="margin-left:auto">+ log meeting</button><span class="card-title-toggle" id="toggle-tr-'+tr.id+'-meetings">\u25BC</span></div>'+
+'<div class="card-content" id="content-tr-'+tr.id+'-meetings">'+
+(trMeetings.length?(function(){
+const grps={};
+trMeetings.forEach(function(m){const k=m.dateKey||m.date||'?';if(!grps[k])grps[k]=[];grps[k].push(m);});
+const gKeys=Object.keys(grps).sort(function(a,b){return b.localeCompare(a);});
+return gKeys.map(function(key){
+const items=grps[key];
+const lbl=items[0].date||key;
+const nsKey='tr-'+tr.id+'_'+key;
+const col=collapsedSections[nsKey]?'collapsed':'';
+const arr=collapsedSections[nsKey]?'\u25B6':'\u25BC';
+const cards=items.map(function(m){
+const noteLines=m.notes?m.notes.split('\n').filter(Boolean):[];
+return '<div class="item-row" style="margin-bottom:10px;padding:14px;border-radius:10px">'+
+'<div class="item-body">'+
+'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">'+
+'<span style="font-size:11px;color:var(--text-dim);font-family:\'IBM Plex Mono\',monospace">'+(m.trainees?esc(m.trainees):'')+'</span>'+
+'<div style="display:flex;gap:4px">'+
+'<button class="edit-btn" onclick="editMeeting('+m.id+')">\u270F edit</button>'+
+'<button class="del-btn" onclick="deleteMeeting('+m.id+')">\u2715</button>'+
+'</div>'+
+'</div>'+
+'<div id="meet-view-'+m.id+'"><ul style="list-style:none;padding:0;margin:0">'+(noteLines.length?noteLines.map(function(line){return '<li style="display:flex;gap:8px;align-items:flex-start;padding:4px 0"><span style="color:var(--blue);margin-top:1px">\u2022</span><span>'+esc(line)+'</span></li>';}).join(''):'<li style="color:var(--text-dim);font-style:italic">No notes</li>')+'</ul></div>'+
+'<div id="meet-edit-'+m.id+'" style="display:none">'+
+'<textarea class="edit-note-area" id="meet-textarea-'+m.id+'">'+esc(m.notes||'')+'</textarea>'+
+'<div><button class="save-edit-btn" onclick="saveMeetingEdit('+m.id+')">save</button><button class="cancel-edit-btn" onclick="cancelMeetingEdit('+m.id+')">cancel</button></div>'+
+'</div>'+
+'</div>'+
+'</div>';
+}).join('');
+return '<div style="margin-bottom:12px">'+
+'<div class="date-group-header" onclick="toggleSection(\''+nsKey+'\')">'+
+'<span class="date-group-label">\u{1F4C5} '+lbl+' <span class="badge" style="margin-left:6px">'+items.length+' meeting'+(items.length!==1?'s':'')+'</span></span>'+
+'<span class="date-group-toggle" id="toggle-'+nsKey+'">'+arr+'</span>'+
+'</div>'+
+'<div class="date-group-body '+col+'" id="content-'+nsKey+'">'+cards+'</div>'+
+'</div>';
+}).join('');
+})():'<div class="empty-state">No meetings logged yet</div>')+
+'</div>'+
+'</div>';
+
+setTimeout(function(){
+['tr-'+tr.id+'-notes','tr-'+tr.id+'-fu','tr-'+tr.id+'-daynotes','tr-'+tr.id+'-meetings'].forEach(function(id){updateSectionUI(id);});
+const grps={};
+trMeetings.forEach(function(m){const k=m.dateKey||m.date||'?';if(!grps[k])grps[k]=[];grps[k].push(m);});
+Object.keys(grps).forEach(function(key){updateSectionUI('tr-'+tr.id+'_'+key);});
+},0);
+
+return html;
 }
 
 // MEETING MODAL
 function openMeetingModal(){ openMeetingFor(''); }
 function openMeetingFor(name){
-  document.getElementById('m-meet-trainees').value=name||'';
-  document.getElementById('m-meet-date').value=TODAY;
-  document.getElementById('m-meet-notes').value='';
-  document.getElementById('m-meet-transcript').value='';
-  document.getElementById('m-meet-followup').value='';
-  document.getElementById('meeting-modal').classList.add('open');
-  document.getElementById(name?'m-meet-notes':'m-meet-trainees').focus();
+document.getElementById('m-meet-trainees').value=name||'';
+document.getElementById('m-meet-date').value=TODAY;
+document.getElementById('m-meet-notes').value='';
+document.getElementById('m-meet-transcript').value='';
+document.getElementById('m-meet-followup').value='';
+document.getElementById('meeting-modal').classList.add('open');
+document.getElementById(name?'m-meet-notes':'m-meet-trainees').focus();
 }
 function closeMeetingModal(){document.getElementById('meeting-modal').classList.remove('open');}
 function saveMeeting(){
-  const trainees=document.getElementById('m-meet-trainees').value.trim();
-  const notes=document.getElementById('m-meet-notes').value.trim();
-  const transcript=document.getElementById('m-meet-transcript').value.trim();
-  const followup=document.getElementById('m-meet-followup').value.trim();
-  const dateInput=document.getElementById('m-meet-date').value||TODAY;
-  if(!trainees){alert('Please enter trainee names');return;}
-  if(!notes&&!transcript){alert('Add notes or a transcript');return;}
-  const[yy,mm,dd]=dateInput.split('-').map(Number);
-  const dispDate=new Date(yy,mm-1,dd).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-  const traineesArray=[];
-  trainees.split(',').map(n=>n.trim()).forEach(name=>{
-    if(!name)return;
-    let tr=STATE.trainees.find(t=>t.name.toLowerCase()===name.toLowerCase());
-    if(!tr){tr={id:STATE.traineeId++,name};STATE.trainees.push(tr);}
-    traineesArray.push(tr.id);
-  });
-  STATE.meetings.push({id:STATE.noteId++,date:dispDate,dateKey:dateInput,trainees,traineesArray,notes:cleanupNotes(notes),transcript});
-  if(followup){ STATE.followups.push({id:STATE.noteId++,text:followup,traineeId:traineesArray[0]||null,dueDate:'',done:false,created:TODAY}); }
-  save();updateNav();closeMeetingModal();showPage(currentPage.startsWith('trainee-')?currentPage:'calendar');
-  if(currentPage==='calendar'){selectedCalKey=dateInput;showPage('calendar');}
+const trainees=document.getElementById('m-meet-trainees').value.trim();
+const notes=document.getElementById('m-meet-notes').value.trim();
+const transcript=document.getElementById('m-meet-transcript').value.trim();
+const followup=document.getElementById('m-meet-followup').value.trim();
+const dateInput=document.getElementById('m-meet-date').value||TODAY;
+if(!trainees){alert('Please enter trainee names');return;}
+if(!notes&&!transcript){alert('Add notes or a transcript');return;}
+const parts=dateInput.split('-').map(Number);
+const dispDate=new Date(parts[0],parts[1]-1,parts[2]).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+const traineesArray=[];
+trainees.split(',').map(function(n){return n.trim();}).forEach(function(name){
+if(!name)return;
+let tr=STATE.trainees.find(function(t){return t.name.toLowerCase()===name.toLowerCase();});
+if(!tr){tr={id:STATE.traineeId++,name};STATE.trainees.push(tr);}
+traineesArray.push(tr.id);
+});
+STATE.meetings.push({id:STATE.noteId++,date:dispDate,dateKey:dateInput,trainees,traineesArray,notes:cleanupNotes(notes),transcript});
+if(followup){ STATE.followups.push({id:STATE.noteId++,text:followup,traineeId:traineesArray[0]||null,dueDate:'',done:false,created:TODAY}); }
+save();updateNav();closeMeetingModal();
+if(currentPage==='calendar'){selectedCalKey=dateInput;showPage('calendar');}else{showPage(currentPage.startsWith('trainee-')?currentPage:'calendar');if(currentPage==='calendar'){selectedCalKey=dateInput;showPage('calendar');}}
 }
-function deleteMeeting(id){if(!confirm('Delete this meeting?'))return;STATE.meetings=STATE.meetings.filter(m=>m.id!==id);save();updateNav();showPage(currentPage);}
+function deleteMeeting(id){if(!confirm('Delete this meeting?'))return;STATE.meetings=STATE.meetings.filter(function(m){return m.id!==id;});save();updateNav();showPage(currentPage);}
 function editMeeting(id){
-  const view=document.getElementById('meet-view-'+id);
-  const edit=document.getElementById('meet-edit-'+id);
-  const ta=document.getElementById('meet-textarea-'+id);
-  if(!view||!edit)return;
-  const m=STATE.meetings.find(x=>x.id===id);
-  if(m&&ta)ta.value=m.notes||'';
-  view.style.display='none';
-  edit.style.display='block';
-  if(ta)ta.focus();
+const view=document.getElementById('meet-view-'+id);
+const edit=document.getElementById('meet-edit-'+id);
+const ta=document.getElementById('meet-textarea-'+id);
+if(!view||!edit)return;
+const m=STATE.meetings.find(function(x){return x.id===id;});
+if(m&&ta)ta.value=m.notes||'';
+view.style.display='none';
+edit.style.display='block';
+if(ta)ta.focus();
 }
 function cancelMeetingEdit(id){
-  const view=document.getElementById('meet-view-'+id);
-  const edit=document.getElementById('meet-edit-'+id);
-  if(view)view.style.display='';
-  if(edit)edit.style.display='none';
+const view=document.getElementById('meet-view-'+id);
+const edit=document.getElementById('meet-edit-'+id);
+if(view)view.style.display='';
+if(edit)edit.style.display='none';
 }
 function saveMeetingEdit(id){
-  const ta=document.getElementById('meet-textarea-'+id);
-  if(!ta)return;
-  const m=STATE.meetings.find(x=>x.id===id);
-  if(!m)return;
-  m.notes=cleanupNotes(ta.value.trim());
-  save();
-  showPage(currentPage);
+const ta=document.getElementById('meet-textarea-'+id);
+if(!ta)return;
+const m=STATE.meetings.find(function(x){return x.id===id;});
+if(!m)return;
+m.notes=cleanupNotes(ta.value.trim());
+save();showPage(currentPage);
 }
 
 // YAAKOV MODAL
 function openYaakovModal(){
-  document.getElementById('m-yak-date').value=TODAY;
-  document.getElementById('m-yak-time').value='';
-  document.getElementById('m-yak-notes').value='';
-  document.getElementById('m-yak-trainees').value='';
-  document.getElementById('yaakov-modal').classList.add('open');
-  document.getElementById('m-yak-notes').focus();
+document.getElementById('m-yak-date').value=TODAY;
+document.getElementById('m-yak-time').value='';
+document.getElementById('m-yak-notes').value='';
+document.getElementById('m-yak-trainees').value='';
+document.getElementById('yaakov-modal').classList.add('open');
+document.getElementById('m-yak-notes').focus();
 }
 function closeYaakovModal(){document.getElementById('yaakov-modal').classList.remove('open');}
 function saveYaakovMeeting(){
-  const dateInput=document.getElementById('m-yak-date').value||TODAY;
-  const time=document.getElementById('m-yak-time').value;
-  const notes=document.getElementById('m-yak-notes').value.trim();
-  const trainees=document.getElementById('m-yak-trainees').value.trim();
-  if(!notes){alert('What did Yaakov say?');return;}
-  const[yy,mm,dd]=dateInput.split('-').map(Number);
-  const dispDate=new Date(yy,mm-1,dd).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-  STATE.yaakovMeetings.push({id:STATE.noteId++,date:dispDate,dateKey:dateInput,time:time||'',notes:cleanupNotes(notes),trainees});
-  save();closeYaakovModal();showPage('yaakov');
+const dateInput=document.getElementById('m-yak-date').value||TODAY;
+const time=document.getElementById('m-yak-time').value;
+const notes=document.getElementById('m-yak-notes').value.trim();
+const trainees=document.getElementById('m-yak-trainees').value.trim();
+if(!notes){alert('What did Yaakov say?');return;}
+const parts=dateInput.split('-').map(Number);
+const dispDate=new Date(parts[0],parts[1]-1,parts[2]).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+STATE.yaakovMeetings.push({id:STATE.noteId++,date:dispDate,dateKey:dateInput,time:time||'',notes:cleanupNotes(notes),trainees});
+save();closeYaakovModal();showPage('yaakov');
 }
-function deleteYaakov(id){if(!confirm('Delete this Yaakov meeting?'))return;STATE.yaakovMeetings=STATE.yaakovMeetings.filter(y=>y.id!==id);save();showPage(currentPage);}
+function deleteYaakov(id){if(!confirm('Delete this Yaakov meeting?'))return;STATE.yaakovMeetings=STATE.yaakovMeetings.filter(function(y){return y.id!==id;});save();showPage(currentPage);}
 function editYaakov(id){
-  const view=document.getElementById('notes-view-'+id);
-  const edit=document.getElementById('notes-edit-'+id);
-  const ta=document.getElementById('notes-textarea-'+id);
-  if(!view||!edit)return;
-  const m=STATE.yaakovMeetings.find(y=>y.id===id);
-  if(m&&ta)ta.value=m.notes||'';
-  view.style.display='none';
-  edit.style.display='block';
-  if(ta)ta.focus();
+const view=document.getElementById('notes-view-'+id);
+const edit=document.getElementById('notes-edit-'+id);
+const ta=document.getElementById('notes-textarea-'+id);
+if(!view||!edit)return;
+const m=STATE.yaakovMeetings.find(function(y){return y.id===id;});
+if(m&&ta)ta.value=m.notes||'';
+view.style.display='none';
+edit.style.display='block';
+if(ta)ta.focus();
 }
 function cancelYaakovEdit(id){
-  const view=document.getElementById('notes-view-'+id);
-  const edit=document.getElementById('notes-edit-'+id);
-  if(view)view.style.display='';
-  if(edit)edit.style.display='none';
+const view=document.getElementById('notes-view-'+id);
+const edit=document.getElementById('notes-edit-'+id);
+if(view)view.style.display='';
+if(edit)edit.style.display='none';
 }
 function saveYaakovEdit(id){
-  const ta=document.getElementById('notes-textarea-'+id);
-  if(!ta)return;
-  const m=STATE.yaakovMeetings.find(y=>y.id===id);
-  if(!m)return;
-  m.notes=cleanupNotes(ta.value.trim());
-  save();
-  showPage('yaakov');
+const ta=document.getElementById('notes-textarea-'+id);
+if(!ta)return;
+const m=STATE.yaakovMeetings.find(function(y){return y.id===id;});
+if(!m)return;
+m.notes=cleanupNotes(ta.value.trim());
+save();showPage('yaakov');
 }
 
 // NOTES
 function openNoteModal(){
-  document.getElementById('m-note-text').value='';
-  const sel=document.getElementById('m-note-trainee');
-  sel.innerHTML='<option value="">— leave unassigned —</option>'+STATE.trainees.map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join('');
-  sel.value='';
-  document.getElementById('note-modal').classList.add('open');
-  document.getElementById('m-note-text').focus();
+document.getElementById('m-note-text').value='';
+const sel=document.getElementById('m-note-trainee');
+sel.innerHTML='<option value="">\u2014 leave unassigned \u2014</option>'+STATE.trainees.map(function(t){return '<option value="'+t.id+'">'+esc(t.name)+'</option>';}).join('');
+sel.value='';
+document.getElementById('note-modal').classList.add('open');
+document.getElementById('m-note-text').focus();
 }
 function openNoteFor(id){openNoteModal();document.getElementById('m-note-trainee').value=String(id);}
 function closeNoteModal(){document.getElementById('note-modal').classList.remove('open');}
 function saveNote(){
-  const text=document.getElementById('m-note-text').value.trim();
-  if(!text)return;
-  const tid=document.getElementById('m-note-trainee').value;
-  STATE.notes.unshift({id:STATE.noteId++,date:TODAY_DISPLAY,dateKey:TODAY,text,traineeId:tid?parseInt(tid):null});
-  save();closeNoteModal();showPage(currentPage);
+const text=document.getElementById('m-note-text').value.trim();
+if(!text)return;
+const tid=document.getElementById('m-note-trainee').value;
+STATE.notes.unshift({id:STATE.noteId++,date:TODAY_DISPLAY,dateKey:TODAY,text,traineeId:tid?parseInt(tid):null});
+save();closeNoteModal();showPage(currentPage);
 }
-function assignNote(noteId,tid){if(!tid)return;const n=STATE.notes.find(x=>x.id===noteId);if(n){n.traineeId=parseInt(tid);save();showPage(currentPage);}}
-function deleteNote(id){STATE.notes=STATE.notes.filter(n=>n.id!==id);save();showPage(currentPage);}
+function assignNote(noteId,tid){if(!tid)return;const n=STATE.notes.find(function(x){return x.id===noteId;});if(n){n.traineeId=parseInt(tid);save();showPage(currentPage);}}
+function deleteNote(id){STATE.notes=STATE.notes.filter(function(n){return n.id!==id;});save();showPage(currentPage);}
 function editNote(id){
-  const note=STATE.notes.find(n=>n.id===id);
-  if(!note)return;
-  const updated=prompt('Edit note:',note.text);
-  if(updated===null)return;
-  note.text=updated.trim();
-  save();showPage(currentPage);
+const note=STATE.notes.find(function(n){return n.id===id;});
+if(!note)return;
+const updated=prompt('Edit note:',note.text);
+if(updated===null)return;
+note.text=updated.trim();
+save();showPage(currentPage);
 }
 
 // TRAINEES
 function addTrainee(){const name=prompt('Enter trainee name:');if(!name||!name.trim())return;STATE.trainees.push({id:STATE.traineeId++,name:name.trim()});save();updateNav();showPage('trainee-'+(STATE.traineeId-1));}
-function renameTrainee(id){const tr=STATE.trainees.find(t=>t.id===id);if(!tr)return;const name=prompt('Rename trainee:',tr.name);if(!name||!name.trim())return;tr.name=name.trim();save();updateNav();showPage(currentPage);}
-function removeTrainee(id){if(!confirm('Remove this trainee? Their meetings stay in your records.'))return;STATE.trainees=STATE.trainees.filter(t=>t.id!==id);save();updateNav();showPage('home');}
+function renameTrainee(id){const tr=STATE.trainees.find(function(t){return t.id===id;});if(!tr)return;const name=prompt('Rename trainee:',tr.name);if(!name||!name.trim())return;tr.name=name.trim();save();updateNav();showPage(currentPage);}
+function removeTrainee(id){if(!confirm('Remove this trainee? Their meetings stay in your records.'))return;STATE.trainees=STATE.trainees.filter(function(t){return t.id!==id;});save();updateNav();showPage('home');}
 function openDayNoteFor(traineeId){document.getElementById('m-daynote-text').value='';document.getElementById('m-daynote-date').value=TODAY;document.getElementById('m-daynote-trainee-id').value=traineeId;document.getElementById('daynote-modal').classList.add('open');document.getElementById('m-daynote-text').focus();}
 function closeDayNoteModal(){document.getElementById('daynote-modal').classList.remove('open');}
-function saveDayNote(){const text=document.getElementById('m-daynote-text').value.trim();if(!text)return;const dateKey=document.getElementById('m-daynote-date').value;const traineeId=parseInt(document.getElementById('m-daynote-trainee-id').value);const[yy,mm,dd]=dateKey.split('-').map(Number);const dispDate=new Date(yy,mm-1,dd).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});STATE.dayNotes.push({id:STATE.dayNoteId++,traineeId,date:dispDate,dateKey,text});save();closeDayNoteModal();showPage(currentPage);}
-function editDayNote(id){
-  const note=STATE.dayNotes.find(n=>n.id===id);
-  if(!note)return;
-  const updatedText=prompt('Edit note:',note.text);
-  if(updatedText===null)return;
-  const updatedDate=prompt('Edit date:',note.date);
-  if(updatedDate===null)return;
-  note.text=updatedText.trim();
-  note.date=updatedDate.trim();
-  save();showPage(currentPage);
-}
-function deleteDayNote(id){STATE.dayNotes=STATE.dayNotes.filter(n=>n.id!==id);save();showPage(currentPage);}
+function saveDayNote(){const text=document.getElementById('m-daynote-text').value.trim();if(!text)return;const dateKey=document.getElementById('m-daynote-date').value;const traineeId=parseInt(document.getElementById('m-daynote-trainee-id').value);const parts=dateKey.split('-').map(Number);const dispDate=new Date(parts[0],parts[1]-1,parts[2]).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});STATE.dayNotes.push({id:STATE.dayNoteId++,traineeId,date:dispDate,dateKey,text});save();closeDayNoteModal();showPage(currentPage);}
+function deleteDayNote(id){STATE.dayNotes=STATE.dayNotes.filter(function(n){return n.id!==id;});save();showPage(currentPage);}
 
 // DATA
 function exportData(){const blob=new Blob([JSON.stringify(STATE,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='coaching_hub_'+TODAY+'.json';a.click();URL.revokeObjectURL(url);}
 function openImportModal(){document.getElementById('import-modal').classList.add('open');}
 function closeImportModal(){document.getElementById('import-modal').classList.remove('open');document.getElementById('import-file').value='';}
 function importData(){
-  const file=document.getElementById('import-file').files[0];
-  if(!file){alert('Please select a file');return;}
-  const reader=new FileReader();
-  reader.onload=(e)=>{try{STATE=JSON.parse(e.target.result);STATE.followups=STATE.followups||[];STATE.notes=STATE.notes||[];STATE.dayNotes=STATE.dayNotes||[];localStorage.setItem('coaching_v7',JSON.stringify(STATE));closeImportModal();showPage('home');updateNav();buildSidebar();}catch(err){alert('Error importing file: '+err.message);}};
-  reader.readAsText(file);
+const file=document.getElementById('import-file').files[0];
+if(!file){alert('Please select a file');return;}
+const reader=new FileReader();
+reader.onload=function(e){try{STATE=JSON.parse(e.target.result);STATE.followups=STATE.followups||[];STATE.notes=STATE.notes||[];STATE.dayNotes=STATE.dayNotes||[];STATE.scheduleEntries=STATE.scheduleEntries||[];localStorage.setItem('coaching_v7',JSON.stringify(STATE));closeImportModal();showPage('home');updateNav();buildSidebar();}catch(err){alert('Error importing file: '+err.message);}};
+reader.readAsText(file);
 }
 
 function buildSidebar(){
-  const openFu=STATE.followups.filter(f=>!f.done).length;
-  const sidebar=document.getElementById('sidebar');
-  sidebar.innerHTML=`<div class="sidebar-section">Navigation</div>
-    <div class="sidebar-item ${currentPage==='home'?'active':''}" onclick="showPage('home')">Home</div>
-    <div class="sidebar-item ${currentPage==='calendar'?'active':''}" onclick="showPage('calendar')">Calendar</div>
-    <div class="sidebar-item ${currentPage==='followups'?'active':''}" onclick="showPage('followups')"><span>Follow-ups</span>${openFu?`<span class="sidebar-count">${openFu}</span>`:''}</div>
-    <div class="sidebar-item ${currentPage==='yaakov'?'active':''}" onclick="showPage('yaakov')">Yaakov</div>
-    <div class="sidebar-section" style="margin-top:16px">Trainees</div>
-    ${STATE.trainees.map(t=>`<div class="sidebar-item ${currentPage==='trainee-'+t.id?'active':''}" onclick="showPage('trainee-${t.id}')">${esc(t.name)}</div>`).join('')}
-    <div class="sidebar-item sidebar-add" onclick="addTrainee()">+ add trainee</div>`;
+const openFu=STATE.followups.filter(function(f){return !f.done;}).length;
+const todaySched=STATE.scheduleEntries.filter(function(e){return e.dateKey===TODAY;}).length;
+const sidebar=document.getElementById('sidebar');
+sidebar.innerHTML='<div class="sidebar-section">Navigation</div>'+
+'<div class="sidebar-item '+(currentPage==='home'?'active':'')+'" onclick="showPage(\'home\')">Home</div>'+
+'<div class="sidebar-item '+(currentPage==='schedule'?'active':'')+'" onclick="showPage(\'schedule\')"><span>Schedule</span>'+(todaySched?'<span class="sidebar-count">'+todaySched+'</span>':'')+' </div>'+
+'<div class="sidebar-item '+(currentPage==='calendar'?'active':'')+'" onclick="showPage(\'calendar\')">Calendar</div>'+
+'<div class="sidebar-item '+(currentPage==='followups'?'active':'')+'" onclick="showPage(\'followups\')"><span>Follow-ups</span>'+(openFu?'<span class="sidebar-count">'+openFu+'</span>':'')+' </div>'+
+'<div class="sidebar-item '+(currentPage==='yaakov'?'active':'')+'" onclick="showPage(\'yaakov\')">Yaakov</div>'+
+'<div class="sidebar-section" style="margin-top:16px">Trainees</div>'+
+STATE.trainees.map(function(t){return '<div class="sidebar-item '+(currentPage==='trainee-'+t.id?'active':'')+'" onclick="showPage(\'trainee-'+t.id+'\')">'+esc(t.name)+'</div>';}).join('')+
+'<div class="sidebar-item sidebar-add" onclick="addTrainee()">+ add trainee</div>';
 }
 
 load();buildSidebar();showPage('home');
