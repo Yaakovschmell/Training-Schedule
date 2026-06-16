@@ -1163,7 +1163,6 @@ sidebar.innerHTML='<div class="sidebar-section">Navigation</div>'+
 '<div class="sidebar-item '+(currentPage==='schedule'?'active':'')+'" onclick="showPage(\'schedule\')"><span>Schedule</span>'+(todaySched?'<span class="sidebar-count">'+todaySched+'</span>':'')+' </div>'+
 '<div class="sidebar-item '+(currentPage==='callreview'?'active':'')+'" onclick="showPage(\'callreview\')"><span>Call Review</span>'+(pendingCr?'<span class="sidebar-count">'+pendingCr+'</span>':'')+' </div>'+
 '<div class="sidebar-item '+(currentPage==='calendar'?'active':'')+'" onclick="showPage(\'calendar\')">Calendar</div>'+
-'<div class="sidebar-item '+(currentPage==='followups'?'active':'')+'" onclick="showPage(\'followups\')"><span>Follow-ups</span>'+(openFu?'<span class="sidebar-count">'+openFu+'</span>':'')+' </div>'+
 '<div class="sidebar-item '+(currentPage==='yaakov'?'active':'')+'" onclick="showPage(\'yaakov\')">Yaakov</div>'+
 '<div class="sidebar-section" style="margin-top:16px">Trainees</div>'+
 STATE.trainees.map(function(t){return '<div class="sidebar-item '+(currentPage==='trainee-'+t.id?'active':'')+'" onclick="showPage(\'trainee-'+t.id+'\')">'+esc(t.name)+'</div>';}).join('')+
