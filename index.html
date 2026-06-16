@@ -420,6 +420,7 @@ function updateNav(){
 const nav=document.getElementById('nav-buttons');
 const openFu=STATE.followups.filter(f=>!f.done).length;
 const todaySched=STATE.scheduleEntries.filter(e=>e.dateKey===TODAY).length;
+const pendingCr=STATE.callReviews.filter(function(r){return !r.reviewed;}).length;
 const items=[{id:'home',label:'Home'},{id:'schedule',label:'Schedule'+(todaySched?' ('+todaySched+')':'')},{id:'callreview',label:'Call Review'+(pendingCr?' ('+pendingCr+')':'')},{id:'calendar',label:'Calendar'},{id:'followups',label:'Follow-ups'+(openFu?' ('+openFu+')':'')},{id:'yaakov',label:'Yaakov'}];
 nav.innerHTML=items.map(i=>'<button class="nav-btn '+(currentPage===i.id?'active':'')+'" onclick="showPage(\''+i.id+'\')">'+i.label+'</button>').join('');
 }
