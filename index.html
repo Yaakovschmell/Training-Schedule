@@ -509,7 +509,7 @@ return '<div class="sched-entry type-'+e.type+(isDone?' done-entry':'')+'">'+
 }
 
 function openSchedModal(type,dateKey){
-document.getElementById('sched-modal-title').textContent=(type==='meeting'?'\u{1F91D} Add Meeting':'type==='task'?'\u2705 Add Task':'\u{1F4C5}'+' Add Schedule Entry');
+document.getElementById('sched-modal-title').textContent=(type==='meeting'?'\u{1F91D} Add Meeting':type==='task'?'\u2705 Add Task':'\u{1F4C5}'+' Add Schedule Entry');
 document.getElementById('m-sched-type').value=type||'meeting';
 document.getElementById('m-sched-date').value=dateKey||schedViewDate||TODAY;
 document.getElementById('m-sched-time').value='';
