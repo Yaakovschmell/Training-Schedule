@@ -722,11 +722,74 @@ return '<h1 class="page-title">\u{1F3AF} Yaakov Meetings</h1>'+
 groupsHtml;
 }
 
+function renderLeadLogCard(trId, trLeadLogs, trCrReviews){
+var allEntries=[];
+trLeadLogs.forEach(function(n){allEntries.push({type:'log',dateKey:n.dateKey||'',item:n});});
+trCrReviews.forEach(function(r){allEntries.push({type:'cr',dateKey:r.callDate||r.added||'',item:r});});
+allEntries.sort(function(a,b){return (b.dateKey||'').localeCompare(a.dateKey||'')||0;});
+var cnt=allEntries.length;
+var out='<div class="card" style="margin-bottom:20px">';
+out+='<div class="card-title" onclick="toggleSection('tr-'+trId+'-leadlog')">';
+out+='📋 Lead Log'+(cnt?'<span class="badge amber">'+cnt+'</span>':'');
+out+='<div style="display:flex;gap:6px;margin-left:auto">';
+out+='<button class="btn-secondary btn-sm" onclick="openLeadLogFor('+trId+')" style="font-size:11px">+ note</button>';
+out+='<button class="btn-secondary btn-sm" onclick="openCrModal('+trId+')" style="font-size:11px;border-color:rgba(45,106,138,.4);color:var(--blue)">+ CR entry</button>';
+out+='</div>';
+out+='<span class="card-title-toggle" id="toggle-tr-'+trId+'-leadlog">▼</span>';
+out+='</div>';
+out+='<div class="card-content" id="content-tr-'+trId+'-leadlog">';
+if(!cnt){out+='<div class="empty-state">No lead log or call review entries yet</div>';}
+else{
+allEntries.forEach(function(e){
+if(e.type==='log'){
+var n=e.item;
+var noteLines=n.text?n.text.split('\n').filter(Boolean):[];
+out+='<div class="item-row" style="border-left-color:var(--teal)">';
+out+='<div class="item-body">';
+out+='<div class="note-date" style="color:var(--teal);font-weight:600">📝 '+esc(n.date)+'</div>';
+out+='<div id="ll-view-'+n.id+'">';
+out+='<ul style="list-style:none;padding:0;margin:0">';
+if(noteLines.length){noteLines.forEach(function(line){out+='<li style="display:flex;gap:8px;align-items:flex-start;padding:3px 0"><span style="color:var(--teal);margin-top:2px">•</span><span>'+esc(line)+'</span></li>';});}
+else{out+='<li style="color:var(--text-dim)">No text</li>';}
+out+='</ul></div>';
+out+='<div id="ll-edit-'+n.id+'" style="display:none">';
+out+='<textarea class="edit-note-area" id="ll-ta-'+n.id+'">'+esc(n.text||'')+'</textarea>';
+out+='<div><button class="save-edit-btn" onclick="saveLeadLogEdit('+n.id+')">save</button>';
+out+='<button class="cancel-edit-btn" onclick="cancelLeadLogEdit('+n.id+')">cancel</button></div>';
+out+='</div></div>';
+out+='<div style="display:flex;gap:4px">';
+out+='<button class="edit-btn" onclick="editLeadLog('+n.id+')">✏</button>';
+out+='<button class="del-btn" onclick="deleteLeadLog('+n.id+')">✕</button>';
+out+='</div></div>';
+}else{
+var r=e.item;
+var metaParts=[];if(r.callDate)metaParts.push(r.callDate);if(r.callTime)metaParts.push(fmtTime(r.callTime));
+var metaStr=metaParts.join(' at ');
+out+='<div class="item-row" style="border-left-color:var(--blue)">';
+out+='<div class="item-body">';
+out+='<div class="note-date" style="color:var(--blue);font-weight:600">📋 CR: '+esc(r.name)+(metaStr?' — '+esc(metaStr):'')+'</div>';
+if(r.note){out+='<div style="white-space:pre-wrap;font-size:12px;margin-top:4px;line-height:1.5">'+esc(r.note)+'</div>';}
+out+='<div style="font-size:10px;margin-top:6px">';
+if(r.reviewed){out+='<span style="background:rgba(90,138,106,.15);color:var(--teal);padding:1px 6px;border-radius:4px">✓ reviewed</span>';}
+else{out+='<span style="background:rgba(201,147,58,.12);color:var(--accent-dark);padding:1px 6px;border-radius:4px">⏳ pending in CR</span>';}
+out+='</div></div>';
+out+='<div style="display:flex;gap:4px">';
+out+='<button class="edit-btn" onclick="openCrEditModal('+r.id+')">✏</button>';
+out+='<button class="del-btn" onclick="deleteCrLead('+r.id+')">✕</button>';
+out+='</div></div>';
+}
+});
+}
+out+='</div></div>';
+return out;
+}
+
 function renderTrainee(tr){
 const trMeetings=STATE.meetings.filter(function(m){return m.traineesArray&&m.traineesArray.includes(tr.id);}).sort(function(a,b){const da=dateOf(a),db=dateOf(b);return(db?db.getTime():0)-(da?da.getTime():0);});
 const trNotes=STATE.notes.filter(function(n){return n.traineeId===tr.id;});
 const trDayNotes=STATE.dayNotes.filter(function(n){return n.traineeId===tr.id;}).sort(function(a,b){return b.dateKey.localeCompare(a.dateKey);});
 const trLeadLogs=STATE.leadLogs.filter(function(n){return n.traineeId===tr.id;}).sort(function(a,b){return b.dateKey.localeCompare(a.dateKey);});
+const trCrReviews=STATE.callReviews.filter(function(r){return r.traineeId===tr.id;}).sort(function(a,b){return (b.callDate||b.added||'').localeCompare(a.callDate||a.added||'');});
 
 
 const html='<div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">'+
@@ -747,13 +810,7 @@ const html='<div style="display:flex;align-items:center;gap:12px;margin-bottom:2
 (trDayNotes.length?trDayNotes.map(function(n){return '<div class="item-row blue"><div class="item-body"><div class="note-date" style="color:var(--accent-light);font-weight:600">'+n.date+'</div><div style="white-space:pre-wrap">'+esc(n.text)+'</div></div><button class="del-btn" onclick="deleteDayNote('+n.id+')">\u2715</button></div>';}).join(''):'<div class="empty-state">No day notes yet</div>')+
 '</div>'+
 '</div>'+
-'<div class="card" style="margin-bottom:20px">'+
-'<div class="card-title" onclick="toggleSection(\'tr-'+tr.id+'-leadlog\')">\u{1F4CB} Lead Log<button class="btn-secondary btn-sm" onclick="openLeadLogFor('+tr.id+')" style="margin-left:auto;font-size:11px">+ add note</button><span class="card-title-toggle" id="toggle-tr-'+tr.id+'-leadlog">\u25BC</span></div>'+
-'<div class="card-content" id="content-tr-'+tr.id+'-leadlog">'+
-'<div style="font-size:12px;color:var(--text-dim);margin-bottom:10px">Track lead coaching notes, call feedback, and action items</div>'+
-(trLeadLogs.length?trLeadLogs.map(function(n){var noteLines=n.text?n.text.split('\n').filter(Boolean):[];return '<div class="item-row" style="border-left-color:var(--teal)"><div class="item-body"><div class="note-date" style="color:var(--teal);font-weight:600">'+n.date+'</div><div id="ll-view-'+n.id+'"><ul style=\"list-style:none;padding:0;margin:0\">'+(noteLines.length?noteLines.map(function(line){return '<li style=\"display:flex;gap:8px;align-items:flex-start;padding:3px 0\"><span style=\"color:var(--teal);margin-top:2px\">•</span><span>'+esc(line)+'</span></li>';}).join(''):'<li style=\"color:var(--text-dim)\">No text</li>')+'</ul></div><div id="ll-edit-'+n.id+'" style="display:none"><textarea class="edit-note-area" id="ll-ta-'+n.id+'">'+esc(n.text||'')+'</textarea><div><button class="save-edit-btn" onclick="saveLeadLogEdit('+n.id+')">save</button><button class="cancel-edit-btn" onclick="cancelLeadLogEdit('+n.id+')">cancel</button></div></div></div><div style=\"display:flex;gap:4px\"><button class=\"edit-btn\" onclick=\"editLeadLog('+n.id+')\">✏</button><button class=\"del-btn\" onclick=\"deleteLeadLog('+n.id+')\">✕</button></div></div>';}).join(''):'<div class="empty-state">No lead log entries yet</div>')+
-'</div>'+
-'</div>'+
+renderLeadLogCard(tr.id, trLeadLogs, trCrReviews)+
 '<div class="card" style="margin-bottom:20px">'+
 '<div class="card-title" onclick="toggleSection(\'tr-'+tr.id+'-meetings\')">Meeting History<button class="btn-secondary btn-sm" onclick="openMeetingFor('+tr.id+')" style="margin-left:auto">+ log meeting</button><span class="card-title-toggle" id="toggle-tr-'+tr.id+'-meetings">\u25BC</span></div>'+
 '<div class="card-content" id="content-tr-'+tr.id+'-meetings">'+
@@ -1085,14 +1142,14 @@ function crToggle(id){
 var r = STATE.callReviews.find(function(x){return x.id===id;});
 if(r) r.reviewed = !r.reviewed;
 save();
-showPage('callreview');
+showPage(currentPage);
 }
 
 function deleteCrLead(id){
 if(!confirm('Delete this lead?'))return;
 STATE.callReviews = STATE.callReviews.filter(function(r){return r.id!==id;});
 save();
-showPage('callreview');
+showPage(currentPage);
 }
 
 function crClearReviewed(traineeId){
@@ -1178,7 +1235,7 @@ if(editId){
   STATE.callReviews.push({id:STATE.noteId++,name:name,traineeId:traineeId,callDate:callDate,callTime:callTime,note:note,reviewed:false,added:TODAY});
   if(traineeId!==null)crTraineeFilter=traineeId;
 }
-save();closeCrModal();showPage('callreview');
+save();closeCrModal();showPage(currentPage.startsWith('trainee-')?currentPage:'callreview');
 }
 
 
