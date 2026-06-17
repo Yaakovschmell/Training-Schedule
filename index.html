@@ -205,8 +205,6 @@ h1.page-title{font-size:27px;font-weight:700;margin-bottom:24px;color:var(--fore
 <input type="date" id="m-meet-date">
 <label class="modal-label">What you covered / worked on</label>
 <textarea id="m-meet-notes" placeholder="What did you go over? What did they do well / need to fix?"></textarea>
-<label class="modal-label">Transcript (optional)</label>
-<textarea id="m-meet-transcript" style="min-height:120px" placeholder="Paste call transcript here if you have one..."></textarea>>
 <div class="modal-buttons">
 <button class="btn-secondary" onclick="closeMeetingModal()">cancel</button>
 <button class="btn-primary" onclick="saveMeeting()">save meeting</button>
@@ -258,6 +256,23 @@ h1.page-title{font-size:27px;font-weight:700;margin-bottom:24px;color:var(--fore
 <div class="modal-buttons">
 <button class="btn-secondary" onclick="closeImportModal()">cancel</button>
 <button class="btn-primary" onclick="importData()">import</button>
+</div>
+</div>
+</div>
+
+<!-- LEAD LOG MODAL -->
+<div class="modal-overlay" id="leadlog-modal">
+<div class="modal-box">
+<div class="modal-title">&#128203; Add Lead Log Note</div>
+<p style="font-size:12px;color:var(--text-dim);margin-bottom:14px">Log coaching notes, lead feedback, and action items for this trainee's file.</p>
+<label class="modal-label">Date</label>
+<input type="date" id="m-ll-date">
+<label class="modal-label">Notes</label>
+<textarea id="m-ll-text" style="min-height:120px" placeholder="e.g. No follow-up on June 10th, calls too short, quoted wrong price..."></textarea>
+<input type="hidden" id="m-ll-trainee-id">
+<div class="modal-buttons">
+<button class="btn-secondary" onclick="closeLeadLogModal()">cancel</button>
+<button class="btn-primary" onclick="saveLeadLog()">save note</button>
 </div>
 </div>
 </div>
@@ -331,7 +346,7 @@ h1.page-title{font-size:27px;font-weight:700;margin-bottom:24px;color:var(--fore
 
 <button class="quick-btn" onclick="openNoteModal()" title="Quick thought">+</button>
 <script>
-let STATE = { trainees:[], meetings:[], yaakovMeetings:[], notes:[], followups:[], dayNotes:[], scheduleEntries:[], callReviews:[], noteId:1, traineeId:1, dayNoteId:1 };
+let STATE = { trainees:[], meetings:[], yaakovMeetings:[], notes:[], followups:[], dayNotes:[], leadLogs:[], scheduleEntries:[], callReviews:[], noteId:1, traineeId:1, dayNoteId:1 };
 const NOW = new Date();
 const TODAY = NOW.toISOString().slice(0,10);
 const TODAY_DISPLAY = NOW.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
@@ -344,7 +359,7 @@ let schedViewDate = TODAY;
 function load(){
 try{ const s=localStorage.getItem('coaching_v7'); if(s)STATE=JSON.parse(s); }catch(e){}
 try{ const c=localStorage.getItem('coaching_collapsed'); if(c)collapsedSections=JSON.parse(c); }catch(e){}
-STATE.trainees=STATE.trainees||[];STATE.meetings=STATE.meetings||[];STATE.yaakovMeetings=STATE.yaakovMeetings||[];STATE.notes=STATE.notes||[];STATE.followups=STATE.followups||[];STATE.dayNotes=STATE.dayNotes||[];STATE.scheduleEntries=STATE.scheduleEntries||[];STATE.callReviews=STATE.callReviews||[];
+STATE.trainees=STATE.trainees||[];STATE.meetings=STATE.meetings||[];STATE.yaakovMeetings=STATE.yaakovMeetings||[];STATE.notes=STATE.notes||[];STATE.followups=STATE.followups||[];STATE.dayNotes=STATE.dayNotes||[];STATE.leadLogs=STATE.leadLogs||[];STATE.scheduleEntries=STATE.scheduleEntries||[];STATE.callReviews=STATE.callReviews||[];
 if(!STATE.noteId)STATE.noteId=1; if(!STATE.traineeId)STATE.traineeId=1; if(!STATE.dayNoteId)STATE.dayNoteId=1;
 document.getElementById('save-indicator').textContent='loaded';
 }
@@ -434,11 +449,9 @@ const html='<h1 class="page-title">\u{1F4CA} Today\'s Workflow</h1>'+
 '</div>'+
 '</div>'+
 '<div class="card">'+
-'<div class="card-title" onclick="toggleSection(\'home-meetings\')">\u{1F399}\uFE0F Meetings Today'+(todayMeet.length?'<span class="badge amber">'+todayMeet.length+'</span>':'')+'<span class="card-title-toggle" id="toggle-home-meetings">\u25BC</span></div>'+
-'<div class="card-content" id="content-home-meetings">'+
-(todayMeet.length?todayMeet.map(m=>'<div style="margin-bottom:8px;padding:8px 10px;background:var(--bg-dark);border-radius:6px;border-left:3px solid var(--blue);font-size:12px;font-weight:600">'+esc(m.trainees)+'</div>').join(''):'<div class="empty-state">No meetings today</div>')+
-'<button class="btn-primary" style="width:100%;margin-top:10px" onclick="openMeetingModal()">+ log meeting</button>'+
-'</div>'+
+'<div class="card-title" onclick="toggleSection(\'home-addmeet\')">\u{1F91D} Add Meeting<span class="card-title-toggle" id="toggle-home-addmeet">\u25BC</span></div>'+
+'<div class="card-content" id="content-home-addmeet">'+
+(STATE.trainees.length?'<div style="font-size:12px;color:var(--text-dim);margin-bottom:10px">Log a meeting with a trainee</div>'+STATE.trainees.map(function(t){return '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-radius:8px;margin-bottom:6px;background:var(--bg-dark)"><span style="font-size:13px;font-weight:600;color:var(--text)">'+esc(t.name)+'</span><button class=\"btn-primary btn-sm\" onclick=\"openMeetingFor('+t.id+')\">+ log meeting</button></div>';}).join(''):'<div class=\"empty-state\">No trainees yet</div>')+
 '</div>'+
 '</div>'+
 '<div class="card">'+
@@ -451,7 +464,7 @@ const html='<h1 class="page-title">\u{1F4CA} Today\'s Workflow</h1>'+
 '</div>';
 
 setTimeout(function(){
-['home-schedule','home-yaakov','home-meetings','home-notes'].forEach(function(id){updateSectionUI(id);});
+['home-schedule','home-yaakov','home-addmeet','home-notes'].forEach(function(id){updateSectionUI(id);});
 },0);
 
 return html;
@@ -713,6 +726,7 @@ function renderTrainee(tr){
 const trMeetings=STATE.meetings.filter(function(m){return m.traineesArray&&m.traineesArray.includes(tr.id);}).sort(function(a,b){const da=dateOf(a),db=dateOf(b);return(db?db.getTime():0)-(da?da.getTime():0);});
 const trNotes=STATE.notes.filter(function(n){return n.traineeId===tr.id;});
 const trDayNotes=STATE.dayNotes.filter(function(n){return n.traineeId===tr.id;}).sort(function(a,b){return b.dateKey.localeCompare(a.dateKey);});
+const trLeadLogs=STATE.leadLogs.filter(function(n){return n.traineeId===tr.id;}).sort(function(a,b){return b.dateKey.localeCompare(a.dateKey);});
 
 
 const html='<div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">'+
@@ -731,6 +745,13 @@ const html='<div style="display:flex;align-items:center;gap:12px;margin-bottom:2
 '<div class="card-title" onclick="toggleSection(\'tr-'+tr.id+'-daynotes\')">Day Notes<button class="btn-secondary btn-sm" onclick="openDayNoteFor('+tr.id+')" style="margin-left:auto">+ add</button><span class="card-title-toggle" id="toggle-tr-'+tr.id+'-daynotes">\u25BC</span></div>'+
 '<div class="card-content" id="content-tr-'+tr.id+'-daynotes">'+
 (trDayNotes.length?trDayNotes.map(function(n){return '<div class="item-row blue"><div class="item-body"><div class="note-date" style="color:var(--accent-light);font-weight:600">'+n.date+'</div><div style="white-space:pre-wrap">'+esc(n.text)+'</div></div><button class="del-btn" onclick="deleteDayNote('+n.id+')">\u2715</button></div>';}).join(''):'<div class="empty-state">No day notes yet</div>')+
+'</div>'+
+'</div>'+
+'<div class="card" style="margin-bottom:20px">'+
+'<div class="card-title" onclick="toggleSection(\'tr-'+tr.id+'-leadlog\')">\u{1F4CB} Lead Log<button class="btn-secondary btn-sm" onclick="openLeadLogFor('+tr.id+')" style="margin-left:auto;font-size:11px">+ add note</button><span class="card-title-toggle" id="toggle-tr-'+tr.id+'-leadlog">\u25BC</span></div>'+
+'<div class="card-content" id="content-tr-'+tr.id+'-leadlog">'+
+'<div style="font-size:12px;color:var(--text-dim);margin-bottom:10px">Track lead coaching notes, call feedback, and action items</div>'+
+(trLeadLogs.length?trLeadLogs.map(function(n){var noteLines=n.text?n.text.split('\n').filter(Boolean):[];return '<div class="item-row" style="border-left-color:var(--teal)"><div class="item-body"><div class="note-date" style="color:var(--teal);font-weight:600">'+n.date+'</div><div id="ll-view-'+n.id+'"><ul style=\"list-style:none;padding:0;margin:0\">'+(noteLines.length?noteLines.map(function(line){return '<li style=\"display:flex;gap:8px;align-items:flex-start;padding:3px 0\"><span style=\"color:var(--teal);margin-top:2px\">•</span><span>'+esc(line)+'</span></li>';}).join(''):'<li style=\"color:var(--text-dim)\">No text</li>')+'</ul></div><div id="ll-edit-'+n.id+'" style="display:none"><textarea class="edit-note-area" id="ll-ta-'+n.id+'">'+esc(n.text||'')+'</textarea><div><button class="save-edit-btn" onclick="saveLeadLogEdit('+n.id+')">save</button><button class="cancel-edit-btn" onclick="cancelLeadLogEdit('+n.id+')">cancel</button></div></div></div><div style=\"display:flex;gap:4px\"><button class=\"edit-btn\" onclick=\"editLeadLog('+n.id+')\">✏</button><button class=\"del-btn\" onclick=\"deleteLeadLog('+n.id+')\">✕</button></div></div>';}).join(''):'<div class="empty-state">No lead log entries yet</div>')+
 '</div>'+
 '</div>'+
 '<div class="card" style="margin-bottom:20px">'+
@@ -778,7 +799,7 @@ return '<div style="margin-bottom:12px">'+
 '</div>';
 
 setTimeout(function(){
-['tr-'+tr.id+'-notes','tr-'+tr.id+'-daynotes','tr-'+tr.id+'-meetings'].forEach(function(id){updateSectionUI(id);});
+['tr-'+tr.id+'-notes','tr-'+tr.id+'-daynotes','tr-'+tr.id+'-leadlog','tr-'+tr.id+'-meetings'].forEach(function(id){updateSectionUI(id);});
 const grps={};
 trMeetings.forEach(function(m){const k=m.dateKey||m.date||'?';if(!grps[k])grps[k]=[];grps[k].push(m);});
 Object.keys(grps).forEach(function(key){updateSectionUI('tr-'+tr.id+'_'+key);});
@@ -789,12 +810,11 @@ return html;
 
 // MEETING MODAL
 function openMeetingModal(){ openMeetingFor(''); }
-function openMeetingFor(name){
-document.getElementById('m-meet-trainees').value=name||'';
+function openMeetingFor(traineeIdOrName){
+var name='';if(typeof traineeIdOrName==='number'){var tr=STATE.trainees.find(function(t){return t.id===traineeIdOrName;});name=tr?tr.name:'';}else{name=traineeIdOrName||'';}
+document.getElementById('m-meet-trainees').value=name;
 document.getElementById('m-meet-date').value=TODAY;
 document.getElementById('m-meet-notes').value='';
-document.getElementById('m-meet-transcript').value='';
-document.getElementById('m-meet-followup').value='';
 document.getElementById('meeting-modal').classList.add('open');
 document.getElementById(name?'m-meet-notes':'m-meet-trainees').focus();
 }
@@ -802,10 +822,9 @@ function closeMeetingModal(){document.getElementById('meeting-modal').classList.
 function saveMeeting(){
 const trainees=document.getElementById('m-meet-trainees').value.trim();
 const notes=document.getElementById('m-meet-notes').value.trim();
-const transcript=document.getElementById('m-meet-transcript').value.trim();
 const dateInput=document.getElementById('m-meet-date').value||TODAY;
 if(!trainees){alert('Please enter trainee names');return;}
-if(!notes&&!transcript){alert('Add notes or a transcript');return;}
+if(!notes){alert('Please add meeting notes');return;}
 const parts=dateInput.split('-').map(Number);
 const dispDate=new Date(parts[0],parts[1]-1,parts[2]).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
 const traineesArray=[];
@@ -815,7 +834,7 @@ let tr=STATE.trainees.find(function(t){return t.name.toLowerCase()===name.toLowe
 if(!tr){tr={id:STATE.traineeId++,name};STATE.trainees.push(tr);}
 traineesArray.push(tr.id);
 });
-STATE.meetings.push({id:STATE.noteId++,date:dispDate,dateKey:dateInput,trainees,traineesArray,notes:cleanupNotes(notes),transcript});
+STATE.meetings.push({id:STATE.noteId++,date:dispDate,dateKey:dateInput,trainees,traineesArray,notes:cleanupNotes(notes)});
 save();updateNav();closeMeetingModal();
 if(currentPage==='calendar'){selectedCalKey=dateInput;showPage('calendar');}else{showPage(currentPage.startsWith('trainee-')?currentPage:'calendar');if(currentPage==='calendar'){selectedCalKey=dateInput;showPage('calendar');}}
 }
@@ -931,6 +950,15 @@ function openDayNoteFor(traineeId){document.getElementById('m-daynote-text').val
 function closeDayNoteModal(){document.getElementById('daynote-modal').classList.remove('open');}
 function saveDayNote(){const text=document.getElementById('m-daynote-text').value.trim();if(!text)return;const dateKey=document.getElementById('m-daynote-date').value;const traineeId=parseInt(document.getElementById('m-daynote-trainee-id').value);const parts=dateKey.split('-').map(Number);const dispDate=new Date(parts[0],parts[1]-1,parts[2]).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});STATE.dayNotes.push({id:STATE.dayNoteId++,traineeId,date:dispDate,dateKey,text});save();closeDayNoteModal();showPage(currentPage);}
 function deleteDayNote(id){STATE.dayNotes=STATE.dayNotes.filter(function(n){return n.id!==id;});save();showPage(currentPage);}
+
+// LEAD LOG
+function openLeadLogFor(traineeId){document.getElementById('m-ll-text').value='';document.getElementById('m-ll-date').value=TODAY;document.getElementById('m-ll-trainee-id').value=traineeId;document.getElementById('leadlog-modal').classList.add('open');document.getElementById('m-ll-text').focus();}
+function closeLeadLogModal(){document.getElementById('leadlog-modal').classList.remove('open');}
+function saveLeadLog(){const text=document.getElementById('m-ll-text').value.trim();if(!text)return;const dateKey=document.getElementById('m-ll-date').value;const traineeId=parseInt(document.getElementById('m-ll-trainee-id').value);const parts=dateKey.split('-').map(Number);const dispDate=new Date(parts[0],parts[1]-1,parts[2]).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});STATE.leadLogs.push({id:STATE.noteId++,traineeId,date:dispDate,dateKey,text});save();closeLeadLogModal();showPage(currentPage);}
+function deleteLeadLog(id){STATE.leadLogs=STATE.leadLogs.filter(function(n){return n.id!==id;});save();showPage(currentPage);}
+function editLeadLog(id){const view=document.getElementById('ll-view-'+id);const edit=document.getElementById('ll-edit-'+id);const ta=document.getElementById('ll-ta-'+id);if(!view||!edit)return;const n=STATE.leadLogs.find(function(x){return x.id===id;});if(n&&ta)ta.value=n.text||'';view.style.display='none';edit.style.display='block';if(ta)ta.focus();}
+function cancelLeadLogEdit(id){const view=document.getElementById('ll-view-'+id);const edit=document.getElementById('ll-edit-'+id);if(view)view.style.display='';if(edit)edit.style.display='none';}
+function saveLeadLogEdit(id){const ta=document.getElementById('ll-ta-'+id);if(!ta)return;const n=STATE.leadLogs.find(function(x){return x.id===id;});if(!n)return;n.text=ta.value.trim();save();showPage(currentPage);}
 
 // DATA
 function exportData(){const blob=new Blob([JSON.stringify(STATE,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='coaching_hub_'+TODAY+'.json';a.click();URL.revokeObjectURL(url);}
