@@ -441,11 +441,14 @@ const html='<h1 class="page-title">\u{1F4CA} Today\'s Workflow</h1>'+
 '</div>'+
 '</div>'+
 '<div class="split-section">'+
-'<div class="card">'+
-'<div class="card-title" onclick="toggleSection(\'home-yaakov\')">\u{1F3AF} Yaakov'+(todayYak.length?'<span class="badge amber">'+todayYak.length+'</span>':'')+'<span class="card-title-toggle" id="toggle-home-yaakov">\u25BC</span></div>'+
+'<div class="card" style="padding:16px">'+
+'<div class="card-title" onclick="toggleSection('home-yaakov')">🎯 Yaakov'+(todayYak.length?'<span class="badge amber">'+todayYak.length+'</span>':'')+'<span class="card-title-toggle" id="toggle-home-yaakov">▼</span></div>'+
 '<div class="card-content" id="content-home-yaakov">'+
-(todayYak.length?todayYak.map(y=>'<div style="margin-bottom:10px;padding:10px;background:var(--bg-dark);border-radius:6px;border-left:3px solid var(--accent)">'+(y.time?'<div class="item-meta">'+y.time+'</div>':'')+(y.notes?'<div>'+esc(y.notes)+'</div>':'')+'</div>').join(''):'<div class="empty-state">No Yaakov meetings today</div>')+
-'<button class="btn-secondary" style="width:100%;margin-top:10px" onclick="openYaakovModal()">+ log Yaakov</button>'+
+(todayYak.length?'<div style="font-size:13px;color:var(--text-dim);margin-bottom:8px">'+todayYak.length+' meeting'+(todayYak.length!==1?'s':'')+' today</div>':'<div style="font-size:12px;color:var(--text-dim);margin-bottom:8px">No Yaakov meetings today</div>')+
+'<div style="display:flex;gap:8px">'+
+'<button class="btn-secondary btn-sm" style="flex:1" onclick="showPage('yaakov')">view Yaakov</button>'+
+'<button class="btn-secondary btn-sm" onclick="openYaakovModal()">+ log</button>'+
+'</div>'+
 '</div>'+
 '</div>'+
 '<div class="card">'+
@@ -652,7 +655,7 @@ const yy=parts[0],mm=parts[1],dd=parts[2];
 detail='<div class="day-detail"><div class="day-card"><div class="day-date">'+MONTHS_FULL[mm-1]+' '+dd+', '+yy+'</div>'+
 (dSched.length?'<div class="day-section"><div class="day-section-title">\u{1F4C5} Scheduled ('+dSched.length+')</div>'+dSched.map(function(e){return schedEntryRow(e,true);}).join('')+'<button class="btn-secondary btn-sm" style="margin-top:8px" onclick="schedViewDate=\''+selectedCalKey+'\';showPage(\'schedule\')">view / edit day</button></div>':'')+
 (dYak.length?'<div class="day-section"><div class="day-section-title">\u{1F3AF} Yaakov ('+dYak.length+')</div>'+dYak.map(function(y){return '<div class="item-row"><div class="item-body">'+(y.time?'<div class="item-meta">'+y.time+'</div>':'')+(y.notes?'<div>'+esc(y.notes)+'</div>':'')+'</div></div>';}).join('')+'</div>':'')+
-(dMeet.length?'<div class="day-section"><div class="day-section-title">\u{1F399}\uFE0F Trainee Meetings ('+dMeet.length+')</div>'+dMeet.map(function(m){return '<div class="item-row blue"><div class="item-body"><div class="item-meta">'+esc(m.trainees)+'</div>'+(m.notes?'<div>'+esc(m.notes)+'</div>':'')+'</div></div>';}).join('')+'</div>':'')+
+(dMeet.length?'<div class="day-section"><div class="day-section-title">\u{1F399}\uFE0F Trainee Meetings ('+dMeet.length+')</div>'+dMeet.map(function(m){var tLinks=(m.traineesArray&&m.traineesArray.length)?m.traineesArray.map(function(tid){var tr=STATE.trainees.find(function(t){return t.id===tid;});return tr?'<button class="btn-secondary btn-sm" onclick="showPage(\'trainee-'+tr.id+'\')" style="margin:2px 4px 2px 0;font-size:12px">'+esc(tr.name)+'</button>':'<span>'+esc(m.trainees)+'</span>';}).join(''):'<span>'+esc(m.trainees)+'</span>';return '<div class="item-row blue"><div class="item-body"><div style="font-size:11px;color:var(--text-dim);margin-bottom:4px">Click name to see notes</div><div>'+tLinks+'</div></div></div>';}).join('')+'</div>':'')+
 (!dYak.length&&!dMeet.length&&!dSched.length?'<div class="empty-state">Nothing logged this day</div>':'')+
 '</div></div>';
 }
