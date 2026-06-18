@@ -442,11 +442,11 @@ const html='<h1 class="page-title">\u{1F4CA} Today\'s Workflow</h1>'+
 '</div>'+
 '<div class="split-section">'+
 '<div class="card" style="padding:16px">'+
-'<div class="card-title" onclick="toggleSection('home-yaakov')">🎯 Yaakov'+(todayYak.length?'<span class="badge amber">'+todayYak.length+'</span>':'')+'<span class="card-title-toggle" id="toggle-home-yaakov">▼</span></div>'+
+'<div class="card-title" onclick="toggleSection(\'home-yaakov\')">🎯 Yaakov'+(todayYak.length?'<span class="badge amber">'+todayYak.length+'</span>':'')+'<span class="card-title-toggle" id="toggle-home-yaakov">▼</span></div>'+
 '<div class="card-content" id="content-home-yaakov">'+
 (todayYak.length?'<div style="font-size:13px;color:var(--text-dim);margin-bottom:8px">'+todayYak.length+' meeting'+(todayYak.length!==1?'s':'')+' today</div>':'<div style="font-size:12px;color:var(--text-dim);margin-bottom:8px">No Yaakov meetings today</div>')+
 '<div style="display:flex;gap:8px">'+
-'<button class="btn-secondary btn-sm" style="flex:1" onclick="showPage('yaakov')">view Yaakov</button>'+
+'<button class="btn-secondary btn-sm" style="flex:1" onclick="showPage(\'yaakov\')">view Yaakov</button>'+
 '<button class="btn-secondary btn-sm" onclick="openYaakovModal()">+ log</button>'+
 '</div>'+
 '</div>'+
