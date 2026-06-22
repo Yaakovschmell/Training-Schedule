@@ -41,8 +41,6 @@ body{background:var(--cream)}
 .content{flex:1;overflow-y:auto;padding:28px 36px}
 .card{background:linear-gradient(160deg,#fdfaf5,#f5efe3);border:1px solid var(--border);border-radius:16px;padding:22px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,.25);transition:border-color .2s}
 .card:hover{border-color:rgba(201,147,58,.4)}
-.note-bullet{display:flex;gap:8px;align-items:flex-start;padding:4px 0;font-size:13px;line-height:1.5;border-bottom:1px solid rgba(0,0,0,.04)}
-.note-bullet:last-child{border-bottom:none}
 .date-group-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:linear-gradient(90deg,rgba(201,147,58,.12),transparent);border-radius:10px;cursor:pointer;user-select:none}
 .date-group-header:hover{background:linear-gradient(90deg,rgba(201,147,58,.2),transparent)}
 .date-group-label{font-size:13px;font-weight:700;color:var(--accent-dark);letter-spacing:.3px}
@@ -78,8 +76,6 @@ textarea{resize:vertical;min-height:80px}
 .modal-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-dim);display:block;margin-bottom:6px;margin-top:12px}
 .modal-label:first-of-type{margin-top:0}
 .modal-buttons{display:flex;gap:8px;justify-content:flex-end;margin-top:20px}
-.transcript-box{background:#f5efe3;border:1px solid var(--border);border-radius:8px;padding:12px;margin:8px 0;font-size:12px;line-height:1.6;color:var(--text);max-height:250px;overflow-y:auto;white-space:pre-wrap;word-wrap:break-word}
-.transcript-empty{color:var(--text-dim);font-style:italic}
 .empty-state{text-align:center;padding:20px;color:var(--text-dim);font-size:13px}
 .del-btn{background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:14px;padding:4px 8px;border-radius:4px;transition:all .15s;flex-shrink:0}
 .del-btn:hover{color:var(--red);background:rgba(201,112,112,.1)}
@@ -111,8 +107,6 @@ textarea{resize:vertical;min-height:80px}
 .item-body{flex:1;min-width:0}
 .item-meta{font-size:10px;color:var(--text-dim);margin-bottom:4px}
 .note-date{font-size:10px;color:var(--text-dim);font-family:'IBM Plex Mono',monospace;margin-bottom:4px}
-.mini-select{font-size:11px;padding:4px 8px;background:var(--border);border:none;color:var(--text-dim);border-radius:4px;cursor:pointer;margin-top:6px;width:auto}
-.mini-select:hover{background:var(--accent);color:var(--bg-dark)}
 .quick-btn{position:fixed;bottom:24px;right:24px;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--teal));color:#fff;border:none;font-size:28px;cursor:pointer;transition:all .2s;box-shadow:0 4px 15px rgba(201,147,58,.3)}
 .quick-btn:hover{transform:scale(1.12) rotate(90deg);box-shadow:0 8px 30px rgba(90,138,106,.5)}
 ::-webkit-scrollbar{width:8px}
@@ -147,7 +141,6 @@ h1.page-title{font-size:27px;font-weight:700;margin-bottom:24px;color:var(--fore
 .sched-empty{text-align:center;padding:40px 20px;color:var(--text-dim);font-size:14px}
 .sched-section-header{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text-dim);padding:8px 0 6px;border-bottom:1px solid var(--border);margin-bottom:10px}
 /* CALL REVIEW */
-.cr-trainee-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px}
 .cr-lead{background:#fdfaf5;border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:flex-start;gap:12px;transition:border-color .2s}
 .cr-lead:hover{border-color:rgba(201,147,58,.4)}
 .cr-lead.reviewed{opacity:.55;border-color:rgba(90,138,106,.35);background:rgba(90,138,106,.05)}
@@ -165,7 +158,6 @@ h1.page-title{font-size:27px;font-weight:700;margin-bottom:24px;color:var(--fore
 .cr-clear-btn{font-size:11px;padding:4px 10px;background:rgba(194,59,42,.1);color:var(--red);border:1px solid rgba(194,59,42,.25);border-radius:6px;cursor:pointer;font-family:'IBM Plex Mono',monospace}
 .cr-clear-btn:hover{background:var(--red);color:#fff}
 .cr-empty{text-align:center;padding:40px 20px;color:var(--text-dim);font-size:13px}
-/* CR accordion */
 .cr-accordion{margin-bottom:12px;border:1px solid var(--border);border-radius:14px;overflow:hidden;background:#fdfaf5}
 .cr-accordion-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;cursor:pointer;background:linear-gradient(90deg,rgba(201,147,58,.09),transparent);user-select:none;transition:background .15s}
 .cr-accordion-header:hover{background:linear-gradient(90deg,rgba(201,147,58,.18),transparent)}
@@ -232,17 +224,18 @@ h1.page-title{font-size:27px;font-weight:700;margin-bottom:24px;color:var(--fore
 </div>
 </div>
 
-<!-- QUICK NOTE MODAL -->
-<div class="modal-overlay" id="note-modal">
+<!-- COACHING NOTE MODAL -->
+<div class="modal-overlay" id="coachnote-modal">
 <div class="modal-box">
-<div class="modal-title">&#128173; Quick Thought</div>
-<p style="font-size:12px;color:var(--text-dim);margin-bottom:14px">Jot it down now, sort it later.</p>
-<textarea id="m-note-text" style="min-height:100px" placeholder="What's on your mind?"></textarea>
-<label class="modal-label">Assign to trainee (optional)</label>
-<select id="m-note-trainee"><option value="">&#8212; leave unassigned &#8212;</option></select>
+<div class="modal-title">&#128203; Add Coaching Note</div>
+<label class="modal-label">Date</label>
+<input type="date" id="m-cn-date">
+<label class="modal-label">Notes</label>
+<textarea id="m-cn-text" style="min-height:120px" placeholder="Coaching points, lead feedback, observations, action items..."></textarea>
+<input type="hidden" id="m-cn-trainee-id">
 <div class="modal-buttons">
-<button class="btn-secondary" onclick="closeNoteModal()">cancel</button>
-<button class="btn-primary" onclick="saveNote()">save</button>
+<button class="btn-secondary" onclick="closeCoachNoteModal()">cancel</button>
+<button class="btn-primary" onclick="saveCoachNote()">save note</button>
 </div>
 </div>
 </div>
@@ -256,40 +249,6 @@ h1.page-title{font-size:27px;font-weight:700;margin-bottom:24px;color:var(--fore
 <div class="modal-buttons">
 <button class="btn-secondary" onclick="closeImportModal()">cancel</button>
 <button class="btn-primary" onclick="importData()">import</button>
-</div>
-</div>
-</div>
-
-<!-- LEAD LOG MODAL -->
-<div class="modal-overlay" id="leadlog-modal">
-<div class="modal-box">
-<div class="modal-title">&#128203; Add Lead Log Note</div>
-<p style="font-size:12px;color:var(--text-dim);margin-bottom:14px">Log coaching notes, lead feedback, and action items for this trainee's file.</p>
-<label class="modal-label">Date</label>
-<input type="date" id="m-ll-date">
-<label class="modal-label">Notes</label>
-<textarea id="m-ll-text" style="min-height:120px" placeholder="e.g. No follow-up on June 10th, calls too short, quoted wrong price..."></textarea>
-<input type="hidden" id="m-ll-trainee-id">
-<div class="modal-buttons">
-<button class="btn-secondary" onclick="closeLeadLogModal()">cancel</button>
-<button class="btn-primary" onclick="saveLeadLog()">save note</button>
-</div>
-</div>
-</div>
-
-<!-- DAY NOTE MODAL -->
-<div class="modal-overlay" id="daynote-modal">
-<div class="modal-box">
-<div class="modal-title">Add Day Note</div>
-<p style="font-size:12px;color:var(--text-dim);margin-bottom:14px">Log notes tied to a specific date for this trainee.</p>
-<label class="modal-label">Date</label>
-<input type="date" id="m-daynote-date">
-<label class="modal-label">Notes</label>
-<textarea id="m-daynote-text" style="min-height:120px" placeholder="What happened on this day? Key coaching points, observations..."></textarea>
-<input type="hidden" id="m-daynote-trainee-id">
-<div class="modal-buttons">
-<button class="btn-secondary" onclick="closeDayNoteModal()">cancel</button>
-<button class="btn-primary" onclick="saveDayNote()">save day note</button>
 </div>
 </div>
 </div>
@@ -344,9 +303,9 @@ h1.page-title{font-size:27px;font-weight:700;margin-bottom:24px;color:var(--fore
 </div>
 </div>
 
-<button class="quick-btn" onclick="openNoteModal()" title="Quick thought">+</button>
+<button class="quick-btn" onclick="openSchedModal('','');" title="Add to schedule">+</button>
 <script>
-let STATE = { trainees:[], meetings:[], yaakovMeetings:[], notes:[], followups:[], dayNotes:[], leadLogs:[], scheduleEntries:[], callReviews:[], noteId:1, traineeId:1, dayNoteId:1 };
+let STATE = { trainees:[], meetings:[], yaakovMeetings:[], coachingNotes:[], scheduleEntries:[], callReviews:[], noteId:1, traineeId:1 };
 const NOW = new Date();
 const TODAY = NOW.toISOString().slice(0,10);
 const TODAY_DISPLAY = NOW.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
@@ -357,24 +316,39 @@ let collapsedSections = {};
 let schedViewDate = TODAY;
 
 function load(){
-try{ const s=localStorage.getItem('coaching_v7'); if(s)STATE=JSON.parse(s); }catch(e){}
+try{ const s=localStorage.getItem('coaching_v8'); if(s){ STATE=JSON.parse(s); } else {
+  // migrate from v7
+  const old=localStorage.getItem('coaching_v7');
+  if(old){
+    const o=JSON.parse(old);
+    STATE.trainees=o.trainees||[];
+    STATE.meetings=o.meetings||[];
+    STATE.yaakovMeetings=o.yaakovMeetings||[];
+    STATE.scheduleEntries=o.scheduleEntries||[];
+    STATE.callReviews=o.callReviews||[];
+    STATE.noteId=o.noteId||1;
+    STATE.traineeId=o.traineeId||1;
+    // merge all old note types into coachingNotes
+    STATE.coachingNotes=[];
+    (o.notes||[]).forEach(function(n){
+      STATE.coachingNotes.push({id:STATE.noteId++,traineeId:n.traineeId||null,dateKey:n.dateKey||TODAY,date:n.date||TODAY_DISPLAY,text:n.text||''});
+    });
+    (o.dayNotes||[]).forEach(function(n){
+      STATE.coachingNotes.push({id:STATE.noteId++,traineeId:n.traineeId||null,dateKey:n.dateKey||TODAY,date:n.date||TODAY_DISPLAY,text:n.text||''});
+    });
+    (o.leadLogs||[]).forEach(function(n){
+      STATE.coachingNotes.push({id:STATE.noteId++,traineeId:n.traineeId||null,dateKey:n.dateKey||TODAY,date:n.date||TODAY_DISPLAY,text:n.text||''});
+    });
+    STATE.coachingNotes.sort(function(a,b){return b.dateKey.localeCompare(a.dateKey);});
+  }
+}}catch(e){}
 try{ const c=localStorage.getItem('coaching_collapsed'); if(c)collapsedSections=JSON.parse(c); }catch(e){}
-STATE.trainees=STATE.trainees||[];STATE.meetings=STATE.meetings||[];STATE.yaakovMeetings=STATE.yaakovMeetings||[];STATE.notes=STATE.notes||[];STATE.followups=STATE.followups||[];STATE.dayNotes=STATE.dayNotes||[];STATE.leadLogs=STATE.leadLogs||[];STATE.scheduleEntries=STATE.scheduleEntries||[];STATE.callReviews=STATE.callReviews||[];
-if(!STATE.noteId)STATE.noteId=1; if(!STATE.traineeId)STATE.traineeId=1; if(!STATE.dayNoteId)STATE.dayNoteId=1;
+STATE.trainees=STATE.trainees||[];STATE.meetings=STATE.meetings||[];STATE.yaakovMeetings=STATE.yaakovMeetings||[];STATE.coachingNotes=STATE.coachingNotes||[];STATE.scheduleEntries=STATE.scheduleEntries||[];STATE.callReviews=STATE.callReviews||[];
+if(!STATE.noteId)STATE.noteId=1; if(!STATE.traineeId)STATE.traineeId=1;
 document.getElementById('save-indicator').textContent='loaded';
 }
-function cleanupNotes(text){
-if(!text||!text.trim())return text;
-var raw=text.trim();
-var parts=raw.split(/(?<=[.!?])\s+|;\s*|\n+/).map(function(s){return s.trim();}).filter(Boolean);
-return parts.map(function(s){
-if(!s)return '';
-s=s.charAt(0).toUpperCase()+s.slice(1);
-if(!/[.!?]$/.test(s))s+='.';
-return s;
-}).join('\n');
-}
-function save(){ try{localStorage.setItem('coaching_v7',JSON.stringify(STATE));localStorage.setItem('coaching_collapsed',JSON.stringify(collapsedSections));document.getElementById('save-indicator').textContent='saved';}catch(e){document.getElementById('save-indicator').textContent='error';}}
+
+function save(){ try{localStorage.setItem('coaching_v8',JSON.stringify(STATE));localStorage.setItem('coaching_collapsed',JSON.stringify(collapsedSections));document.getElementById('save-indicator').textContent='saved';}catch(e){document.getElementById('save-indicator').textContent='error';}}
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function dateOf(item){ if(item.dateKey){const[y,m,d]=item.dateKey.split('-').map(Number);return new Date(y,m-1,d);} const p=new Date(item.date); return isNaN(p)?null:p; }
 function keyFromDate(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
@@ -392,13 +366,8 @@ function updateSectionUI(id){
 const content=document.getElementById('content-'+id);
 const toggle=document.getElementById('toggle-'+id);
 if(content){
-if(collapsedSections[id]){
-content.classList.add('collapsed');
-if(toggle)toggle.textContent='\u25B6';
-}else{
-content.classList.remove('collapsed');
-if(toggle)toggle.textContent='\u25BC';
-}
+if(collapsedSections[id]){content.classList.add('collapsed');if(toggle)toggle.textContent='\u25B6';}
+else{content.classList.remove('collapsed');if(toggle)toggle.textContent='\u25BC';}
 }
 }
 
@@ -409,7 +378,7 @@ const nav=document.getElementById('nav-buttons');
 const todaySched=STATE.scheduleEntries.filter(e=>e.dateKey===TODAY).length;
 const pendingCr=STATE.callReviews.filter(function(r){return !r.reviewed;}).length;
 const items=[{id:'home',label:'Home'},{id:'schedule',label:'Schedule'+(todaySched?' ('+todaySched+')':'')},{id:'callreview',label:'Call Review'+(pendingCr?' ('+pendingCr+')':'')},{id:'calendar',label:'Calendar'},{id:'yaakov',label:'Yaakov'}];
-nav.innerHTML=items.map(i=>'<button class="nav-btn '+(currentPage===i.id?'active':'')+'" onclick="showPage(\''+i.id+'\')">'+i.label+'</button>').join('');
+nav.innerHTML=items.map(i=>'<button class="nav-btn '+(currentPage===i.id?'active':'')+'" onclick="showPage(''+i.id+'')">'+i.label+'</button>').join('');
 }
 function renderPage(name){
 if(name==='home')return renderHome();
@@ -424,52 +393,41 @@ return '';
 // HOME
 function renderHome(){
 const todayYak=STATE.yaakovMeetings.filter(y=>{const d=dateOf(y);return d&&keyFromDate(d)===TODAY;});
-const todayMeet=STATE.meetings.filter(m=>{const d=dateOf(m);return d&&keyFromDate(d)===TODAY;});
 const todaySched=STATE.scheduleEntries.filter(e=>e.dateKey===TODAY).sort((a,b)=>(a.time||'99:99').localeCompare(b.time||'99:99'));
-const unassigned=STATE.notes.filter(n=>!n.traineeId);
 
-const html='<h1 class="page-title">\u{1F4CA} Today\'s Workflow</h1>'+
+const html='<h1 class="page-title">\u{1F4CA} Today's Workflow</h1>'+
 '<div style="font-size:13px;color:var(--text-dim);margin-top:-16px;margin-bottom:24px">'+TODAY_DISPLAY+'</div>'+
 '<div class="card">'+
-'<div class="card-title" onclick="toggleSection(\'home-schedule\')">\u{1F4C5} Today\'s Schedule'+(todaySched.length?'<span class="badge amber">'+todaySched.length+'</span>':'')+'<span class="card-title-toggle" id="toggle-home-schedule">\u25BC</span></div>'+
+'<div class="card-title" onclick="toggleSection('home-schedule')">\u{1F4C5} Today's Schedule'+(todaySched.length?'<span class="badge amber">'+todaySched.length+'</span>':'')+'<span class="card-title-toggle" id="toggle-home-schedule">\u25BC</span></div>'+
 '<div class="card-content" id="content-home-schedule">'+
 (todaySched.length?todaySched.map(e=>schedEntryRow(e,true)).join(''):'<div class="sched-empty">Nothing scheduled for today</div>')+
 '<div style="display:flex;gap:8px;margin-top:12px">'+
-'<button class="btn-primary" style="flex:1" onclick="openSchedModal(\'\',TODAY)">+ add to today</button>'+
-'<button class="btn-secondary" style="flex:1" onclick="showPage(\'schedule\')">view full schedule</button>'+
+'<button class="btn-primary" style="flex:1" onclick="openSchedModal('',TODAY)">+ add to today</button>'+
+'<button class="btn-secondary" style="flex:1" onclick="showPage('schedule')">view full schedule</button>'+
 '</div>'+
 '</div>'+
 '</div>'+
 '<div class="split-section">'+
 '<div class="card" style="padding:16px">'+
-'<div class="card-title" onclick="toggleSection(\'home-yaakov\')">🎯 Yaakov'+(todayYak.length?'<span class="badge amber">'+todayYak.length+'</span>':'')+'<span class="card-title-toggle" id="toggle-home-yaakov">▼</span></div>'+
+'<div class="card-title" onclick="toggleSection('home-yaakov')">\u{1F3AF} Yaakov'+(todayYak.length?'<span class="badge amber">'+todayYak.length+'</span>':'')+'<span class="card-title-toggle" id="toggle-home-yaakov">\u25BC</span></div>'+
 '<div class="card-content" id="content-home-yaakov">'+
 (todayYak.length?'<div style="font-size:13px;color:var(--text-dim);margin-bottom:8px">'+todayYak.length+' meeting'+(todayYak.length!==1?'s':'')+' today</div>':'<div style="font-size:12px;color:var(--text-dim);margin-bottom:8px">No Yaakov meetings today</div>')+
 '<div style="display:flex;gap:8px">'+
-'<button class="btn-secondary btn-sm" style="flex:1" onclick="showPage(\'yaakov\')">view Yaakov</button>'+
+'<button class="btn-secondary btn-sm" style="flex:1" onclick="showPage('yaakov')">view Yaakov</button>'+
 '<button class="btn-secondary btn-sm" onclick="openYaakovModal()">+ log</button>'+
 '</div>'+
 '</div>'+
 '</div>'+
 '<div class="card">'+
-'<div class="card-title" onclick="toggleSection(\'home-addmeet\')">\u{1F91D} Add Meeting<span class="card-title-toggle" id="toggle-home-addmeet">\u25BC</span></div>'+
+'<div class="card-title" onclick="toggleSection('home-addmeet')">\u{1F91D} Log Meeting<span class="card-title-toggle" id="toggle-home-addmeet">\u25BC</span></div>'+
 '<div class="card-content" id="content-home-addmeet">'+
-(STATE.trainees.length?'<div style="font-size:12px;color:var(--text-dim);margin-bottom:10px">Log a meeting with a trainee</div>'+STATE.trainees.map(function(t){return '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-radius:8px;margin-bottom:6px;background:var(--bg-dark)"><span style="font-size:13px;font-weight:600;color:var(--text)">'+esc(t.name)+'</span><button class=\"btn-primary btn-sm\" onclick=\"openMeetingFor('+t.id+')\">+ log meeting</button></div>';}).join(''):'<div class=\"empty-state\">No trainees yet</div>')+
-'</div>'+
-'</div>'+
-'<div class="card">'+
-'<div class="card-title" onclick="toggleSection(\'home-notes\')">\u{1F4AD} Quick Notes'+(unassigned.length?'<span class="badge amber">'+unassigned.length+'</span>':'')+'<span class="card-title-toggle" id="toggle-home-notes">\u25BC</span></div>'+
-'<div class="card-content" id="content-home-notes">'+
-'<div style="font-size:12px;color:var(--text-dim);margin-bottom:12px">Unassigned thoughts \u2014 assign to a trainee or clear</div>'+
-(unassigned.length?unassigned.map(n=>noteRow(n,true)).join(''):'<div class="empty-state">No unassigned notes</div>')+
-'<button class="btn-secondary" style="width:100%;margin-top:10px" onclick="openNoteModal()">+ add a thought</button>'+
+(STATE.trainees.length?'<div style="font-size:12px;color:var(--text-dim);margin-bottom:10px">Log a meeting with a trainee</div>'+STATE.trainees.map(function(t){return '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-radius:8px;margin-bottom:6px;background:var(--bg-dark)"><span style="font-size:13px;font-weight:600;color:var(--text)">'+esc(t.name)+'</span><button class="btn-primary btn-sm" onclick="openMeetingFor('+t.id+')">+ log meeting</button></div>';}).join(''):'<div class="empty-state">No trainees yet</div>')+
 '</div>'+
 '</div>';
 
 setTimeout(function(){
-['home-schedule','home-yaakov','home-addmeet','home-notes'].forEach(function(id){updateSectionUI(id);});
+['home-schedule','home-yaakov','home-addmeet'].forEach(function(id){updateSectionUI(id);});
 },0);
-
 return html;
 }
 
@@ -482,33 +440,26 @@ const dateObj=new Date(schedViewDate+'T12:00:00');
 const dispDate=MONTHS_FULL[dateObj.getMonth()]+' '+dateObj.getDate()+', '+dateObj.getFullYear();
 const isToday=schedViewDate===TODAY;
 
-function changeSchedDate(delta){
-const d=new Date(schedViewDate+'T12:00:00');
-d.setDate(d.getDate()+delta);
-schedViewDate=keyFromDate(d);
-showPage('schedule');
-}
+function changeSchedDate(delta){const d=new Date(schedViewDate+'T12:00:00');d.setDate(d.getDate()+delta);schedViewDate=keyFromDate(d);showPage('schedule');}
 window._changeSchedDate=changeSchedDate;
 
 const entriesHtml=entries.length?(
 (meetings.length?'<div class="sched-section-header">\u{1F91D} Meetings ('+meetings.length+')</div>'+meetings.map(function(e){return schedEntryRow(e,false);}).join(''):'')+
-(tasks.length?'<div class="sched-section-header" style="margin-top:'+(meetings.length?'16':'0')+'px">\u2705 Tasks &amp; To-dos ('+tasks.length+')</div>'+tasks.map(function(e){return schedEntryRow(e,false);}).join(''):'')):
-'<div class="sched-empty" style="padding:60px 20px"><div style="font-size:32px;margin-bottom:12px">\u{1F4C5}</div><div>Nothing scheduled for this day.</div><div style="margin-top:8px;font-size:13px">Add a meeting or task below.</div></div>';
+(tasks.length?'<div class="sched-section-header" style="margin-top:'+(meetings.length?'16':'0')+'px">\u2705 Tasks &amp; To-dos ('+tasks.length+')</div>'+tasks.map(function(e){return schedEntryRow(e,false);}).join(''):''))
+:'<div class="sched-empty" style="padding:60px 20px"><div style="font-size:32px;margin-bottom:12px">\u{1F4C5}</div><div>Nothing scheduled for this day.</div><div style="margin-top:8px;font-size:13px">Add a meeting or task below.</div></div>';
 
 return '<h1 class="page-title">\u{1F4C5} Daily Schedule</h1>'+
 '<div class="sched-date-nav">'+
 '<button class="btn-secondary btn-sm" onclick="window._changeSchedDate(-1)">\u2039 prev</button>'+
 '<div class="sched-date-label">'+dispDate+(isToday?' <span class="badge amber">Today</span>':'')+'</div>'+
 '<button class="btn-secondary btn-sm" onclick="window._changeSchedDate(1)">next \u203A</button>'+
-'<button class="btn-secondary btn-sm" onclick="schedViewDate=TODAY;showPage(\'schedule\')">Today</button>'+
-'<input type="date" value="'+schedViewDate+'" onchange="schedViewDate=this.value;showPage(\'schedule\')" style="width:auto;padding:6px 10px;font-size:12px">'+
+'<button class="btn-secondary btn-sm" onclick="schedViewDate=TODAY;showPage('schedule')">Today</button>'+
+'<input type="date" value="'+schedViewDate+'" onchange="schedViewDate=this.value;showPage('schedule')" style="width:auto;padding:6px 10px;font-size:12px">'+
 '</div>'+
-'<div class="card">'+
-entriesHtml+
-'</div>'+
+'<div class="card">'+entriesHtml+'</div>'+
 '<div style="display:flex;gap:10px;margin-top:4px">'+
-'<button class="btn-primary" onclick="openSchedModal(\'meeting\',schedViewDate)">+ add meeting</button>'+
-'<button class="btn-secondary" onclick="openSchedModal(\'task\',schedViewDate)">+ add task</button>'+
+'<button class="btn-primary" onclick="openSchedModal('meeting',schedViewDate)">+ add meeting</button>'+
+'<button class="btn-secondary" onclick="openSchedModal('task',schedViewDate)">+ add task</button>'+
 '</div>';
 }
 
@@ -519,7 +470,7 @@ return '<div class="sched-entry type-'+e.type+(isDone?' done-entry':'')+'">'+
 '<div class="sched-cb'+(isDone?' checked':'')+'" onclick="toggleSchedDone('+e.id+')" title="'+(isDone?'Mark undone':'Mark done')+'"></div>'+
 '<div style="flex:1;min-width:0">'+
 (timeStr?'<div class="sched-time">'+esc(timeStr)+'</div>':'')+
-'<div class="sched-title'+(isDone?' done-text':'')+'"><span class="sched-type-badge '+e.type+'">'+( e.type==='meeting'?'meeting':'task')+'</span>'+esc(e.title)+'</div>'+
+'<div class="sched-title'+(isDone?' done-text':'')+'"><span class="sched-type-badge '+e.type+'">'+(e.type==='meeting'?'meeting':'task')+'</span>'+esc(e.title)+'</div>'+
 (e.who&&e.type==='meeting'?'<div class="sched-who">\u{1F464} with: '+esc(e.who)+'</div>':'')+
 (e.notes&&!compact?'<div class="sched-note">'+esc(e.notes)+'</div>':'')+
 (e.notes&&compact?'<div class="sched-note" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:400px">'+esc(e.notes)+'</div>':'')+
@@ -532,7 +483,7 @@ return '<div class="sched-entry type-'+e.type+(isDone?' done-entry':'')+'">'+
 }
 
 function openSchedModal(type,dateKey){
-document.getElementById('sched-modal-title').textContent=(type==='meeting'?'\u{1F91D} Add Meeting':type==='task'?'\u2705 Add Task':'\u{1F4C5}'+' Add Schedule Entry');
+document.getElementById('sched-modal-title').textContent=(type==='meeting'?'\u{1F91D} Add Meeting':type==='task'?'\u2705 Add Task':'\u{1F4C5} Add Schedule Entry');
 document.getElementById('m-sched-type').value=type||'meeting';
 document.getElementById('m-sched-date').value=dateKey||schedViewDate||TODAY;
 document.getElementById('m-sched-time').value='';
@@ -544,7 +495,6 @@ updateSchedWhoLabel();
 document.getElementById('sched-modal').classList.add('open');
 document.getElementById('m-sched-title').focus();
 }
-
 function openSchedEditModal(id){
 const e=STATE.scheduleEntries.find(x=>x.id===id);
 if(!e)return;
@@ -560,29 +510,15 @@ updateSchedWhoLabel();
 document.getElementById('sched-modal').classList.add('open');
 document.getElementById('m-sched-title').focus();
 }
-
 function updateSchedWhoLabel(){
 const type=document.getElementById('m-sched-type').value;
 const whoLabel=document.getElementById('m-sched-who-label');
 const whoInput=document.getElementById('m-sched-who');
-if(type==='meeting'){
-whoLabel.style.display='block';
-whoInput.style.display='block';
-whoLabel.textContent='Who are you meeting with?';
-whoInput.placeholder='e.g. Cameron, Joshua, client name...';
-}else{
-whoLabel.style.display='none';
-whoInput.style.display='none';
+if(type==='meeting'){whoLabel.style.display='block';whoInput.style.display='block';whoLabel.textContent='Who are you meeting with?';whoInput.placeholder='e.g. Cameron, Joshua, client name...';}
+else{whoLabel.style.display='none';whoInput.style.display='none';}
 }
-}
-
-document.addEventListener('DOMContentLoaded',function(){
-var typeEl=document.getElementById('m-sched-type');
-if(typeEl)typeEl.addEventListener('change',updateSchedWhoLabel);
-});
-
+document.addEventListener('DOMContentLoaded',function(){var typeEl=document.getElementById('m-sched-type');if(typeEl)typeEl.addEventListener('change',updateSchedWhoLabel);});
 function closeSchedModal(){document.getElementById('sched-modal').classList.remove('open');}
-
 function saveSchedEntry(){
 const title=document.getElementById('m-sched-title').value.trim();
 if(!title){alert('Please enter a title');return;}
@@ -592,41 +528,13 @@ const time=document.getElementById('m-sched-time').value;
 const who=document.getElementById('m-sched-who').value.trim();
 const notes=document.getElementById('m-sched-notes').value.trim();
 const editId=document.getElementById('m-sched-edit-id').value;
-if(editId){
-const e=STATE.scheduleEntries.find(x=>x.id===parseInt(editId));
-if(e){e.type=type;e.dateKey=dateKey;e.time=time;e.title=title;e.who=who;e.notes=notes;}
-}else{
-STATE.scheduleEntries.push({id:STATE.noteId++,type,dateKey,time,title,who,notes,done:false});
-}
+if(editId){const e=STATE.scheduleEntries.find(x=>x.id===parseInt(editId));if(e){e.type=type;e.dateKey=dateKey;e.time=time;e.title=title;e.who=who;e.notes=notes;}}
+else{STATE.scheduleEntries.push({id:STATE.noteId++,type,dateKey,time,title,who,notes,done:false});}
 schedViewDate=dateKey;
 save();closeSchedModal();showPage(currentPage==='schedule'||currentPage==='home'?currentPage:'schedule');
 }
-
-function toggleSchedDone(id){
-const e=STATE.scheduleEntries.find(x=>x.id===id);
-if(e)e.done=!e.done;
-save();showPage(currentPage);
-}
-
-function deleteSchedEntry(id){
-if(!confirm('Delete this entry?'))return;
-STATE.scheduleEntries=STATE.scheduleEntries.filter(e=>e.id!==id);
-save();showPage(currentPage);
-}
-
-function noteRow(n,showAssign){
-return '<div class="item-row">'+
-'<div class="item-body">'+
-'<div class="note-date">'+n.date+'</div>'+
-'<div>'+esc(n.text)+'</div>'+
-(showAssign&&STATE.trainees.length?'<select class="mini-select" onchange="assignNote('+n.id+',this.value)"><option value="">assign to trainee...</option>'+STATE.trainees.map(function(t){return '<option value="'+t.id+'">'+esc(t.name)+'</option>';}).join('')+'</select>':'')+
-'</div>'+
-'<div style="display:flex;gap:4px">'+
-'<button class="del-btn" onclick="editNote('+n.id+')">\u270E</button>'+
-'<button class="del-btn" onclick="deleteNote('+n.id+')">\u2715</button>'+
-'</div>'+
-'</div>';
-}
+function toggleSchedDone(id){const e=STATE.scheduleEntries.find(x=>x.id===id);if(e)e.done=!e.done;save();showPage(currentPage);}
+function deleteSchedEntry(id){if(!confirm('Delete this entry?'))return;STATE.scheduleEntries=STATE.scheduleEntries.filter(e=>e.id!==id);save();showPage(currentPage);}
 
 // CALENDAR
 function renderCalendar(){
@@ -643,7 +551,7 @@ const isToday=(calYear===NOW.getFullYear()&&calMonth===NOW.getMonth()&&day===NOW
 const has=dMeet.length||dYak.length||dSched.length;
 const names=dMeet.map(function(m){return m.trainees;}).join(', ');
 const schedCount=dSched.length;
-cells+='<div class="cal-cell '+(isToday?'today':'')+' '+(has?'has-activity':'')+' '+(selectedCalKey===key?'selected':'')+'" onclick="selectCalDay(\''+key+'\')">'+'<div class="cal-day-num">'+day+'</div>'+(dYak.length?'<div class="cal-yaakov-tag">YAK</div>':'')+(names?'<div class="cal-names">'+esc(names)+'</div>':'')+(schedCount?'<div class="cal-names" style="color:var(--accent)">\u{1F4C5} '+schedCount+'</div>':'')+'</div>';
+cells+='<div class="cal-cell '+(isToday?'today':'')+' '+(has?'has-activity':'')+' '+(selectedCalKey===key?'selected':'')+'" onclick="selectCalDay(''+key+'')">'+'<div class="cal-day-num">'+day+'</div>'+(dYak.length?'<div class="cal-yaakov-tag">YAK</div>':'')+(names?'<div class="cal-names">'+esc(names)+'</div>':'')+(schedCount?'<div class="cal-names" style="color:var(--accent)">\u{1F4C5} '+schedCount+'</div>':'')+'</div>';
 }
 let detail='';
 if(selectedCalKey){
@@ -653,9 +561,9 @@ const dSched=STATE.scheduleEntries.filter(function(e){return e.dateKey===selecte
 const parts=selectedCalKey.split('-').map(Number);
 const yy=parts[0],mm=parts[1],dd=parts[2];
 detail='<div class="day-detail"><div class="day-card"><div class="day-date">'+MONTHS_FULL[mm-1]+' '+dd+', '+yy+'</div>'+
-(dSched.length?'<div class="day-section"><div class="day-section-title">\u{1F4C5} Scheduled ('+dSched.length+')</div>'+dSched.map(function(e){return schedEntryRow(e,true);}).join('')+'<button class="btn-secondary btn-sm" style="margin-top:8px" onclick="schedViewDate=\''+selectedCalKey+'\';showPage(\'schedule\')">view / edit day</button></div>':'')+
+(dSched.length?'<div class="day-section"><div class="day-section-title">\u{1F4C5} Scheduled ('+dSched.length+')</div>'+dSched.map(function(e){return schedEntryRow(e,true);}).join('')+'<button class="btn-secondary btn-sm" style="margin-top:8px" onclick="schedViewDate=''+selectedCalKey+'';showPage('schedule')">view / edit day</button></div>':'')+
 (dYak.length?'<div class="day-section"><div class="day-section-title">\u{1F3AF} Yaakov ('+dYak.length+')</div>'+dYak.map(function(y){return '<div class="item-row"><div class="item-body">'+(y.time?'<div class="item-meta">'+y.time+'</div>':'')+(y.notes?'<div>'+esc(y.notes)+'</div>':'')+'</div></div>';}).join('')+'</div>':'')+
-(dMeet.length?'<div class="day-section"><div class="day-section-title">\u{1F399}\uFE0F Trainee Meetings ('+dMeet.length+')</div>'+dMeet.map(function(m){var tLinks=(m.traineesArray&&m.traineesArray.length)?m.traineesArray.map(function(tid){var tr=STATE.trainees.find(function(t){return t.id===tid;});return tr?'<button class="btn-secondary btn-sm" onclick="showPage(\'trainee-'+tr.id+'\')" style="margin:2px 4px 2px 0;font-size:12px">'+esc(tr.name)+'</button>':'<span>'+esc(m.trainees)+'</span>';}).join(''):'<span>'+esc(m.trainees)+'</span>';return '<div class="item-row blue"><div class="item-body"><div style="font-size:11px;color:var(--text-dim);margin-bottom:4px">Click name to see notes</div><div>'+tLinks+'</div></div></div>';}).join('')+'</div>':'')+
+(dMeet.length?'<div class="day-section"><div class="day-section-title">\u{1F399}\uFE0F Trainee Meetings ('+dMeet.length+')</div>'+dMeet.map(function(m){var tLinks=(m.traineesArray&&m.traineesArray.length)?m.traineesArray.map(function(tid){var tr=STATE.trainees.find(function(t){return t.id===tid;});return tr?'<button class="btn-secondary btn-sm" onclick="showPage('trainee-'+tr.id+'')" style="margin:2px 4px 2px 0;font-size:12px">'+esc(tr.name)+'</button>':'<span>'+esc(m.trainees)+'</span>';}).join(''):'<span>'+esc(m.trainees)+'</span>';return '<div class="item-row blue"><div class="item-body"><div style="font-size:11px;color:var(--text-dim);margin-bottom:4px">Click name to see notes</div><div>'+tLinks+'</div></div></div>';}).join('')+'</div>':'')+
 (!dYak.length&&!dMeet.length&&!dSched.length?'<div class="empty-state">Nothing logged this day</div>':'')+
 '</div></div>';
 }
@@ -677,11 +585,7 @@ function selectCalDay(key){selectedCalKey=(selectedCalKey===key)?null:key;showPa
 function renderYaakov(){
 const meetings=[...STATE.yaakovMeetings].sort(function(a,b){const da=dateOf(a),db=dateOf(b);return(db?db.getTime():0)-(da?da.getTime():0);});
 const groups={};
-meetings.forEach(function(y){
-const key=y.dateKey||y.date||'Unknown';
-if(!groups[key])groups[key]=[];
-groups[key].push(y);
-});
+meetings.forEach(function(y){const key=y.dateKey||y.date||'Unknown';if(!groups[key])groups[key]=[];groups[key].push(y);});
 const groupKeys=Object.keys(groups).sort(function(a,b){return b.localeCompare(a);});
 const groupsHtml=groupKeys.map(function(key){
 const items=groups[key];
@@ -707,58 +611,56 @@ return '<div class="card" style="border-left:3px solid var(--accent);padding:18p
 '</div>';
 }).join('');
 return '<div style="margin-bottom:16px">'+
-'<div class="date-group-header" onclick="toggleSection(\'yak-'+key+'\')">'+
+'<div class="date-group-header" onclick="toggleSection('yak-'+key+'')">'+
 '<span class="date-group-label">\u{1F4C5} '+label+' <span class="badge" style="margin-left:6px">'+items.length+' note'+(items.length!==1?'s':'')+'</span></span>'+
 '<span class="date-group-toggle" id="toggle-yak-'+key+'">'+arrow+'</span>'+
 '</div>'+
 '<div class="date-group-body '+collapsed+'" id="content-yak-'+key+'">'+cardsHtml+'</div>'+
 '</div>';
 }).join('');
-
-setTimeout(function(){
-groupKeys.forEach(function(key){updateSectionUI('yak-'+key);});
-},0);
-
+setTimeout(function(){groupKeys.forEach(function(key){updateSectionUI('yak-'+key);});},0);
 return '<h1 class="page-title">\u{1F3AF} Yaakov Meetings</h1>'+
 '<button class="btn-primary" style="margin-bottom:20px" onclick="openYaakovModal()">+ log meeting</button>'+
 (meetings.length===0?'<div class="empty-state">No meetings logged yet</div>':'')+
 groupsHtml;
 }
 
+// TRAINEE PAGE - single coaching notes section
 function renderTrainee(tr){
 const trMeetings=STATE.meetings.filter(function(m){return m.traineesArray&&m.traineesArray.includes(tr.id);}).sort(function(a,b){const da=dateOf(a),db=dateOf(b);return(db?db.getTime():0)-(da?da.getTime():0);});
-const trNotes=STATE.notes.filter(function(n){return n.traineeId===tr.id;});
-const trDayNotes=STATE.dayNotes.filter(function(n){return n.traineeId===tr.id;}).sort(function(a,b){return b.dateKey.localeCompare(a.dateKey);});
-const trLeadLogs=STATE.leadLogs.filter(function(n){return n.traineeId===tr.id;}).sort(function(a,b){return b.dateKey.localeCompare(a.dateKey);});
-
+const trNotes=STATE.coachingNotes.filter(function(n){return n.traineeId===tr.id;}).sort(function(a,b){return b.dateKey.localeCompare(a.dateKey);});
 
 const html='<div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">'+
 '<h1 class="page-title" style="margin-bottom:0">'+esc(tr.name)+'</h1>'+
 '<button class="btn-secondary btn-sm" onclick="renameTrainee('+tr.id+')" style="padding:4px 10px;font-size:11px">rename</button>'+
 '<button class="btn-secondary btn-sm" onclick="removeTrainee('+tr.id+')" style="padding:4px 10px;font-size:11px;color:var(--red);border-color:rgba(248,113,113,.3)">delete</button>'+
 '</div>'+
-'<div class="split-section">'+
-'<div class="card">'+
-'<div class="card-title" onclick="toggleSection(\'tr-'+tr.id+'-notes\')">General Notes<button class="btn-secondary btn-sm" onclick="openNoteFor('+tr.id+')" style="margin-left:auto">+ add</button><span class="card-title-toggle" id="toggle-tr-'+tr.id+'-notes">\u25BC</span></div>'+
+// Coaching Notes
+'<div class="card" style="margin-bottom:20px">'+
+'<div class="card-title" onclick="toggleSection('tr-'+tr.id+'-notes')">\u{1F4CB} Coaching Notes'+(trNotes.length?'<span class="badge amber">'+trNotes.length+'</span>':'')+'<button class="btn-secondary btn-sm" onclick="openCoachNoteFor('+tr.id+');event.stopPropagation();" style="margin-left:auto">+ add note</button><span class="card-title-toggle" id="toggle-tr-'+tr.id+'-notes">\u25BC</span></div>'+
 '<div class="card-content" id="content-tr-'+tr.id+'-notes">'+
-(trNotes.length?trNotes.map(function(n){return noteRow(n,false);}).join(''):'<div class="empty-state">Jot down lead names or coaching points</div>')+
+(trNotes.length?trNotes.map(function(n){
+var noteLines=n.text?n.text.split('\n').filter(Boolean):[];
+return '<div class="item-row" style="border-left-color:var(--teal);margin-bottom:8px">'+
+'<div class="item-body">'+
+'<div class="note-date" style="color:var(--accent-dark);font-weight:600">'+esc(n.date)+'</div>'+
+'<div id="cn-view-'+n.id+'"><ul style="list-style:none;padding:0;margin:0">'+(noteLines.length?noteLines.map(function(line){return '<li style="display:flex;gap:8px;align-items:flex-start;padding:3px 0"><span style="color:var(--teal);margin-top:2px">\u2022</span><span>'+esc(line)+'</span></li>';}).join(''):'<li style="color:var(--text-dim)">No text</li>')+'</ul></div>'+
+'<div id="cn-edit-'+n.id+'" style="display:none">'+
+'<textarea class="edit-note-area" id="cn-ta-'+n.id+'">'+esc(n.text||'')+'</textarea>'+
+'<div><button class="save-edit-btn" onclick="saveCoachNoteEdit('+n.id+')">save</button><button class="cancel-edit-btn" onclick="cancelCoachNoteEdit('+n.id+')">cancel</button></div>'+
 '</div>'+
 '</div>'+
+'<div style="display:flex;gap:4px">'+
+'<button class="edit-btn" onclick="editCoachNote('+n.id+')">\u270F</button>'+
+'<button class="del-btn" onclick="deleteCoachNote('+n.id+')">\u2715</button>'+
+'</div>'+
+'</div>';
+}).join(''):'<div class="empty-state">No notes yet \u2014 add coaching points, lead feedback, and observations here</div>')+
+'</div>'+
+'</div>'+
+// Meeting History
 '<div class="card" style="margin-bottom:20px">'+
-'<div class="card-title" onclick="toggleSection(\'tr-'+tr.id+'-daynotes\')">Day Notes<button class="btn-secondary btn-sm" onclick="openDayNoteFor('+tr.id+')" style="margin-left:auto">+ add</button><span class="card-title-toggle" id="toggle-tr-'+tr.id+'-daynotes">\u25BC</span></div>'+
-'<div class="card-content" id="content-tr-'+tr.id+'-daynotes">'+
-(trDayNotes.length?trDayNotes.map(function(n){return '<div class="item-row blue"><div class="item-body"><div class="note-date" style="color:var(--accent-light);font-weight:600">'+n.date+'</div><div style="white-space:pre-wrap">'+esc(n.text)+'</div></div><button class="del-btn" onclick="deleteDayNote('+n.id+')">\u2715</button></div>';}).join(''):'<div class="empty-state">No day notes yet</div>')+
-'</div>'+
-'</div>'+
-'<div class="card" style="margin-bottom:20px">'+
-'<div class="card-title" onclick="toggleSection(\'tr-'+tr.id+'-leadlog\')">\u{1F4CB} Lead Log<button class="btn-secondary btn-sm" onclick="openLeadLogFor('+tr.id+')" style="margin-left:auto;font-size:11px">+ add note</button><span class="card-title-toggle" id="toggle-tr-'+tr.id+'-leadlog">\u25BC</span></div>'+
-'<div class="card-content" id="content-tr-'+tr.id+'-leadlog">'+
-'<div style="font-size:12px;color:var(--text-dim);margin-bottom:10px">Track lead coaching notes, call feedback, and action items</div>'+
-(trLeadLogs.length?trLeadLogs.map(function(n){var noteLines=n.text?n.text.split('\n').filter(Boolean):[];return '<div class="item-row" style="border-left-color:var(--teal)"><div class="item-body"><div class="note-date" style="color:var(--teal);font-weight:600">'+n.date+'</div><div id="ll-view-'+n.id+'"><ul style=\"list-style:none;padding:0;margin:0\">'+(noteLines.length?noteLines.map(function(line){return '<li style=\"display:flex;gap:8px;align-items:flex-start;padding:3px 0\"><span style=\"color:var(--teal);margin-top:2px\">•</span><span>'+esc(line)+'</span></li>';}).join(''):'<li style=\"color:var(--text-dim)\">No text</li>')+'</ul></div><div id="ll-edit-'+n.id+'" style="display:none"><textarea class="edit-note-area" id="ll-ta-'+n.id+'">'+esc(n.text||'')+'</textarea><div><button class="save-edit-btn" onclick="saveLeadLogEdit('+n.id+')">save</button><button class="cancel-edit-btn" onclick="cancelLeadLogEdit('+n.id+')">cancel</button></div></div></div><div style=\"display:flex;gap:4px\"><button class=\"edit-btn\" onclick=\"editLeadLog('+n.id+')\">✏</button><button class=\"del-btn\" onclick=\"deleteLeadLog('+n.id+')\">✕</button></div></div>';}).join(''):'<div class="empty-state">No lead log entries yet</div>')+
-'</div>'+
-'</div>'+
-'<div class="card" style="margin-bottom:20px">'+
-'<div class="card-title" onclick="toggleSection(\'tr-'+tr.id+'-meetings\')">Meeting History<button class="btn-secondary btn-sm" onclick="openMeetingFor('+tr.id+')" style="margin-left:auto">+ log meeting</button><span class="card-title-toggle" id="toggle-tr-'+tr.id+'-meetings">\u25BC</span></div>'+
+'<div class="card-title" onclick="toggleSection('tr-'+tr.id+'-meetings')">Meeting History'+(trMeetings.length?'<span class="badge">'+trMeetings.length+'</span>':'')+'<button class="btn-secondary btn-sm" onclick="openMeetingFor('+tr.id+');event.stopPropagation();" style="margin-left:auto">+ log meeting</button><span class="card-title-toggle" id="toggle-tr-'+tr.id+'-meetings">\u25BC</span></div>'+
 '<div class="card-content" id="content-tr-'+tr.id+'-meetings">'+
 (trMeetings.length?(function(){
 const grps={};
@@ -790,7 +692,7 @@ return '<div class="item-row" style="margin-bottom:10px;padding:14px;border-radi
 '</div>';
 }).join('');
 return '<div style="margin-bottom:12px">'+
-'<div class="date-group-header" onclick="toggleSection(\''+nsKey+'\')">'+
+'<div class="date-group-header" onclick="toggleSection(''+nsKey+'')">'+
 '<span class="date-group-label">\u{1F4C5} '+lbl+' <span class="badge" style="margin-left:6px">'+items.length+' meeting'+(items.length!==1?'s':'')+'</span></span>'+
 '<span class="date-group-toggle" id="toggle-'+nsKey+'">'+arr+'</span>'+
 '</div>'+
@@ -802,14 +704,57 @@ return '<div style="margin-bottom:12px">'+
 '</div>';
 
 setTimeout(function(){
-['tr-'+tr.id+'-notes','tr-'+tr.id+'-daynotes','tr-'+tr.id+'-leadlog','tr-'+tr.id+'-meetings'].forEach(function(id){updateSectionUI(id);});
+['tr-'+tr.id+'-notes','tr-'+tr.id+'-meetings'].forEach(function(id){updateSectionUI(id);});
 const grps={};
 trMeetings.forEach(function(m){const k=m.dateKey||m.date||'?';if(!grps[k])grps[k]=[];grps[k].push(m);});
 Object.keys(grps).forEach(function(key){updateSectionUI('tr-'+tr.id+'_'+key);});
 },0);
-
 return html;
 }
+
+// COACHING NOTE MODAL
+function openCoachNoteFor(traineeId){
+document.getElementById('m-cn-text').value='';
+document.getElementById('m-cn-date').value=TODAY;
+document.getElementById('m-cn-trainee-id').value=traineeId;
+document.getElementById('coachnote-modal').classList.add('open');
+document.getElementById('m-cn-text').focus();
+}
+function closeCoachNoteModal(){document.getElementById('coachnote-modal').classList.remove('open');}
+function saveCoachNote(){
+const text=document.getElementById('m-cn-text').value.trim();
+if(!text)return;
+const dateKey=document.getElementById('m-cn-date').value||TODAY;
+const traineeId=parseInt(document.getElementById('m-cn-trainee-id').value);
+const parts=dateKey.split('-').map(Number);
+const dispDate=new Date(parts[0],parts[1]-1,parts[2]).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+STATE.coachingNotes.push({id:STATE.noteId++,traineeId,date:dispDate,dateKey,text});
+save();closeCoachNoteModal();showPage(currentPage);
+}
+function editCoachNote(id){
+const view=document.getElementById('cn-view-'+id);
+const edit=document.getElementById('cn-edit-'+id);
+const ta=document.getElementById('cn-ta-'+id);
+if(!view||!edit)return;
+const n=STATE.coachingNotes.find(function(x){return x.id===id;});
+if(n&&ta)ta.value=n.text||'';
+view.style.display='none';edit.style.display='block';
+if(ta)ta.focus();
+}
+function cancelCoachNoteEdit(id){
+const view=document.getElementById('cn-view-'+id);
+const edit=document.getElementById('cn-edit-'+id);
+if(view)view.style.display='';if(edit)edit.style.display='none';
+}
+function saveCoachNoteEdit(id){
+const ta=document.getElementById('cn-ta-'+id);
+if(!ta)return;
+const n=STATE.coachingNotes.find(function(x){return x.id===id;});
+if(!n)return;
+n.text=ta.value.trim();
+save();showPage(currentPage);
+}
+function deleteCoachNote(id){STATE.coachingNotes=STATE.coachingNotes.filter(function(n){return n.id!==id;});save();showPage(currentPage);}
 
 // MEETING MODAL
 function openMeetingModal(){ openMeetingFor(''); }
@@ -837,45 +782,26 @@ let tr=STATE.trainees.find(function(t){return t.name.toLowerCase()===name.toLowe
 if(!tr){tr={id:STATE.traineeId++,name};STATE.trainees.push(tr);}
 traineesArray.push(tr.id);
 });
-STATE.meetings.push({id:STATE.noteId++,date:dispDate,dateKey:dateInput,trainees,traineesArray,notes:cleanupNotes(notes)});
+STATE.meetings.push({id:STATE.noteId++,date:dispDate,dateKey:dateInput,trainees,traineesArray,notes});
 save();updateNav();closeMeetingModal();
 if(currentPage==='calendar'){selectedCalKey=dateInput;showPage('calendar');}else{showPage(currentPage.startsWith('trainee-')?currentPage:'calendar');if(currentPage==='calendar'){selectedCalKey=dateInput;showPage('calendar');}}
 }
 function deleteMeeting(id){if(!confirm('Delete this meeting?'))return;STATE.meetings=STATE.meetings.filter(function(m){return m.id!==id;});save();updateNav();showPage(currentPage);}
 function editMeeting(id){
-const view=document.getElementById('meet-view-'+id);
-const edit=document.getElementById('meet-edit-'+id);
-const ta=document.getElementById('meet-textarea-'+id);
+const view=document.getElementById('meet-view-'+id);const edit=document.getElementById('meet-edit-'+id);const ta=document.getElementById('meet-textarea-'+id);
 if(!view||!edit)return;
 const m=STATE.meetings.find(function(x){return x.id===id;});
 if(m&&ta)ta.value=m.notes||'';
-view.style.display='none';
-edit.style.display='block';
-if(ta)ta.focus();
+view.style.display='none';edit.style.display='block';if(ta)ta.focus();
 }
-function cancelMeetingEdit(id){
-const view=document.getElementById('meet-view-'+id);
-const edit=document.getElementById('meet-edit-'+id);
-if(view)view.style.display='';
-if(edit)edit.style.display='none';
-}
-function saveMeetingEdit(id){
-const ta=document.getElementById('meet-textarea-'+id);
-if(!ta)return;
-const m=STATE.meetings.find(function(x){return x.id===id;});
-if(!m)return;
-m.notes=cleanupNotes(ta.value.trim());
-save();showPage(currentPage);
-}
+function cancelMeetingEdit(id){const view=document.getElementById('meet-view-'+id);const edit=document.getElementById('meet-edit-'+id);if(view)view.style.display='';if(edit)edit.style.display='none';}
+function saveMeetingEdit(id){const ta=document.getElementById('meet-textarea-'+id);if(!ta)return;const m=STATE.meetings.find(function(x){return x.id===id;});if(!m)return;m.notes=ta.value.trim();save();showPage(currentPage);}
 
 // YAAKOV MODAL
 function openYaakovModal(){
-document.getElementById('m-yak-date').value=TODAY;
-document.getElementById('m-yak-time').value='';
-document.getElementById('m-yak-notes').value='';
-document.getElementById('m-yak-trainees').value='';
-document.getElementById('yaakov-modal').classList.add('open');
-document.getElementById('m-yak-notes').focus();
+document.getElementById('m-yak-date').value=TODAY;document.getElementById('m-yak-time').value='';
+document.getElementById('m-yak-notes').value='';document.getElementById('m-yak-trainees').value='';
+document.getElementById('yaakov-modal').classList.add('open');document.getElementById('m-yak-notes').focus();
 }
 function closeYaakovModal(){document.getElementById('yaakov-modal').classList.remove('open');}
 function saveYaakovMeeting(){
@@ -886,82 +812,24 @@ const trainees=document.getElementById('m-yak-trainees').value.trim();
 if(!notes){alert('What did Yaakov say?');return;}
 const parts=dateInput.split('-').map(Number);
 const dispDate=new Date(parts[0],parts[1]-1,parts[2]).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-STATE.yaakovMeetings.push({id:STATE.noteId++,date:dispDate,dateKey:dateInput,time:time||'',notes:cleanupNotes(notes),trainees});
+STATE.yaakovMeetings.push({id:STATE.noteId++,date:dispDate,dateKey:dateInput,time:time||'',notes,trainees});
 save();closeYaakovModal();showPage('yaakov');
 }
 function deleteYaakov(id){if(!confirm('Delete this Yaakov meeting?'))return;STATE.yaakovMeetings=STATE.yaakovMeetings.filter(function(y){return y.id!==id;});save();showPage(currentPage);}
 function editYaakov(id){
-const view=document.getElementById('notes-view-'+id);
-const edit=document.getElementById('notes-edit-'+id);
-const ta=document.getElementById('notes-textarea-'+id);
+const view=document.getElementById('notes-view-'+id);const edit=document.getElementById('notes-edit-'+id);const ta=document.getElementById('notes-textarea-'+id);
 if(!view||!edit)return;
 const m=STATE.yaakovMeetings.find(function(y){return y.id===id;});
 if(m&&ta)ta.value=m.notes||'';
-view.style.display='none';
-edit.style.display='block';
-if(ta)ta.focus();
+view.style.display='none';edit.style.display='block';if(ta)ta.focus();
 }
-function cancelYaakovEdit(id){
-const view=document.getElementById('notes-view-'+id);
-const edit=document.getElementById('notes-edit-'+id);
-if(view)view.style.display='';
-if(edit)edit.style.display='none';
-}
-function saveYaakovEdit(id){
-const ta=document.getElementById('notes-textarea-'+id);
-if(!ta)return;
-const m=STATE.yaakovMeetings.find(function(y){return y.id===id;});
-if(!m)return;
-m.notes=cleanupNotes(ta.value.trim());
-save();showPage('yaakov');
-}
-
-// NOTES
-function openNoteModal(){
-document.getElementById('m-note-text').value='';
-const sel=document.getElementById('m-note-trainee');
-sel.innerHTML='<option value="">\u2014 leave unassigned \u2014</option>'+STATE.trainees.map(function(t){return '<option value="'+t.id+'">'+esc(t.name)+'</option>';}).join('');
-sel.value='';
-document.getElementById('note-modal').classList.add('open');
-document.getElementById('m-note-text').focus();
-}
-function openNoteFor(id){openNoteModal();document.getElementById('m-note-trainee').value=String(id);}
-function closeNoteModal(){document.getElementById('note-modal').classList.remove('open');}
-function saveNote(){
-const text=document.getElementById('m-note-text').value.trim();
-if(!text)return;
-const tid=document.getElementById('m-note-trainee').value;
-STATE.notes.unshift({id:STATE.noteId++,date:TODAY_DISPLAY,dateKey:TODAY,text,traineeId:tid?parseInt(tid):null});
-save();closeNoteModal();showPage(currentPage);
-}
-function assignNote(noteId,tid){if(!tid)return;const n=STATE.notes.find(function(x){return x.id===noteId;});if(n){n.traineeId=parseInt(tid);save();showPage(currentPage);}}
-function deleteNote(id){STATE.notes=STATE.notes.filter(function(n){return n.id!==id;});save();showPage(currentPage);}
-function editNote(id){
-const note=STATE.notes.find(function(n){return n.id===id;});
-if(!note)return;
-const updated=prompt('Edit note:',note.text);
-if(updated===null)return;
-note.text=updated.trim();
-save();showPage(currentPage);
-}
+function cancelYaakovEdit(id){const view=document.getElementById('notes-view-'+id);const edit=document.getElementById('notes-edit-'+id);if(view)view.style.display='';if(edit)edit.style.display='none';}
+function saveYaakovEdit(id){const ta=document.getElementById('notes-textarea-'+id);if(!ta)return;const m=STATE.yaakovMeetings.find(function(y){return y.id===id;});if(!m)return;m.notes=ta.value.trim();save();showPage('yaakov');}
 
 // TRAINEES
 function addTrainee(){const name=prompt('Enter trainee name:');if(!name||!name.trim())return;STATE.trainees.push({id:STATE.traineeId++,name:name.trim()});save();updateNav();showPage('trainee-'+(STATE.traineeId-1));}
 function renameTrainee(id){const tr=STATE.trainees.find(function(t){return t.id===id;});if(!tr)return;const name=prompt('Rename trainee:',tr.name);if(!name||!name.trim())return;tr.name=name.trim();save();updateNav();showPage(currentPage);}
 function removeTrainee(id){if(!confirm('Remove this trainee? Their meetings stay in your records.'))return;STATE.trainees=STATE.trainees.filter(function(t){return t.id!==id;});save();updateNav();showPage('home');}
-function openDayNoteFor(traineeId){document.getElementById('m-daynote-text').value='';document.getElementById('m-daynote-date').value=TODAY;document.getElementById('m-daynote-trainee-id').value=traineeId;document.getElementById('daynote-modal').classList.add('open');document.getElementById('m-daynote-text').focus();}
-function closeDayNoteModal(){document.getElementById('daynote-modal').classList.remove('open');}
-function saveDayNote(){const text=document.getElementById('m-daynote-text').value.trim();if(!text)return;const dateKey=document.getElementById('m-daynote-date').value;const traineeId=parseInt(document.getElementById('m-daynote-trainee-id').value);const parts=dateKey.split('-').map(Number);const dispDate=new Date(parts[0],parts[1]-1,parts[2]).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});STATE.dayNotes.push({id:STATE.dayNoteId++,traineeId,date:dispDate,dateKey,text});save();closeDayNoteModal();showPage(currentPage);}
-function deleteDayNote(id){STATE.dayNotes=STATE.dayNotes.filter(function(n){return n.id!==id;});save();showPage(currentPage);}
-
-// LEAD LOG
-function openLeadLogFor(traineeId){document.getElementById('m-ll-text').value='';document.getElementById('m-ll-date').value=TODAY;document.getElementById('m-ll-trainee-id').value=traineeId;document.getElementById('leadlog-modal').classList.add('open');document.getElementById('m-ll-text').focus();}
-function closeLeadLogModal(){document.getElementById('leadlog-modal').classList.remove('open');}
-function saveLeadLog(){const text=document.getElementById('m-ll-text').value.trim();if(!text)return;const dateKey=document.getElementById('m-ll-date').value;const traineeId=parseInt(document.getElementById('m-ll-trainee-id').value);const parts=dateKey.split('-').map(Number);const dispDate=new Date(parts[0],parts[1]-1,parts[2]).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});STATE.leadLogs.push({id:STATE.noteId++,traineeId,date:dispDate,dateKey,text});save();closeLeadLogModal();showPage(currentPage);}
-function deleteLeadLog(id){STATE.leadLogs=STATE.leadLogs.filter(function(n){return n.id!==id;});save();showPage(currentPage);}
-function editLeadLog(id){const view=document.getElementById('ll-view-'+id);const edit=document.getElementById('ll-edit-'+id);const ta=document.getElementById('ll-ta-'+id);if(!view||!edit)return;const n=STATE.leadLogs.find(function(x){return x.id===id;});if(n&&ta)ta.value=n.text||'';view.style.display='none';edit.style.display='block';if(ta)ta.focus();}
-function cancelLeadLogEdit(id){const view=document.getElementById('ll-view-'+id);const edit=document.getElementById('ll-edit-'+id);if(view)view.style.display='';if(edit)edit.style.display='none';}
-function saveLeadLogEdit(id){const ta=document.getElementById('ll-ta-'+id);if(!ta)return;const n=STATE.leadLogs.find(function(x){return x.id===id;});if(!n)return;n.text=ta.value.trim();save();showPage(currentPage);}
 
 // DATA
 function exportData(){const blob=new Blob([JSON.stringify(STATE,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='coaching_hub_'+TODAY+'.json';a.click();URL.revokeObjectURL(url);}
@@ -971,232 +839,151 @@ function importData(){
 const file=document.getElementById('import-file').files[0];
 if(!file){alert('Please select a file');return;}
 const reader=new FileReader();
-reader.onload=function(e){try{STATE=JSON.parse(e.target.result);STATE.followups=STATE.followups||[];STATE.notes=STATE.notes||[];STATE.dayNotes=STATE.dayNotes||[];STATE.scheduleEntries=STATE.scheduleEntries||[];STATE.callReviews=STATE.callReviews||[];localStorage.setItem('coaching_v7',JSON.stringify(STATE));closeImportModal();showPage('home');updateNav();buildSidebar();}catch(err){alert('Error importing file: '+err.message);}};
+reader.onload=function(e){try{
+  const imported=JSON.parse(e.target.result);
+  STATE=imported;
+  // ensure new fields exist
+  STATE.coachingNotes=STATE.coachingNotes||[];
+  STATE.scheduleEntries=STATE.scheduleEntries||[];
+  STATE.callReviews=STATE.callReviews||[];
+  STATE.trainees=STATE.trainees||[];
+  STATE.meetings=STATE.meetings||[];
+  STATE.yaakovMeetings=STATE.yaakovMeetings||[];
+  if(!STATE.noteId)STATE.noteId=1;if(!STATE.traineeId)STATE.traineeId=1;
+  // migrate if needed
+  if((imported.notes||imported.dayNotes||imported.leadLogs)&&!imported.coachingNotes){
+    STATE.coachingNotes=[];
+    (imported.notes||[]).forEach(function(n){STATE.coachingNotes.push({id:STATE.noteId++,traineeId:n.traineeId||null,dateKey:n.dateKey||TODAY,date:n.date||TODAY_DISPLAY,text:n.text||''});});
+    (imported.dayNotes||[]).forEach(function(n){STATE.coachingNotes.push({id:STATE.noteId++,traineeId:n.traineeId||null,dateKey:n.dateKey||TODAY,date:n.date||TODAY_DISPLAY,text:n.text||''});});
+    (imported.leadLogs||[]).forEach(function(n){STATE.coachingNotes.push({id:STATE.noteId++,traineeId:n.traineeId||null,dateKey:n.dateKey||TODAY,date:n.date||TODAY_DISPLAY,text:n.text||''});});
+  }
+  localStorage.setItem('coaching_v8',JSON.stringify(STATE));
+  closeImportModal();showPage('home');updateNav();buildSidebar();
+}catch(err){alert('Error importing file: '+err.message);}};
 reader.readAsText(file);
 }
 
 // CALL REVIEW
-let crTraineeFilter = null;
 let crCollapsed = {};
 
 function renderCallReview(){
 const reviews = STATE.callReviews;
-const traineesWithReviews = STATE.trainees.filter(function(t){
-  return reviews.some(function(r){return r.traineeId===t.id;});
-});
+const traineesWithReviews = STATE.trainees.filter(function(t){return reviews.some(function(r){return r.traineeId===t.id;});});
 const noTraineeReviews = reviews.filter(function(r){return !r.traineeId;});
 
 function accordionSection(traineeId, traineeName, sectionReviews){
-  var sKey = 'cr-acc-' + (traineeId||'none');
-  var isCollapsed = !!crCollapsed[sKey];
-  var pending = sectionReviews.filter(function(r){return !r.reviewed;}).length;
-  var done = sectionReviews.filter(function(r){return r.reviewed;}).length;
-  var total = sectionReviews.length;
-
-  var sorted = sectionReviews.slice().sort(function(a,b){
-    if(a.reviewed !== b.reviewed) return a.reviewed ? 1 : -1;
-    return (a.name||'').localeCompare(b.name||'');
-  });
-
-  var progressHtml = total ?
-    '<div style="display:flex;align-items:center;gap:10px;padding:10px 0 6px">'+
-    '<div style="flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden">'+
-    '<div style="height:100%;width:'+Math.round(done/total*100)+'%;background:linear-gradient(90deg,var(--teal),var(--green));border-radius:3px;transition:width .3s"></div>'+
-    '</div>'+
-    '<span style="font-size:10px;color:var(--text-dim);font-family:\'IBM Plex Mono\',monospace;white-space:nowrap">'+done+'/'+total+'</span>'+
-    '</div>' : '';
-
-  var leadsHtml = sorted.map(function(r){return crLeadRow(r);}).join('');
-
-  var tid = traineeId || '';
-  var addBtn = '<button class="btn-secondary btn-sm" onclick="openCrModal('+tid+');event.stopPropagation();" style="font-size:11px;padding:4px 10px">+ add lead</button>';
-  var clearAllBtn = total > 0 ? '<button style="font-size:11px;padding:4px 10px;background:rgba(194,59,42,.1);color:var(--red);border:1px solid rgba(194,59,42,.25);border-radius:6px;cursor:pointer;font-family:\'IBM Plex Mono\',monospace" onclick="crDeleteAll('+(traineeId||'null')+');event.stopPropagation();" title="Delete all leads for this trainee after meeting">delete all</button>' : '';
-  var clearDoneBtn = done > 0 ? '<button class="cr-clear-btn" onclick="crClearReviewed('+(traineeId||'null')+');event.stopPropagation();" title="Remove reviewed leads">clear reviewed</button>' : '';
-
-  return '<div class="cr-accordion">'+
-    '<div class="cr-accordion-header" onclick="crToggleAccordion(\''+sKey+'\')">'+
-    '<div class="cr-accordion-title">'+
-    esc(traineeName)+
-    (pending?'<span class="badge amber">'+pending+' pending</span>':'<span class="badge" style="background:rgba(90,138,106,.2);color:var(--teal)">done ✓</span>')+
-    '</div>'+
-    '<div class="cr-accordion-actions">'+
-    addBtn+
-    (done>0?clearDoneBtn:'')+
-    (total>0?clearAllBtn:'')+
-    '<span class="cr-accordion-toggle" style="margin-left:6px">'+(isCollapsed?'▶':'▼')+'</span>'+
-    '</div>'+
-    '</div>'+
-    '<div class="cr-accordion-body'+(isCollapsed?' cr-collapsed':'')+'">'+
-    progressHtml+
-    (total ? leadsHtml : '<div class="cr-empty" style="padding:20px 0 16px;text-align:center"><div style="font-size:22px;margin-bottom:6px">📋</div>No leads yet.</div>')+
-    '</div>'+
-    '</div>';
+var sKey = 'cr-acc-' + (traineeId||'none');
+var isCollapsed = !!crCollapsed[sKey];
+var pending = sectionReviews.filter(function(r){return !r.reviewed;}).length;
+var done = sectionReviews.filter(function(r){return r.reviewed;}).length;
+var total = sectionReviews.length;
+var sorted = sectionReviews.slice().sort(function(a,b){if(a.reviewed !== b.reviewed) return a.reviewed ? 1 : -1;return (a.name||'').localeCompare(b.name||'');});
+var progressHtml = total?'<div style="display:flex;align-items:center;gap:10px;padding:10px 0 6px"><div style="flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden"><div style="height:100%;width:'+Math.round(done/total*100)+'%;background:linear-gradient(90deg,var(--teal),var(--green));border-radius:3px;transition:width .3s"></div></div><span style="font-size:10px;color:var(--text-dim);font-family:\'IBM Plex Mono\',monospace;white-space:nowrap">'+done+'/'+total+'</span></div>':'';
+var leadsHtml = sorted.map(function(r){return crLeadRow(r);}).join('');
+var tid = traineeId || '';
+var addBtn = '<button class="btn-secondary btn-sm" onclick="openCrModal('+tid+');event.stopPropagation();" style="font-size:11px;padding:4px 10px">+ add lead</button>';
+var clearDoneBtn = done > 0 ? '<button class="cr-clear-btn" onclick="crClearReviewed('+(traineeId||'null')+');event.stopPropagation();">clear reviewed</button>' : '';
+var clearAllBtn = total > 0 ? '<button style="font-size:11px;padding:4px 10px;background:rgba(194,59,42,.1);color:var(--red);border:1px solid rgba(194,59,42,.25);border-radius:6px;cursor:pointer;font-family:\'IBM Plex Mono\',monospace" onclick="crDeleteAll('+(traineeId||'null')+');event.stopPropagation();">delete all</button>' : '';
+return '<div class="cr-accordion">'+
+'<div class="cr-accordion-header" onclick="crToggleAccordion(''+sKey+'')">'+
+'<div class="cr-accordion-title">'+esc(traineeName)+(pending?'<span class="badge amber">'+pending+' pending</span>':'<span class="badge" style="background:rgba(90,138,106,.2);color:var(--teal)">done \u2713</span>')+'</div>'+
+'<div class="cr-accordion-actions">'+addBtn+(done>0?clearDoneBtn:'')+(total>0?clearAllBtn:'')+'<span class="cr-accordion-toggle" style="margin-left:6px">'+(isCollapsed?'\u25B6':'\u25BC')+'</span></div>'+
+'</div>'+
+'<div class="cr-accordion-body'+(isCollapsed?' cr-collapsed':'')+'">'+progressHtml+(total?leadsHtml:'<div class="cr-empty" style="padding:20px 0 16px;text-align:center"><div style="font-size:22px;margin-bottom:6px">\u{1F4CB}</div>No leads yet.</div>')+'</div>'+
+'</div>';
 }
 
-var sections = traineesWithReviews.map(function(t){
-  var tReviews = reviews.filter(function(r){return r.traineeId===t.id;});
-  return accordionSection(t.id, t.name, tReviews);
-}).join('');
-
-if(noTraineeReviews.length){
-  sections += accordionSection(null, 'Unassigned', noTraineeReviews);
-}
-
+var sections = traineesWithReviews.map(function(t){return accordionSection(t.id, t.name, reviews.filter(function(r){return r.traineeId===t.id;}));}).join('');
+if(noTraineeReviews.length){sections += accordionSection(null, 'Unassigned', noTraineeReviews);}
 var totalPending = reviews.filter(function(r){return !r.reviewed;}).length;
 
-return '<h1 class="page-title">📋 Call Review</h1>'+
-  '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px">'+
-  '<div style="font-size:13px;color:var(--text-dim)">Go through leads before meeting with a trainee</div>'+
-  '<div style="display:flex;gap:8px">'+
-  (totalPending===0&&reviews.length?'<button class="btn-secondary btn-sm" onclick="crDeleteAllEverything()" style="color:var(--red)">clear everything</button>':'')+
-  '<button class="btn-primary" onclick="openCrModal()">+ add lead</button>'+
-  '</div>'+
-  '</div>'+
-  (sections || '<div class="card"><div class="cr-empty"><div style="font-size:32px;margin-bottom:12px">📋</div><div>No leads yet.</div><div style="margin-top:8px;font-size:13px">Click “+ add lead” to start your call review list.</div></div></div>');
+return '<h1 class="page-title">\u{1F4CB} Call Review</h1>'+
+'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px">'+
+'<div style="font-size:13px;color:var(--text-dim)">Go through leads before meeting with a trainee</div>'+
+'<div style="display:flex;gap:8px">'+
+(totalPending===0&&reviews.length?'<button class="btn-secondary btn-sm" onclick="crDeleteAllEverything()" style="color:var(--red)">clear everything</button>':'')+
+'<button class="btn-primary" onclick="openCrModal()">+ add lead</button>'+
+'</div>'+
+'</div>'+
+(sections || '<div class="card"><div class="cr-empty"><div style="font-size:32px;margin-bottom:12px">\u{1F4CB}</div><div>No leads yet.</div><div style="margin-top:8px;font-size:13px">Click "+ add lead" to start your call review list.</div></div></div>');
 }
 
-function crToggleAccordion(sKey){
-crCollapsed[sKey] = !crCollapsed[sKey];
-showPage('callreview');
-}
+function crToggleAccordion(sKey){crCollapsed[sKey]=!crCollapsed[sKey];showPage('callreview');}
 
 function crLeadRow(r){
-var metaParts = [];
-if(r.callDate)metaParts.push(r.callDate);
-if(r.callTime)metaParts.push(fmtTime(r.callTime));
-var metaStr = metaParts.join(' at ');
+var metaParts=[];if(r.callDate)metaParts.push(r.callDate);if(r.callTime)metaParts.push(fmtTime(r.callTime));var metaStr=metaParts.join(' at ');
 return '<div class="cr-lead'+(r.reviewed?' reviewed':'')+'">'+
-  '<div class="cr-cb'+(r.reviewed?' checked':'')+'" onclick="crToggle('+r.id+')" title="'+(r.reviewed?'Mark pending':'Mark reviewed')+'"></div>'+
-  '<div class="cr-lead-body">'+
-  '<div class="cr-lead-name'+(r.reviewed?' reviewed-text':'')+'">'+esc(r.name)+'</div>'+
-  (metaStr?'<div class="cr-lead-meta">'+esc(metaStr)+'</div>':'')+
-  (r.note?'<div class="cr-lead-note">'+esc(r.note)+'</div>':'')+
-  '</div>'+
-  '<div class="cr-actions">'+
-  '<button class="edit-btn" onclick="openCrEditModal('+r.id+')" title="Edit">✏</button>'+
-  '<button class="del-btn" onclick="deleteCrLead('+r.id+')" title="Delete">✕</button>'+
-  '</div>'+
-  '</div>';
+'<div class="cr-cb'+(r.reviewed?' checked':'')+'" onclick="crToggle('+r.id+')" title="'+(r.reviewed?'Mark pending':'Mark reviewed')+'"></div>'+
+'<div class="cr-lead-body"><div class="cr-lead-name'+(r.reviewed?' reviewed-text':'')+'">'+esc(r.name)+'</div>'+
+(metaStr?'<div class="cr-lead-meta">'+esc(metaStr)+'</div>':'')+
+(r.note?'<div class="cr-lead-note">'+esc(r.note)+'</div>':'')+
+'</div>'+
+'<div class="cr-actions"><button class="edit-btn" onclick="openCrEditModal('+r.id+')" title="Edit">\u270F</button><button class="del-btn" onclick="deleteCrLead('+r.id+')" title="Delete">\u2715</button></div>'+
+'</div>';
 }
 
-function crSetTrainee(id){
-crTraineeFilter = id;
-showPage('callreview');
-}
-
-function crToggle(id){
-var r = STATE.callReviews.find(function(x){return x.id===id;});
-if(r) r.reviewed = !r.reviewed;
-save();
-showPage('callreview');
-}
-
-function deleteCrLead(id){
-if(!confirm('Delete this lead?'))return;
-STATE.callReviews = STATE.callReviews.filter(function(r){return r.id!==id;});
-save();
-showPage('callreview');
-}
-
+function crToggle(id){var r=STATE.callReviews.find(function(x){return x.id===id;});if(r)r.reviewed=!r.reviewed;save();showPage('callreview');}
+function deleteCrLead(id){if(!confirm('Delete this lead?'))return;STATE.callReviews=STATE.callReviews.filter(function(r){return r.id!==id;});save();showPage('callreview');}
 function crClearReviewed(traineeId){
-var isNull = (traineeId===null||traineeId==='null'||traineeId===undefined);
+var isNull=(traineeId===null||traineeId==='null'||traineeId===undefined);
 if(!confirm('Remove reviewed leads'+(isNull?'':' for this trainee')+' from the list?'))return;
-if(isNull){
-  STATE.callReviews = STATE.callReviews.filter(function(r){return !r.reviewed||!!r.traineeId;});
-}else{
-  STATE.callReviews = STATE.callReviews.filter(function(r){return !(r.traineeId===traineeId&&r.reviewed);});
+if(isNull){STATE.callReviews=STATE.callReviews.filter(function(r){return !r.reviewed||!!r.traineeId;});}
+else{STATE.callReviews=STATE.callReviews.filter(function(r){return !(r.traineeId===traineeId&&r.reviewed);});}
+save();showPage('callreview');
 }
-save();
-showPage('callreview');
-}
-
 function crDeleteAll(traineeId){
-var isNull = (traineeId===null||traineeId==='null'||traineeId===undefined);
-var name = isNull ? 'unassigned' : ((STATE.trainees.find(function(t){return t.id===traineeId;})||{name:'this trainee'}).name);
+var isNull=(traineeId===null||traineeId==='null'||traineeId===undefined);
+var name=isNull?'unassigned':((STATE.trainees.find(function(t){return t.id===traineeId;})||{name:'this trainee'}).name);
 if(!confirm('Delete ALL leads for '+name+'?\nUse this after the meeting is done.'))return;
-if(isNull){
-  STATE.callReviews = STATE.callReviews.filter(function(r){return !!r.traineeId;});
-}else{
-  STATE.callReviews = STATE.callReviews.filter(function(r){return r.traineeId!==traineeId;});
+if(isNull){STATE.callReviews=STATE.callReviews.filter(function(r){return !!r.traineeId;});}
+else{STATE.callReviews=STATE.callReviews.filter(function(r){return r.traineeId!==traineeId;});}
+save();showPage('callreview');
 }
-save();
-showPage('callreview');
-}
-
-function crDeleteAllEverything(){
-if(!confirm('Clear ALL leads from every trainee?'))return;
-STATE.callReviews = [];
-save();
-showPage('callreview');
-}
+function crDeleteAllEverything(){if(!confirm('Clear ALL leads from every trainee?'))return;STATE.callReviews=[];save();showPage('callreview');}
 
 function openCrModal(prefillTraineeId){
-document.getElementById('cr-modal-title').textContent='📋 Add Lead to Review';
-document.getElementById('m-cr-edit-id').value='';
-document.getElementById('m-cr-name').value='';
-document.getElementById('m-cr-date').value='';
-document.getElementById('m-cr-time').value='';
-document.getElementById('m-cr-note').value='';
-var sel = document.getElementById('m-cr-trainee');
-sel.innerHTML='<option value="">— select trainee —</option>'+
-  STATE.trainees.map(function(t){return '<option value="'+t.id+'">'+esc(t.name)+'</option>';}).join('');
-var useId = (prefillTraineeId !== undefined && prefillTraineeId !== null && prefillTraineeId !== '') ? prefillTraineeId : (crTraineeFilter !== null ? crTraineeFilter : '');
-sel.value = (useId !== null && useId !== undefined && useId !== '') ? String(useId) : '';
-document.getElementById('cr-modal').classList.add('open');
-document.getElementById('m-cr-name').focus();
-}
-
-function openCrEditModal(id){
-var r = STATE.callReviews.find(function(x){return x.id===id;});
-if(!r)return;
-document.getElementById('cr-modal-title').textContent='✏ Edit Lead';
-document.getElementById('m-cr-edit-id').value=id;
-document.getElementById('m-cr-name').value=r.name||'';
-document.getElementById('m-cr-date').value=r.callDate||'';
-document.getElementById('m-cr-time').value=r.callTime||'';
-document.getElementById('m-cr-note').value=r.note||'';
+document.getElementById('cr-modal-title').textContent='\u{1F4CB} Add Lead to Review';
+document.getElementById('m-cr-edit-id').value='';document.getElementById('m-cr-name').value='';
+document.getElementById('m-cr-date').value='';document.getElementById('m-cr-time').value='';document.getElementById('m-cr-note').value='';
 var sel=document.getElementById('m-cr-trainee');
-sel.innerHTML='<option value="">— select trainee —</option>'+
-  STATE.trainees.map(function(t){return '<option value="'+t.id+'">'+esc(t.name)+'</option>';}).join('');
+sel.innerHTML='<option value="">\u2014 select trainee \u2014</option>'+STATE.trainees.map(function(t){return '<option value="'+t.id+'">'+esc(t.name)+'</option>';}).join('');
+var useId=(prefillTraineeId!==undefined&&prefillTraineeId!==null&&prefillTraineeId!=='')?prefillTraineeId:'';
+sel.value=(useId!==null&&useId!==undefined&&useId!=='')?String(useId):'';
+document.getElementById('cr-modal').classList.add('open');document.getElementById('m-cr-name').focus();
+}
+function openCrEditModal(id){
+var r=STATE.callReviews.find(function(x){return x.id===id;});if(!r)return;
+document.getElementById('cr-modal-title').textContent='\u270F Edit Lead';
+document.getElementById('m-cr-edit-id').value=id;document.getElementById('m-cr-name').value=r.name||'';
+document.getElementById('m-cr-date').value=r.callDate||'';document.getElementById('m-cr-time').value=r.callTime||'';document.getElementById('m-cr-note').value=r.note||'';
+var sel=document.getElementById('m-cr-trainee');
+sel.innerHTML='<option value="">\u2014 select trainee \u2014</option>'+STATE.trainees.map(function(t){return '<option value="'+t.id+'">'+esc(t.name)+'</option>';}).join('');
 sel.value=r.traineeId?String(r.traineeId):'';
-document.getElementById('cr-modal').classList.add('open');
-document.getElementById('m-cr-name').focus();
+document.getElementById('cr-modal').classList.add('open');document.getElementById('m-cr-name').focus();
 }
-
 function closeCrModal(){document.getElementById('cr-modal').classList.remove('open');}
-
 function saveCrLead(){
-var name=document.getElementById('m-cr-name').value.trim();
-if(!name){alert('Enter a lead name');return;}
-var traineeIdVal=document.getElementById('m-cr-trainee').value;
-var traineeId=traineeIdVal?parseInt(traineeIdVal):null;
-var callDate=document.getElementById('m-cr-date').value;
-var callTime=document.getElementById('m-cr-time').value;
-var note=document.getElementById('m-cr-note').value.trim();
-var editId=document.getElementById('m-cr-edit-id').value;
-if(editId){
-  var r=STATE.callReviews.find(function(x){return x.id===parseInt(editId);});
-  if(r){r.name=name;r.traineeId=traineeId;r.callDate=callDate;r.callTime=callTime;r.note=note;}
-}else{
-  STATE.callReviews.push({id:STATE.noteId++,name:name,traineeId:traineeId,callDate:callDate,callTime:callTime,note:note,reviewed:false,added:TODAY});
-  if(traineeId!==null)crTraineeFilter=traineeId;
-}
+var name=document.getElementById('m-cr-name').value.trim();if(!name){alert('Enter a lead name');return;}
+var traineeIdVal=document.getElementById('m-cr-trainee').value;var traineeId=traineeIdVal?parseInt(traineeIdVal):null;
+var callDate=document.getElementById('m-cr-date').value;var callTime=document.getElementById('m-cr-time').value;
+var note=document.getElementById('m-cr-note').value.trim();var editId=document.getElementById('m-cr-edit-id').value;
+if(editId){var r=STATE.callReviews.find(function(x){return x.id===parseInt(editId);});if(r){r.name=name;r.traineeId=traineeId;r.callDate=callDate;r.callTime=callTime;r.note=note;}}
+else{STATE.callReviews.push({id:STATE.noteId++,name,traineeId,callDate,callTime,note,reviewed:false,added:TODAY});}
 save();closeCrModal();showPage('callreview');
 }
-
 
 function buildSidebar(){
 const todaySched=STATE.scheduleEntries.filter(function(e){return e.dateKey===TODAY;}).length;
 const pendingCr=STATE.callReviews.filter(function(r){return !r.reviewed;}).length;
 const sidebar=document.getElementById('sidebar');
 sidebar.innerHTML='<div class="sidebar-section">Navigation</div>'+
-'<div class="sidebar-item '+(currentPage==='home'?'active':'')+'" onclick="showPage(\'home\')">Home</div>'+
-'<div class="sidebar-item '+(currentPage==='schedule'?'active':'')+'" onclick="showPage(\'schedule\')"><span>Schedule</span>'+(todaySched?'<span class="sidebar-count">'+todaySched+'</span>':'')+' </div>'+
-'<div class="sidebar-item '+(currentPage==='callreview'?'active':'')+'" onclick="showPage(\'callreview\')"><span>Call Review</span>'+(pendingCr?'<span class="sidebar-count">'+pendingCr+'</span>':'')+' </div>'+
-'<div class="sidebar-item '+(currentPage==='calendar'?'active':'')+'" onclick="showPage(\'calendar\')">Calendar</div>'+
-'<div class="sidebar-item '+(currentPage==='yaakov'?'active':'')+'" onclick="showPage(\'yaakov\')">Yaakov</div>'+
+'<div class="sidebar-item '+(currentPage==='home'?'active':'')+'" onclick="showPage('home')">Home</div>'+
+'<div class="sidebar-item '+(currentPage==='schedule'?'active':'')+'" onclick="showPage('schedule')"><span>Schedule</span>'+(todaySched?'<span class="sidebar-count">'+todaySched+'</span>':'')+' </div>'+
+'<div class="sidebar-item '+(currentPage==='callreview'?'active':'')+'" onclick="showPage('callreview')"><span>Call Review</span>'+(pendingCr?'<span class="sidebar-count">'+pendingCr+'</span>':'')+' </div>'+
+'<div class="sidebar-item '+(currentPage==='calendar'?'active':'')+'" onclick="showPage('calendar')">Calendar</div>'+
+'<div class="sidebar-item '+(currentPage==='yaakov'?'active':'')+'" onclick="showPage('yaakov')">Yaakov</div>'+
 '<div class="sidebar-section" style="margin-top:16px">Trainees</div>'+
-STATE.trainees.map(function(t){return '<div class="sidebar-item '+(currentPage==='trainee-'+t.id?'active':'')+'" onclick="showPage(\'trainee-'+t.id+'\')">'+esc(t.name)+'</div>';}).join('')+
+STATE.trainees.map(function(t){return '<div class="sidebar-item '+(currentPage==='trainee-'+t.id?'active':'')+'" onclick="showPage('trainee-'+t.id+'')">'+esc(t.name)+'</div>';}).join('')+
 '<div class="sidebar-item sidebar-add" onclick="addTrainee()">+ add trainee</div>';
 }
 load();buildSidebar();showPage('home');
