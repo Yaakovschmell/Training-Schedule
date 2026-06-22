@@ -396,10 +396,10 @@ function renderHome(){
 const todayYak=STATE.yaakovMeetings.filter(y=>{const d=dateOf(y);return d&&keyFromDate(d)===TODAY;});
 const todaySched=STATE.scheduleEntries.filter(e=>e.dateKey===TODAY).sort((a,b)=>(a.time||'99:99').localeCompare(b.time||'99:99'));
 
-const html='<h1 class="page-title">\u{1F4CA} Today's Workflow</h1>'+
+const html='<h1 class="page-title">\u{1F4CA} Today\'s Workflow</h1>'+
 '<div style="font-size:13px;color:var(--text-dim);margin-top:-16px;margin-bottom:24px">'+TODAY_DISPLAY+'</div>'+
 '<div class="card">'+
-'<div class="card-title" onclick="toggleSection('home-schedule')">\u{1F4C5} Today's Schedule'+(todaySched.length?'<span class="badge amber">'+todaySched.length+'</span>':'')+'<span class="card-title-toggle" id="toggle-home-schedule">\u25BC</span></div>'+
+'<div class="card-title" onclick="toggleSection('home-schedule')">\u{1F4C5} Today\'s Schedule'+(todaySched.length?'<span class="badge amber">'+todaySched.length+'</span>':'')+'<span class="card-title-toggle" id="toggle-home-schedule">\u25BC</span></div>'+
 '<div class="card-content" id="content-home-schedule">'+
 (todaySched.length?todaySched.map(e=>schedEntryRow(e,true)).join(''):'<div class="sched-empty">Nothing scheduled for today</div>')+
 '<div style="display:flex;gap:8px;margin-top:12px">'+
