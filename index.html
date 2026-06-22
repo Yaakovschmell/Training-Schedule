@@ -399,30 +399,30 @@ const todaySched=STATE.scheduleEntries.filter(e=>e.dateKey===TODAY).sort((a,b)=>
 const html='<h1 class="page-title">\u{1F4CA} Today\'s Workflow</h1>'+
 '<div style="font-size:13px;color:var(--text-dim);margin-top:-16px;margin-bottom:24px">'+TODAY_DISPLAY+'</div>'+
 '<div class="card">'+
-'<div class="card-title" onclick="toggleSection('home-schedule')">\u{1F4C5} Today\'s Schedule'+(todaySched.length?'<span class="badge amber">'+todaySched.length+'</span>':'')+'<span class="card-title-toggle" id="toggle-home-schedule">\u25BC</span></div>'+
+'<div class="card-title" onclick="toggleSection(\'home-schedule\')">\u{1F4C5} Today\'s Schedule'+(todaySched.length?'<span class="badge amber">'+todaySched.length+'</span>':'')+'<span class="card-title-toggle" id="toggle-home-schedule">\u25BC</span></div>'+
 '<div class="card-content" id="content-home-schedule">'+
 (todaySched.length?todaySched.map(e=>schedEntryRow(e,true)).join(''):'<div class="sched-empty">Nothing scheduled for today</div>')+
 '<div style="display:flex;gap:8px;margin-top:12px">'+
-'<button class="btn-primary" style="flex:1" onclick="openSchedModal('',TODAY)">+ add to today</button>'+
-'<button class="btn-secondary" style="flex:1" onclick="showPage('schedule')">view full schedule</button>'+
+'<button class="btn-primary" style="flex:1" onclick="openSchedModal(\'\',TODAY)">+ add to today</button>'+
+'<button class="btn-secondary" style="flex:1" onclick="showPage(\'schedule\')">view full schedule</button>'+
 '</div>'+
 '</div>'+
 '</div>'+
 '<div class="split-section">'+
 '<div class="card" style="padding:16px">'+
-'<div class="card-title" onclick="toggleSection('home-yaakov')">\u{1F3AF} Yaakov'+(todayYak.length?'<span class="badge amber">'+todayYak.length+'</span>':'')+'<span class="card-title-toggle" id="toggle-home-yaakov">\u25BC</span></div>'+
+'<div class="card-title" onclick="toggleSection(\'home-yaakov\')">\u{1F3AF} Yaakov'+(todayYak.length?'<span class="badge amber">'+todayYak.length+'</span>':'')+'<span class="card-title-toggle" id="toggle-home-yaakov">\u25BC</span></div>'+
 '<div class="card-content" id="content-home-yaakov">'+
 (todayYak.length?'<div style="font-size:13px;color:var(--text-dim);margin-bottom:8px">'+todayYak.length+' meeting'+(todayYak.length!==1?'s':'')+' today</div>':'<div style="font-size:12px;color:var(--text-dim);margin-bottom:8px">No Yaakov meetings today</div>')+
 '<div style="display:flex;gap:8px">'+
-'<button class="btn-secondary btn-sm" style="flex:1" onclick="showPage('yaakov')">view Yaakov</button>'+
+'<button class="btn-secondary btn-sm" style="flex:1" onclick="showPage(\'yaakov\')">view Yaakov</button>'+
 '<button class="btn-secondary btn-sm" onclick="openYaakovModal()">+ log</button>'+
 '</div>'+
 '</div>'+
 '</div>'+
 '<div class="card">'+
-'<div class="card-title" onclick="toggleSection('home-addmeet')">\u{1F91D} Log Meeting<span class="card-title-toggle" id="toggle-home-addmeet">\u25BC</span></div>'+
+'<div class="card-title" onclick="toggleSection(\'home-addmeet\')">\u{1F91D} Log Meeting<span class="card-title-toggle" id="toggle-home-addmeet">\u25BC</span></div>'+
 '<div class="card-content" id="content-home-addmeet">'+
-(STATE.trainees.length?'<div style="font-size:12px;color:var(--text-dim);margin-bottom:10px">Log a meeting with a trainee</div>'+STATE.trainees.map(function(t){return '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-radius:8px;margin-bottom:6px;background:var(--bg-dark)"><span style="font-size:13px;font-weight:600;color:var(--text)">'+esc(t.name)+'</span><button class="btn-primary btn-sm" onclick="openMeetingFor('+t.id+')">+ log meeting</button></div>';}).join(''):'<div class="empty-state">No trainees yet</div>')+
+(STATE.trainees.length?'<div style="font-size:12px;color:var(--text-dim);margin-bottom:10px">Log a meeting with a trainee</div>'+STATE.trainees.map(function(t){return '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-radius:8px;margin-bottom:6px;background:var(--bg-dark)"><span style="font-size:13px;font-weight:600;color:var(--text)">'+esc(t.name)+'</span><button class="btn-primary btn-sm" onclick="openMeetingFor(\'+t.id+\')">+ log meeting</button></div>';}).join(''):'<div class="empty-state">No trainees yet</div>')+
 '</div>'+
 '</div>';
 
@@ -454,13 +454,13 @@ return '<h1 class="page-title">\u{1F4C5} Daily Schedule</h1>'+
 '<button class="btn-secondary btn-sm" onclick="window._changeSchedDate(-1)">\u2039 prev</button>'+
 '<div class="sched-date-label">'+dispDate+(isToday?' <span class="badge amber">Today</span>':'')+'</div>'+
 '<button class="btn-secondary btn-sm" onclick="window._changeSchedDate(1)">next \u203A</button>'+
-'<button class="btn-secondary btn-sm" onclick="schedViewDate=TODAY;showPage('schedule')">Today</button>'+
+'<button class="btn-secondary btn-sm" onclick="schedViewDate=TODAY;showPage(\'schedule\')">Today</button>'+
 '<input type="date" value="'+schedViewDate+'" onchange="schedViewDate=this.value;showPage('schedule')" style="width:auto;padding:6px 10px;font-size:12px">'+
 '</div>'+
 '<div class="card">'+entriesHtml+'</div>'+
 '<div style="display:flex;gap:10px;margin-top:4px">'+
-'<button class="btn-primary" onclick="openSchedModal('meeting',schedViewDate)">+ add meeting</button>'+
-'<button class="btn-secondary" onclick="openSchedModal('task',schedViewDate)">+ add task</button>'+
+'<button class="btn-primary" onclick="openSchedModal(\'meeting\',schedViewDate)">+ add meeting</button>'+
+'<button class="btn-secondary" onclick="openSchedModal(\'task\',schedViewDate)">+ add task</button>'+
 '</div>';
 }
 
@@ -468,7 +468,7 @@ function schedEntryRow(e,compact){
 const timeStr=e.time?fmtTime(e.time):'';
 const isDone=!!e.done;
 return '<div class="sched-entry type-'+e.type+(isDone?' done-entry':'')+'">'+
-'<div class="sched-cb'+(isDone?' checked':'')+'" onclick="toggleSchedDone('+e.id+')" title="'+(isDone?'Mark undone':'Mark done')+'"></div>'+
+'<div class="sched-cb'+(isDone?' checked':'')+'" onclick="toggleSchedDone(\'+e.id+\')" title="'+(isDone?'Mark undone':'Mark done')+'"></div>'+
 '<div style="flex:1;min-width:0">'+
 (timeStr?'<div class="sched-time">'+esc(timeStr)+'</div>':'')+
 '<div class="sched-title'+(isDone?' done-text':'')+'"><span class="sched-type-badge '+e.type+'">'+(e.type==='meeting'?'meeting':'task')+'</span>'+esc(e.title)+'</div>'+
@@ -477,8 +477,8 @@ return '<div class="sched-entry type-'+e.type+(isDone?' done-entry':'')+'">'+
 (e.notes&&compact?'<div class="sched-note" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:400px">'+esc(e.notes)+'</div>':'')+
 '</div>'+
 '<div class="sched-actions">'+
-'<button class="edit-btn" onclick="openSchedEditModal('+e.id+')" title="Edit">\u270F</button>'+
-'<button class="del-btn" onclick="deleteSchedEntry('+e.id+')" title="Delete">\u2715</button>'+
+'<button class="edit-btn" onclick="openSchedEditModal(\'+e.id+\')" title="Edit">\u270F</button>'+
+'<button class="del-btn" onclick="deleteSchedEntry(\'+e.id+\')" title="Delete">\u2715</button>'+
 '</div>'+
 '</div>';
 }
@@ -552,7 +552,7 @@ const isToday=(calYear===NOW.getFullYear()&&calMonth===NOW.getMonth()&&day===NOW
 const has=dMeet.length||dYak.length||dSched.length;
 const names=dMeet.map(function(m){return m.trainees;}).join(', ');
 const schedCount=dSched.length;
-cells+='<div class="cal-cell '+(isToday?'today':'')+' '+(has?'has-activity':'')+' '+(selectedCalKey===key?'selected':'')+'" onclick="selectCalDay(''+key+'')">'+'<div class="cal-day-num">'+day+'</div>'+(dYak.length?'<div class="cal-yaakov-tag">YAK</div>':'')+(names?'<div class="cal-names">'+esc(names)+'</div>':'')+(schedCount?'<div class="cal-names" style="color:var(--accent)">\u{1F4C5} '+schedCount+'</div>':'')+'</div>';
+cells+='<div class="cal-cell '+(isToday?'today':'')+' '+(has?'has-activity':'')+' '+(selectedCalKey===key?'selected':'')+'" onclick="selectCalDay(\'\'+key+\'\')">'+'<div class="cal-day-num">'+day+'</div>'+(dYak.length?'<div class="cal-yaakov-tag">YAK</div>':'')+(names?'<div class="cal-names">'+esc(names)+'</div>':'')+(schedCount?'<div class="cal-names" style="color:var(--accent)">\u{1F4C5} '+schedCount+'</div>':'')+'</div>';
 }
 let detail='';
 if(selectedCalKey){
@@ -562,9 +562,9 @@ const dSched=STATE.scheduleEntries.filter(function(e){return e.dateKey===selecte
 const parts=selectedCalKey.split('-').map(Number);
 const yy=parts[0],mm=parts[1],dd=parts[2];
 detail='<div class="day-detail"><div class="day-card"><div class="day-date">'+MONTHS_FULL[mm-1]+' '+dd+', '+yy+'</div>'+
-(dSched.length?'<div class="day-section"><div class="day-section-title">\u{1F4C5} Scheduled ('+dSched.length+')</div>'+dSched.map(function(e){return schedEntryRow(e,true);}).join('')+'<button class="btn-secondary btn-sm" style="margin-top:8px" onclick="schedViewDate=''+selectedCalKey+'';showPage('schedule')">view / edit day</button></div>':'')+
+(dSched.length?'<div class="day-section"><div class="day-section-title">\u{1F4C5} Scheduled ('+dSched.length+')</div>'+dSched.map(function(e){return schedEntryRow(e,true);}).join('')+'<button class="btn-secondary btn-sm" style="margin-top:8px" onclick="schedViewDate=\'\'+selectedCalKey+\'\';showPage(\'schedule\')">view / edit day</button></div>':'')+
 (dYak.length?'<div class="day-section"><div class="day-section-title">\u{1F3AF} Yaakov ('+dYak.length+')</div>'+dYak.map(function(y){return '<div class="item-row"><div class="item-body">'+(y.time?'<div class="item-meta">'+y.time+'</div>':'')+(y.notes?'<div>'+esc(y.notes)+'</div>':'')+'</div></div>';}).join('')+'</div>':'')+
-(dMeet.length?'<div class="day-section"><div class="day-section-title">\u{1F399}\uFE0F Trainee Meetings ('+dMeet.length+')</div>'+dMeet.map(function(m){var tLinks=(m.traineesArray&&m.traineesArray.length)?m.traineesArray.map(function(tid){var tr=STATE.trainees.find(function(t){return t.id===tid;});return tr?'<button class="btn-secondary btn-sm" onclick="showPage('trainee-'+tr.id+'')" style="margin:2px 4px 2px 0;font-size:12px">'+esc(tr.name)+'</button>':'<span>'+esc(m.trainees)+'</span>';}).join(''):'<span>'+esc(m.trainees)+'</span>';return '<div class="item-row blue"><div class="item-body"><div style="font-size:11px;color:var(--text-dim);margin-bottom:4px">Click name to see notes</div><div>'+tLinks+'</div></div></div>';}).join('')+'</div>':'')+
+(dMeet.length?'<div class="day-section"><div class="day-section-title">\u{1F399}\uFE0F Trainee Meetings ('+dMeet.length+')</div>'+dMeet.map(function(m){var tLinks=(m.traineesArray&&m.traineesArray.length)?m.traineesArray.map(function(tid){var tr=STATE.trainees.find(function(t){return t.id===tid;});return tr?'<button class="btn-secondary btn-sm" onclick="showPage(\'trainee-\'+tr.id+\'\')" style="margin:2px 4px 2px 0;font-size:12px">'+esc(tr.name)+'</button>':'<span>'+esc(m.trainees)+'</span>';}).join(''):'<span>'+esc(m.trainees)+'</span>';return '<div class="item-row blue"><div class="item-body"><div style="font-size:11px;color:var(--text-dim);margin-bottom:4px">Click name to see notes</div><div>'+tLinks+'</div></div></div>';}).join('')+'</div>':'')+
 (!dYak.length&&!dMeet.length&&!dSched.length?'<div class="empty-state">Nothing logged this day</div>':'')+
 '</div></div>';
 }
@@ -599,20 +599,20 @@ return '<div class="card" style="border-left:3px solid var(--accent);padding:18p
 '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">'+
 '<span style="font-size:13px;font-weight:700;color:var(--accent-dark)">'+(y.time?'<span style="font-size:11px;color:var(--text-dim);font-weight:400;margin-right:6px">\u23F0 '+y.time+'</span>':'')+'Notes</span>'+
 '<div style="display:flex;align-items:center;gap:4px">'+
-'<button class="edit-btn" onclick="editYaakov('+y.id+')">\u270F edit</button>'+
-'<button class="del-btn" onclick="deleteYaakov('+y.id+')">\u2715</button>'+
+'<button class="edit-btn" onclick="editYaakov(\'+y.id+\')">\u270F edit</button>'+
+'<button class="del-btn" onclick="deleteYaakov(\'+y.id+\')">\u2715</button>'+
 '</div>'+
 '</div>'+
 (y.trainees?'<div style="font-size:11px;color:var(--text-dim);margin-bottom:10px"><strong>Trainees:</strong> '+esc(y.trainees)+'</div>':'')+
 '<div id="notes-view-'+y.id+'"><ul style="list-style:none;padding:0;margin:0">'+(noteLines.length?noteLines.map(function(line){return '<li style="display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.05)"><span style="color:var(--accent);margin-top:2px">\u2022</span><span>'+esc(line)+'</span></li>';}).join(''):'<li style="color:var(--text-dim);font-style:italic">No notes</li>')+'</ul></div>'+
 '<div id="notes-edit-'+y.id+'" style="display:none">'+
 '<textarea class="edit-note-area" id="notes-textarea-'+y.id+'">'+esc(y.notes||'')+'</textarea>'+
-'<div><button class="save-edit-btn" onclick="saveYaakovEdit('+y.id+')">save</button><button class="cancel-edit-btn" onclick="cancelYaakovEdit('+y.id+')">cancel</button></div>'+
+'<div><button class="save-edit-btn" onclick="saveYaakovEdit(\'+y.id+\')">save</button><button class="cancel-edit-btn" onclick="cancelYaakovEdit(\'+y.id+\')">cancel</button></div>'+
 '</div>'+
 '</div>';
 }).join('');
 return '<div style="margin-bottom:16px">'+
-'<div class="date-group-header" onclick="toggleSection('yak-'+key+'')">'+
+'<div class="date-group-header" onclick="toggleSection(\'yak-\'+key+\'\')">'+
 '<span class="date-group-label">\u{1F4C5} '+label+' <span class="badge" style="margin-left:6px">'+items.length+' note'+(items.length!==1?'s':'')+'</span></span>'+
 '<span class="date-group-toggle" id="toggle-yak-'+key+'">'+arrow+'</span>'+
 '</div>'+
@@ -633,12 +633,12 @@ const trNotes=STATE.coachingNotes.filter(function(n){return n.traineeId===tr.id;
 
 const html='<div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">'+
 '<h1 class="page-title" style="margin-bottom:0">'+esc(tr.name)+'</h1>'+
-'<button class="btn-secondary btn-sm" onclick="renameTrainee('+tr.id+')" style="padding:4px 10px;font-size:11px">rename</button>'+
-'<button class="btn-secondary btn-sm" onclick="removeTrainee('+tr.id+')" style="padding:4px 10px;font-size:11px;color:var(--red);border-color:rgba(248,113,113,.3)">delete</button>'+
+'<button class="btn-secondary btn-sm" onclick="renameTrainee(\'+tr.id+\')" style="padding:4px 10px;font-size:11px">rename</button>'+
+'<button class="btn-secondary btn-sm" onclick="removeTrainee(\'+tr.id+\')" style="padding:4px 10px;font-size:11px;color:var(--red);border-color:rgba(248,113,113,.3)">delete</button>'+
 '</div>'+
 // Coaching Notes
 '<div class="card" style="margin-bottom:20px">'+
-'<div class="card-title" onclick="toggleSection('tr-'+tr.id+'-notes')">\u{1F4CB} Coaching Notes'+(trNotes.length?'<span class="badge amber">'+trNotes.length+'</span>':'')+'<button class="btn-secondary btn-sm" onclick="openCoachNoteFor('+tr.id+');event.stopPropagation();" style="margin-left:auto">+ add note</button><span class="card-title-toggle" id="toggle-tr-'+tr.id+'-notes">\u25BC</span></div>'+
+'<div class="card-title" onclick="toggleSection(\'tr-\'+tr.id+\'-notes\')">\u{1F4CB} Coaching Notes'+(trNotes.length?'<span class="badge amber">'+trNotes.length+'</span>':'')+'<button class="btn-secondary btn-sm" onclick="openCoachNoteFor(\'+tr.id+\');event.stopPropagation();" style="margin-left:auto">+ add note</button><span class="card-title-toggle" id="toggle-tr-'+tr.id+'-notes">\u25BC</span></div>'+
 '<div class="card-content" id="content-tr-'+tr.id+'-notes">'+
 (trNotes.length?trNotes.map(function(n){
 var noteLines=n.text?n.text.split('\n').filter(Boolean):[];
@@ -648,12 +648,12 @@ return '<div class="item-row" style="border-left-color:var(--teal);margin-bottom
 '<div id="cn-view-'+n.id+'"><ul style="list-style:none;padding:0;margin:0">'+(noteLines.length?noteLines.map(function(line){return '<li style="display:flex;gap:8px;align-items:flex-start;padding:3px 0"><span style="color:var(--teal);margin-top:2px">\u2022</span><span>'+esc(line)+'</span></li>';}).join(''):'<li style="color:var(--text-dim)">No text</li>')+'</ul></div>'+
 '<div id="cn-edit-'+n.id+'" style="display:none">'+
 '<textarea class="edit-note-area" id="cn-ta-'+n.id+'">'+esc(n.text||'')+'</textarea>'+
-'<div><button class="save-edit-btn" onclick="saveCoachNoteEdit('+n.id+')">save</button><button class="cancel-edit-btn" onclick="cancelCoachNoteEdit('+n.id+')">cancel</button></div>'+
+'<div><button class="save-edit-btn" onclick="saveCoachNoteEdit(\'+n.id+\')">save</button><button class="cancel-edit-btn" onclick="cancelCoachNoteEdit(\'+n.id+\')">cancel</button></div>'+
 '</div>'+
 '</div>'+
 '<div style="display:flex;gap:4px">'+
-'<button class="edit-btn" onclick="editCoachNote('+n.id+')">\u270F</button>'+
-'<button class="del-btn" onclick="deleteCoachNote('+n.id+')">\u2715</button>'+
+'<button class="edit-btn" onclick="editCoachNote(\'+n.id+\')">\u270F</button>'+
+'<button class="del-btn" onclick="deleteCoachNote(\'+n.id+\')">\u2715</button>'+
 '</div>'+
 '</div>';
 }).join(''):'<div class="empty-state">No notes yet \u2014 add coaching points, lead feedback, and observations here</div>')+
@@ -661,7 +661,7 @@ return '<div class="item-row" style="border-left-color:var(--teal);margin-bottom
 '</div>'+
 // Meeting History
 '<div class="card" style="margin-bottom:20px">'+
-'<div class="card-title" onclick="toggleSection('tr-'+tr.id+'-meetings')">Meeting History'+(trMeetings.length?'<span class="badge">'+trMeetings.length+'</span>':'')+'<button class="btn-secondary btn-sm" onclick="openMeetingFor('+tr.id+');event.stopPropagation();" style="margin-left:auto">+ log meeting</button><span class="card-title-toggle" id="toggle-tr-'+tr.id+'-meetings">\u25BC</span></div>'+
+'<div class="card-title" onclick="toggleSection(\'tr-\'+tr.id+\'-meetings\')">Meeting History'+(trMeetings.length?'<span class="badge">'+trMeetings.length+'</span>':'')+'<button class="btn-secondary btn-sm" onclick="openMeetingFor(\'+tr.id+\');event.stopPropagation();" style="margin-left:auto">+ log meeting</button><span class="card-title-toggle" id="toggle-tr-'+tr.id+'-meetings">\u25BC</span></div>'+
 '<div class="card-content" id="content-tr-'+tr.id+'-meetings">'+
 (trMeetings.length?(function(){
 const grps={};
@@ -680,20 +680,20 @@ return '<div class="item-row" style="margin-bottom:10px;padding:14px;border-radi
 '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">'+
 '<span style="font-size:11px;color:var(--text-dim);font-family:\'IBM Plex Mono\',monospace">'+(m.trainees?esc(m.trainees):'')+'</span>'+
 '<div style="display:flex;gap:4px">'+
-'<button class="edit-btn" onclick="editMeeting('+m.id+')">\u270F edit</button>'+
-'<button class="del-btn" onclick="deleteMeeting('+m.id+')">\u2715</button>'+
+'<button class="edit-btn" onclick="editMeeting(\'+m.id+\')">\u270F edit</button>'+
+'<button class="del-btn" onclick="deleteMeeting(\'+m.id+\')">\u2715</button>'+
 '</div>'+
 '</div>'+
 '<div id="meet-view-'+m.id+'"><ul style="list-style:none;padding:0;margin:0">'+(noteLines.length?noteLines.map(function(line){return '<li style="display:flex;gap:8px;align-items:flex-start;padding:4px 0"><span style="color:var(--blue);margin-top:1px">\u2022</span><span>'+esc(line)+'</span></li>';}).join(''):'<li style="color:var(--text-dim);font-style:italic">No notes</li>')+'</ul></div>'+
 '<div id="meet-edit-'+m.id+'" style="display:none">'+
 '<textarea class="edit-note-area" id="meet-textarea-'+m.id+'">'+esc(m.notes||'')+'</textarea>'+
-'<div><button class="save-edit-btn" onclick="saveMeetingEdit('+m.id+')">save</button><button class="cancel-edit-btn" onclick="cancelMeetingEdit('+m.id+')">cancel</button></div>'+
+'<div><button class="save-edit-btn" onclick="saveMeetingEdit(\'+m.id+\')">save</button><button class="cancel-edit-btn" onclick="cancelMeetingEdit(\'+m.id+\')">cancel</button></div>'+
 '</div>'+
 '</div>'+
 '</div>';
 }).join('');
 return '<div style="margin-bottom:12px">'+
-'<div class="date-group-header" onclick="toggleSection(''+nsKey+'')">'+
+'<div class="date-group-header" onclick="toggleSection(\'\'+nsKey+\'\')">'+
 '<span class="date-group-label">\u{1F4C5} '+lbl+' <span class="badge" style="margin-left:6px">'+items.length+' meeting'+(items.length!==1?'s':'')+'</span></span>'+
 '<span class="date-group-toggle" id="toggle-'+nsKey+'">'+arr+'</span>'+
 '</div>'+
@@ -882,11 +882,11 @@ var sorted = sectionReviews.slice().sort(function(a,b){if(a.reviewed !== b.revie
 var progressHtml = total?'<div style="display:flex;align-items:center;gap:10px;padding:10px 0 6px"><div style="flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden"><div style="height:100%;width:'+Math.round(done/total*100)+'%;background:linear-gradient(90deg,var(--teal),var(--green));border-radius:3px;transition:width .3s"></div></div><span style="font-size:10px;color:var(--text-dim);font-family:\'IBM Plex Mono\',monospace;white-space:nowrap">'+done+'/'+total+'</span></div>':'';
 var leadsHtml = sorted.map(function(r){return crLeadRow(r);}).join('');
 var tid = traineeId || '';
-var addBtn = '<button class="btn-secondary btn-sm" onclick="openCrModal('+tid+');event.stopPropagation();" style="font-size:11px;padding:4px 10px">+ add lead</button>';
-var clearDoneBtn = done > 0 ? '<button class="cr-clear-btn" onclick="crClearReviewed('+(traineeId||'null')+');event.stopPropagation();">clear reviewed</button>' : '';
-var clearAllBtn = total > 0 ? '<button style="font-size:11px;padding:4px 10px;background:rgba(194,59,42,.1);color:var(--red);border:1px solid rgba(194,59,42,.25);border-radius:6px;cursor:pointer;font-family:\'IBM Plex Mono\',monospace" onclick="crDeleteAll('+(traineeId||'null')+');event.stopPropagation();">delete all</button>' : '';
+var addBtn = '<button class="btn-secondary btn-sm" onclick="openCrModal(\'+tid+\');event.stopPropagation();" style="font-size:11px;padding:4px 10px">+ add lead</button>';
+var clearDoneBtn = done > 0 ? '<button class="cr-clear-btn" onclick="crClearReviewed(\'+(traineeId||\'null\')+\');event.stopPropagation();">clear reviewed</button>' : '';
+var clearAllBtn = total > 0 ? '<button style="font-size:11px;padding:4px 10px;background:rgba(194,59,42,.1);color:var(--red);border:1px solid rgba(194,59,42,.25);border-radius:6px;cursor:pointer;font-family:\'IBM Plex Mono\',monospace" onclick="crDeleteAll(\'+(traineeId||\'null\')+\');event.stopPropagation();">delete all</button>' : '';
 return '<div class="cr-accordion">'+
-'<div class="cr-accordion-header" onclick="crToggleAccordion(''+sKey+'')">'+
+'<div class="cr-accordion-header" onclick="crToggleAccordion(\'\'+sKey+\'\')">'+
 '<div class="cr-accordion-title">'+esc(traineeName)+(pending?'<span class="badge amber">'+pending+' pending</span>':'<span class="badge" style="background:rgba(90,138,106,.2);color:var(--teal)">done \u2713</span>')+'</div>'+
 '<div class="cr-accordion-actions">'+addBtn+(done>0?clearDoneBtn:'')+(total>0?clearAllBtn:'')+'<span class="cr-accordion-toggle" style="margin-left:6px">'+(isCollapsed?'\u25B6':'\u25BC')+'</span></div>'+
 '</div>'+
@@ -914,12 +914,12 @@ function crToggleAccordion(sKey){crCollapsed[sKey]=!crCollapsed[sKey];showPage('
 function crLeadRow(r){
 var metaParts=[];if(r.callDate)metaParts.push(r.callDate);if(r.callTime)metaParts.push(fmtTime(r.callTime));var metaStr=metaParts.join(' at ');
 return '<div class="cr-lead'+(r.reviewed?' reviewed':'')+'">'+
-'<div class="cr-cb'+(r.reviewed?' checked':'')+'" onclick="crToggle('+r.id+')" title="'+(r.reviewed?'Mark pending':'Mark reviewed')+'"></div>'+
+'<div class="cr-cb'+(r.reviewed?' checked':'')+'" onclick="crToggle(\'+r.id+\')" title="'+(r.reviewed?'Mark pending':'Mark reviewed')+'"></div>'+
 '<div class="cr-lead-body"><div class="cr-lead-name'+(r.reviewed?' reviewed-text':'')+'">'+esc(r.name)+'</div>'+
 (metaStr?'<div class="cr-lead-meta">'+esc(metaStr)+'</div>':'')+
 (r.note?'<div class="cr-lead-note">'+esc(r.note)+'</div>':'')+
 '</div>'+
-'<div class="cr-actions"><button class="edit-btn" onclick="openCrEditModal('+r.id+')" title="Edit">\u270F</button><button class="del-btn" onclick="deleteCrLead('+r.id+')" title="Delete">\u2715</button></div>'+
+'<div class="cr-actions"><button class="edit-btn" onclick="openCrEditModal(\'+r.id+\')" title="Edit">\u270F</button><button class="del-btn" onclick="deleteCrLead(\'+r.id+\')" title="Delete">\u2715</button></div>'+
 '</div>';
 }
 
@@ -978,13 +978,13 @@ const todaySched=STATE.scheduleEntries.filter(function(e){return e.dateKey===TOD
 const pendingCr=STATE.callReviews.filter(function(r){return !r.reviewed;}).length;
 const sidebar=document.getElementById('sidebar');
 sidebar.innerHTML='<div class="sidebar-section">Navigation</div>'+
-'<div class="sidebar-item '+(currentPage==='home'?'active':'')+'" onclick="showPage('home')">Home</div>'+
-'<div class="sidebar-item '+(currentPage==='schedule'?'active':'')+'" onclick="showPage('schedule')"><span>Schedule</span>'+(todaySched?'<span class="sidebar-count">'+todaySched+'</span>':'')+' </div>'+
-'<div class="sidebar-item '+(currentPage==='callreview'?'active':'')+'" onclick="showPage('callreview')"><span>Call Review</span>'+(pendingCr?'<span class="sidebar-count">'+pendingCr+'</span>':'')+' </div>'+
-'<div class="sidebar-item '+(currentPage==='calendar'?'active':'')+'" onclick="showPage('calendar')">Calendar</div>'+
-'<div class="sidebar-item '+(currentPage==='yaakov'?'active':'')+'" onclick="showPage('yaakov')">Yaakov</div>'+
+'<div class="sidebar-item '+(currentPage==='home'?'active':'')+'" onclick="showPage(\'home\')">Home</div>'+
+'<div class="sidebar-item '+(currentPage==='schedule'?'active':'')+'" onclick="showPage(\'schedule\')"><span>Schedule</span>'+(todaySched?'<span class="sidebar-count">'+todaySched+'</span>':'')+' </div>'+
+'<div class="sidebar-item '+(currentPage==='callreview'?'active':'')+'" onclick="showPage(\'callreview\')"><span>Call Review</span>'+(pendingCr?'<span class="sidebar-count">'+pendingCr+'</span>':'')+' </div>'+
+'<div class="sidebar-item '+(currentPage==='calendar'?'active':'')+'" onclick="showPage(\'calendar\')">Calendar</div>'+
+'<div class="sidebar-item '+(currentPage==='yaakov'?'active':'')+'" onclick="showPage(\'yaakov\')">Yaakov</div>'+
 '<div class="sidebar-section" style="margin-top:16px">Trainees</div>'+
-STATE.trainees.map(function(t){return '<div class="sidebar-item '+(currentPage==='trainee-'+t.id?'active':'')+'" onclick="showPage('trainee-'+t.id+'')">'+esc(t.name)+'</div>';}).join('')+
+STATE.trainees.map(function(t){return '<div class="sidebar-item '+(currentPage==='trainee-'+t.id?'active':'')+'" onclick="showPage(\'trainee-\'+t.id+\'\')">'+esc(t.name)+'</div>';}).join('')+
 '<div class="sidebar-item sidebar-add" onclick="addTrainee()">+ add trainee</div>';
 }
 load();buildSidebar();showPage('home');
